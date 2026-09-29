@@ -1,0 +1,18 @@
+.empty-state {
+    background: rgba(15, 28, 45, .55);
+    border: 1px dashed rgba(148, 163, 184, .24);
+    border-radius: 8px;
+    padding: 2.5rem 1.25rem;
+    text-align: center;
+}
+
+    .empty-state h2 {
+        color: #f8fbff;
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    .empty-state p {
+        color: #91a4bc;
+        margin: .45rem 0 0;
+    }

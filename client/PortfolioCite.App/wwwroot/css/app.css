@@ -1,0 +1,423 @@
+:root {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+}
+
+html,
+body {
+    background: #07111f;
+    color: #d7e2f0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+::selection {
+    background: rgba(99, 230, 190, .28);
+}
+
+a {
+    color: inherit;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3,
+p {
+    overflow-wrap: anywhere;
+}
+
+    h1:focus {
+        outline: none;
+    }
+
+.boot-loader {
+    align-items: center;
+    display: flex;
+    gap: .45rem;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+    .boot-loader span {
+        animation: boot-pulse 1s ease-in-out infinite;
+        background: #63e6be;
+        border-radius: 50%;
+        height: .55rem;
+        opacity: .35;
+        width: .55rem;
+    }
+
+        .boot-loader span:nth-child(2) {
+            animation-delay: .14s;
+        }
+
+        .boot-loader span:nth-child(3) {
+            animation-delay: .28s;
+        }
+
+@keyframes boot-pulse {
+    50% {
+        opacity: 1;
+        transform: translateY(-.3rem);
+    }
+}
+
+.admin-page-header {
+    align-items: end;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+    .admin-page-header p {
+        color: #63e6be;
+        font-size: .72rem;
+        font-weight: 850;
+        letter-spacing: .1em;
+        margin: 0 0 .3rem;
+        text-transform: uppercase;
+    }
+
+    .admin-page-header h1 {
+        color: #f8fbff;
+        margin: 0;
+    }
+
+    .admin-page-header span {
+        color: #91a4bc;
+        display: block;
+        margin-top: .35rem;
+    }
+
+.admin-primary-action, .admin-secondary-action {
+    border-radius: 7px;
+    font-weight: 850;
+    padding: .72rem .9rem;
+    text-decoration: none;
+}
+
+.admin-primary-action {
+    background: linear-gradient(135deg, #63e6be, #79a8ff);
+    color: #06101d;
+}
+
+.admin-secondary-action {
+    border: 1px solid rgba(148, 163, 184, .22);
+    color: #d7e2f0;
+}
+
+.admin-action-button {
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+}
+
+.admin-dashboard-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+    .admin-dashboard-grid a {
+        background: rgba(15, 28, 45, .68);
+        border: 1px solid rgba(148, 163, 184, .16);
+        border-radius: 8px;
+        display: grid;
+        gap: .45rem;
+        padding: 1.25rem;
+        text-decoration: none;
+        transition: border-color .2s ease, transform .2s ease;
+    }
+
+        .admin-dashboard-grid a:hover {
+            border-color: rgba(99, 230, 190, .32);
+            transform: translateY(-2px);
+        }
+
+    .admin-dashboard-grid strong {
+        color: #f8fbff;
+    }
+
+    .admin-dashboard-grid span {
+        color: #91a4bc;
+        line-height: 1.55;
+    }
+
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    .admin-table th {
+        color: #91a4bc;
+        font-size: .74rem;
+        letter-spacing: .06em;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    .admin-table th, .admin-table td {
+        border-bottom: 1px solid rgba(148, 163, 184, .13);
+        padding: .85rem .7rem;
+        vertical-align: top;
+    }
+
+        .admin-table td strong {
+            color: #f8fbff;
+            display: block;
+        }
+
+        .admin-table td small {
+            color: #91a4bc;
+            display: block;
+            margin-top: .3rem;
+            max-width: 28rem;
+        }
+
+.admin-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem;
+}
+
+    .admin-tags span, .status-pill {
+        border: 1px solid rgba(148, 163, 184, .2);
+        border-radius: 999px;
+        color: #91a4bc;
+        font-size: .72rem;
+        padding: .2rem .45rem;
+    }
+
+.status-pill {
+    background: transparent;
+    cursor: pointer;
+}
+
+    .status-pill.published {
+        border-color: rgba(99, 230, 190, .3);
+        color: #63e6be;
+    }
+
+    .status-pill.draft {
+        color: #ffd166;
+    }
+
+.admin-row-actions {
+    display: flex;
+    gap: .65rem;
+    white-space: nowrap;
+}
+
+    .admin-row-actions a, .admin-row-actions button {
+        background: transparent;
+        border: 0;
+        color: #79a8ff;
+        cursor: pointer;
+        font: inherit;
+        padding: 0;
+        text-decoration: none;
+    }
+
+    .admin-row-actions button {
+        color: #ff9aaa;
+    }
+
+        .admin-row-actions button.admin-edit-action {
+            color: #79a8ff;
+        }
+
+.admin-form {
+    background: rgba(15, 28, 45, .68);
+    border: 1px solid rgba(148, 163, 184, .16);
+    border-radius: 8px;
+    max-width: 58rem;
+    padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+.admin-editor {
+    margin-bottom: 2rem;
+}
+
+.admin-form-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-form label {
+    color: #d7e2f0;
+    display: grid;
+    font-size: .86rem;
+    font-weight: 750;
+    gap: .4rem;
+}
+
+    .admin-form label.wide {
+        grid-column: 1 / -1;
+    }
+
+.admin-form input, .admin-form textarea {
+    background: #07111f;
+    border: 1px solid rgba(148, 163, 184, .24);
+    border-radius: 7px;
+    color: #f8fbff;
+    font: inherit;
+    outline: 0;
+    padding: .75rem;
+}
+
+    .admin-form input:focus, .admin-form textarea:focus {
+        border-color: #79a8ff;
+        box-shadow: 0 0 0 3px rgba(121, 168, 255, .1);
+    }
+
+.admin-form label small {
+    color: #71849d;
+    font-weight: 500;
+}
+
+.admin-form .admin-checkbox {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+    .admin-form .admin-checkbox input {
+        height: 1rem;
+        width: 1rem;
+    }
+
+.admin-form-actions {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+    .admin-form-actions button {
+        background: linear-gradient(135deg, #63e6be, #79a8ff);
+        border: 0;
+        border-radius: 7px;
+        color: #06101d;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 850;
+        padding: .75rem 1rem;
+    }
+
+        .admin-form-actions button.admin-cancel-action {
+            background: transparent;
+            color: #91a4bc;
+        }
+
+    .admin-form-actions a {
+        color: #91a4bc;
+        text-decoration: none;
+    }
+
+.admin-form-error {
+    background: rgba(255, 107, 129, .08);
+    border: 1px solid rgba(255, 107, 129, .25);
+    border-radius: 7px;
+    color: #ffabb8;
+    margin-top: 1rem;
+    padding: .7rem;
+}
+
+.admin-form-success {
+    background: rgba(99, 230, 190, .08);
+    border: 1px solid rgba(99, 230, 190, .25);
+    border-radius: 7px;
+    color: #63e6be;
+    margin-top: 1rem;
+    padding: .7rem;
+}
+
+.admin-nested-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+    .admin-nested-header h2 {
+        color: #f8fbff;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+.admin-nested-item {
+    border-top: 1px solid rgba(148, 163, 184, .14);
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+
+.admin-danger-action {
+    background: transparent;
+    border: 0;
+    color: #ff9aaa;
+    cursor: pointer;
+    font: inherit;
+    margin-top: .75rem;
+    padding: 0;
+}
+
+@media (max-width: 640px) {
+    .admin-page-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-form label.wide {
+        grid-column: auto;
+    }
+}
+
+.section-reveal {
+    animation: reveal .72s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}

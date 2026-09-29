@@ -1,0 +1,31 @@
+@page "/projects"
+
+<section class="projects-page section-reveal">
+    <SectionTitleComponent Eyebrow="Projects" Title="Selected work" />
+
+    @if (IsLoading)
+    {
+        <LoadingSkeletonComponent Variant="cards" Count="3" />
+    }
+    else if (LoadError is not null)
+    {
+        <ErrorStateComponent Title="Unable to load projects"
+                             Description="Published work is temporarily unavailable."
+                             IsRetrying="IsLoading"
+                             OnRetry="LoadAsync" />
+    }
+    else if (Projects.Count == 0)
+    {
+        <EmptyStateComponent Title="No published projects yet"
+                             Description="New work will appear here once it is published." />
+    }
+    else
+    {
+        <div class="projects-grid">
+            @foreach (var project in Projects)
+            {
+                <ProjectCardComponent Project="project" />
+            }
+        </div>
+    }
+</section>

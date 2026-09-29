@@ -1,0 +1,74 @@
+@page "/admin/messages"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Inbox</p>
+        <h1>Contact messages</h1>
+        <span>@UnreadCount unread</span>
+    </div>
+</header>
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="list" Count="4" />
+}
+else if (Error is not null)
+{
+    <ErrorStateComponent Title="Unable to load messages"
+                         Description="@Error"
+                         OnRetry="LoadAsync"
+                         IsRetrying="IsLoading" />
+}
+else if (Messages.Count == 0)
+{
+    <EmptyStateComponent Title="Inbox is empty"
+                         Description="New contact submissions will appear here." />
+}
+else
+{
+    <div class="message-grid">
+        <div class="message-list">
+            @foreach (var message in Messages)
+            {
+                <button class="message-preview @(message.IsRead ? "" : "unread") @(Selected?.Id == message.Id ? "selected" : "")"
+                        @onclick="() => OpenAsync(message)">
+                    <span>
+                        <strong>@message.Name</strong>
+                        <time>@message.CreatedAt.LocalDateTime.ToString("dd MMM, HH:mm")</time>
+                    </span>
+                    <b>@message.Subject</b>
+                    <small>@message.Email</small>
+                </button>
+            }
+        </div>
+
+        <article class="message-detail">
+            @if (Selected is null)
+            {
+                <div class="message-placeholder">Select a message to read it.</div>
+            }
+            else
+            {
+                <header>
+                    <div>
+                        <p>From @Selected.Name</p>
+                        <h2>@Selected.Subject</h2>
+                        <a href="mailto:@Selected.Email">@Selected.Email</a>
+                    </div>
+                    <time>@Selected.CreatedAt.LocalDateTime.ToString("f")</time>
+                </header>
+
+                <div class="message-body">@Selected.Message</div>
+
+                <footer>
+                    <button @onclick="ToggleReadAsync">
+                        Mark as @(Selected.IsRead ? "unread" : "read")
+                    </button>
+                    <button class="danger" @onclick="DeleteAsync">Delete</button>
+                </footer>
+            }
+        </article>
+    </div>
+}

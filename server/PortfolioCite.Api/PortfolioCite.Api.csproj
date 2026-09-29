@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9d4f8936-032b-4749-9a71-79ac8c4fdf1d</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.20" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.20">
+
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PortfolioCite.Application\PortfolioCite.Application.csproj" />
+    <ProjectReference Include="..\PortfolioCite.Infrastructure\PortfolioCite.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\PortfolioCite.Contracts\PortfolioCite.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

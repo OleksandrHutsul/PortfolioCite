@@ -1,0 +1,138 @@
+@page "/"
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="hero" Count="2" />
+}
+else if (LoadError is not null)
+{
+    <section class="page-section">
+        <ErrorStateComponent Title="Unable to load the portfolio"
+                             Description="The portfolio service could not be reached. Please try again."
+                             IsRetrying="IsLoading"
+                             OnRetry="LoadAsync" />
+    </section>
+}
+else if (Portfolio is not null)
+{
+    <section class="hero section-reveal" id="profile">
+        <div class="hero__content">
+            <p class="hero__eyebrow">Software developer</p>
+            <h1>@Portfolio.Profile.FullName</h1>
+            <strong>@Portfolio.Profile.Role</strong>
+            <p>@Portfolio.Profile.Summary</p>
+            <div class="hero__actions">
+                <a href="#projects-preview">View work</a>
+                <a href="contact">Contact</a>
+            </div>
+        </div>
+
+        <div class="hero__portrait">
+            <img src="@Portfolio.Profile.AvatarUrl" alt="Portrait of @Portfolio.Profile.FullName" />
+            <div class="hero__signal" aria-hidden="true">
+                @foreach (var skill in Portfolio.SkillCategories.SelectMany(category => category.Skills).Take(3))
+                {
+                    <span>@skill.Name</span>
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="page-section section-reveal" id="about">
+        <SectionTitleComponent Eyebrow="About" Title="Engineer with product instincts" />
+        <div class="about-grid">
+            <article>
+                <h3>Current focus</h3>
+                <p>@Portfolio.Profile.CurrentFocus</p>
+            </article>
+            <article>
+                <h3>Education</h3>
+                @if (Portfolio.Education.Count == 0)
+                {
+                    <p>Education details will be added soon.</p>
+                }
+                else
+                {
+                    @foreach (var education in Portfolio.Education)
+                    {
+                        <p><strong>@education.Degree</strong>@(string.IsNullOrWhiteSpace(education.FieldOfStudy) ? null : $" in {education.FieldOfStudy}"), @education.Institution</p>
+                    }
+                }
+            </article>
+            <article>
+                <h3>Languages</h3>
+                <p>@Portfolio.Profile.Languages</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="page-section section-reveal" id="skills">
+        <SectionTitleComponent Eyebrow="Skills" Title="Technologies I use to build" />
+        @if (Portfolio.SkillCategories.Count == 0)
+        {
+            <EmptyStateComponent Title="Skills are being updated" />
+        }
+        else
+        {
+            <div class="skill-grid">
+                @foreach (var category in Portfolio.SkillCategories)
+                {
+                    <article class="skill-category">
+                        <h3>@category.Name</h3>
+                        <div>
+                            @foreach (var skill in category.Skills)
+                            {
+                                <TechnologyCardComponent Skill="skill" />
+                            }
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+
+    <section class="page-section section-reveal" id="experience">
+        <SectionTitleComponent Eyebrow="Experience" Title="Work history" />
+        @if (Portfolio.WorkExperiences.Count == 0)
+        {
+            <EmptyStateComponent Title="Experience is being updated" />
+        }
+        else
+        {
+            <div class="timeline">
+                @foreach (var experience in Portfolio.WorkExperiences)
+                {
+                    <article>
+                        <span>@FormatRange(experience)</span>
+                        <h3>@experience.Position</h3>
+                        <strong>@experience.Company</strong>
+                        <p>@experience.Summary</p>
+                        <ul>
+                            @foreach (var highlight in experience.Highlights)
+                            {
+                                <li>@highlight</li>
+                            }
+                        </ul>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+
+    <section class="page-section section-reveal" id="projects-preview">
+        <SectionTitleComponent Eyebrow="Projects" Title="Selected systems" />
+        @if (Portfolio.Projects.Count == 0)
+        {
+            <EmptyStateComponent Title="No published projects yet" />
+        }
+        else
+        {
+            <div class="projects-preview">
+                @foreach (var project in Portfolio.Projects.Take(3))
+                {
+                    <ProjectCardComponent Project="project" />
+                }
+            </div>
+        }
+    </section>
+}

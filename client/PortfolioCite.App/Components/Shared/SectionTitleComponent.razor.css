@@ -1,0 +1,23 @@
+.section-title {
+    margin: 0 0 1.2rem;
+}
+
+.section-title p {
+    color: #63e6be;
+    font-size: .78rem;
+    font-weight: 850;
+    margin: 0 0 .35rem;
+    text-transform: uppercase;
+}
+
+.section-title h2 {
+    color: #f8fbff;
+    font-size: 2rem;
+    margin: 0;
+}
+
+@media (max-width: 680px) {
+    .section-title h2 {
+        font-size: 1.55rem;
+    }
+}

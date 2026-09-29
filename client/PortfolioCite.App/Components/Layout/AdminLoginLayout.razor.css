@@ -1,0 +1,8 @@
+.admin-login-shell {
+    align-items: center;
+    background: radial-gradient(circle at top, rgba(121, 168, 255, .15), transparent 30rem), #07111f;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1.25rem;
+}

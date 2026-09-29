@@ -1,0 +1,129 @@
+@page "/admin/education"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Content</p>
+        <h1>Education</h1>
+        <span>Manage education history and display order.</span>
+    </div>
+
+    <button class="admin-primary-action admin-action-button" type="button" @onclick="StartCreate">
+        Add education
+    </button>
+</header>
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="list" Count="4" />
+}
+else if (LoadError is not null)
+{
+    <ErrorStateComponent Title="Unable to load education"
+                         Description="@LoadError"
+                         OnRetry="LoadAsync"
+                         IsRetrying="IsLoading" />
+}
+else
+{
+    @if (IsEditing)
+    {
+        <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="admin-form-grid">
+                <label>
+                    <span>Institution</span>
+                    <InputText @bind-Value="Request.Institution" />
+                </label>
+
+                <label>
+                    <span>Degree</span>
+                    <InputText @bind-Value="Request.Degree" />
+                </label>
+
+                <label>
+                    <span>Field of study</span>
+                    <InputText @bind-Value="Request.FieldOfStudy" />
+                </label>
+
+                <label>
+                    <span>Display order</span>
+                    <InputNumber @bind-Value="Request.DisplayOrder" />
+                </label>
+
+                <label>
+                    <span>Start date</span>
+                    <InputDate @bind-Value="Request.StartedOn" />
+                </label>
+
+                <label>
+                    <span>End date</span>
+                    <InputDate @bind-Value="Request.EndedOn" />
+                </label>
+
+                <label class="wide">
+                    <span>Description</span>
+                    <InputTextArea @bind-Value="Request.Description" rows="5" />
+                </label>
+            </div>
+
+            @if (SaveError is not null)
+            {
+                <div class="admin-form-error" role="alert">@SaveError</div>
+            }
+
+            <div class="admin-form-actions">
+                <button type="submit" disabled="@IsSaving">
+                    @(IsSaving ? "Saving…" : "Save education")
+                </button>
+
+                <button type="button" class="admin-cancel-action" @onclick="CancelEdit">
+                    Cancel
+                </button>
+            </div>
+        </EditForm>
+    }
+
+    @if (EducationItems.Count == 0)
+    {
+        <EmptyStateComponent Title="No education entries"
+                             Description="Add the first item to populate the education section." />
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Education</th>
+                        <th>Dates</th>
+                        <th>Order</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in EducationItems)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@item.Degree</strong>
+                                <small>@item.Institution@(string.IsNullOrWhiteSpace(item.FieldOfStudy) ? null : $" · {item.FieldOfStudy}")</small>
+                            </td>
+                            <td>
+                                @item.StartedOn.ToString("MMM yyyy") – @(item.EndedOn?.ToString("MMM yyyy") ?? "Present")
+                            </td>
+                            <td>@item.DisplayOrder</td>
+                            <td class="admin-row-actions">
+                                <button class="admin-edit-action" @onclick="() => StartEdit(item)">Edit</button>
+                                <button @onclick="() => DeleteAsync(item)">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}

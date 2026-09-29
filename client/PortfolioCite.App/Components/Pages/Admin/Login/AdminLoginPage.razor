@@ -1,0 +1,35 @@
+@page "/admin/login"
+@layout AdminLoginLayout
+
+<section class="login-card">
+    <a href="/" class="login-back">← Back to portfolio</a>
+
+    <p class="login-eyebrow">Private administration</p>
+    <h1>Welcome back</h1>
+    <p class="login-copy">Sign in to manage portfolio content and messages.</p>
+
+    <EditForm Model="Request" OnValidSubmit="LoginAsync" class="login-form">
+        <DataAnnotationsValidator />
+
+        <label>
+            <span>Email</span>
+            <InputText @bind-Value="Request.Email" type="email" autocomplete="username" />
+            <ValidationMessage For="@(() => Request.Email)" />
+        </label>
+
+        <label>
+            <span>Password</span>
+            <InputText @bind-Value="Request.Password" type="password" autocomplete="current-password" />
+            <ValidationMessage For="@(() => Request.Password)" />
+        </label>
+
+        @if (Error is not null)
+        {
+            <div class="login-error" role="alert">@Error</div>
+        }
+
+        <button type="submit" disabled="@IsSubmitting">
+            @(IsSubmitting ? "Signing in…" : "Sign in")
+        </button>
+    </EditForm>
+</section>

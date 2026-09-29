@@ -1,0 +1,37 @@
+@page "/certificates"
+
+<section class="certificates-page section-reveal">
+    <SectionTitleComponent Eyebrow="Certificates" Title="Validated learning" />
+
+    @if (IsLoading)
+    {
+        <LoadingSkeletonComponent Variant="list" Count="4" />
+    }
+    else if (LoadError is not null)
+    {
+        <ErrorStateComponent Title="Unable to load certificates"
+                             Description="Credentials are temporarily unavailable."
+                             IsRetrying="IsLoading"
+                             OnRetry="LoadAsync" />
+    }
+    else if (Certificates.Count == 0)
+    {
+        <EmptyStateComponent Title="No certificates yet" />
+    }
+    else
+    {
+        <div class="certificate-list">
+            @foreach (var certificate in Certificates)
+            {
+                <article>
+                    <div>
+                        <h3>@certificate.Name</h3>
+                        <p>@certificate.Issuer</p>
+                    </div>
+                    <time>@certificate.IssuedOn.ToString("MMM yyyy")</time>
+                    <a href="@certificate.CredentialUrl" target="_blank" rel="noopener noreferrer">Credential</a>
+                </article>
+            }
+        </div>
+    }
+</section>

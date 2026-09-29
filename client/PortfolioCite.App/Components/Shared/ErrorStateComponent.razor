@@ -1,0 +1,13 @@
+<section class="error-state" role="alert">
+    <span aria-hidden="true">!</span>
+    <div>
+        <h2>@Title</h2>
+        @if (!string.IsNullOrWhiteSpace(Description))
+        {
+            <p>@Description</p>
+        }
+    </div>
+    <button type="button" @onclick="Retry" disabled="@IsRetrying">
+        @(IsRetrying ? "Retrying…" : "Retry")
+    </button>
+</section>

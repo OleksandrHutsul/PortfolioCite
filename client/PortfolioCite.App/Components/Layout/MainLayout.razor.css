@@ -1,0 +1,60 @@
+.site-shell {
+    background:
+        radial-gradient(circle at top left, rgba(65, 120, 255, .13), transparent 28rem),
+        radial-gradient(circle at 82% 12%, rgba(59, 219, 164, .10), transparent 24rem),
+        linear-gradient(180deg, #07111f 0%, #091625 52%, #07111f 100%);
+    color: #d7e2f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.site-shell::before {
+    background-image:
+        linear-gradient(rgba(148, 163, 184, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, .045) 1px, transparent 1px);
+    background-size: 56px 56px;
+    content: "";
+    inset: 0;
+    mask-image: linear-gradient(to bottom, black, transparent 74%);
+    pointer-events: none;
+    position: fixed;
+}
+
+.site-shell__main {
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.site-shell__content {
+    animation: page-enter .42s ease both;
+    margin: 0 auto;
+    max-width: 1160px;
+    padding: 0 1.35rem 4.5rem;
+}
+
+.not-found {
+    padding: 7rem 0;
+}
+
+.not-found h1 {
+    color: #f8fbff;
+}
+
+.not-found a {
+    color: #63e6be;
+    font-weight: 800;
+}
+
+@keyframes page-enter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,81 @@
+.skeleton {
+    display: grid;
+    gap: 1rem;
+}
+
+.skeleton--cards,
+.skeleton--skills {
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+.skeleton--hero {
+    grid-template-columns: minmax(0, 1.05fr) minmax(18rem, .95fr);
+    min-height: calc(100vh - 4.4rem);
+    padding: 4.5rem 0 3.75rem;
+}
+
+.skeleton--contact {
+    grid-template-columns: minmax(15rem, .8fr) minmax(18rem, 1.2fr);
+}
+
+.skeleton--list .skeleton__item {
+    min-height: 7rem;
+}
+
+.skeleton__item {
+    background: rgba(15, 28, 45, .68);
+    border: 1px solid rgba(148, 163, 184, .13);
+    border-radius: 8px;
+    display: grid;
+    gap: .8rem;
+    min-height: 14rem;
+    overflow: hidden;
+    padding: 1rem;
+    position: relative;
+}
+
+    .skeleton__item::after {
+        animation: shimmer 1.5s infinite;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .065), transparent);
+        content: "";
+        inset: 0;
+        position: absolute;
+        transform: translateX(-100%);
+    }
+
+.skeleton__media,
+.skeleton__line {
+    background: rgba(148, 163, 184, .11);
+    border-radius: 6px;
+    display: block;
+}
+
+.skeleton__media {
+    min-height: 7rem;
+}
+
+.skeleton__line {
+    height: .75rem;
+}
+
+.skeleton__line--title {
+    height: 1.25rem;
+    width: 62%;
+}
+
+.skeleton__line--short {
+    width: 42%;
+}
+
+@keyframes shimmer {
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@media (max-width: 760px) {
+    .skeleton--hero,
+    .skeleton--contact {
+        grid-template-columns: 1fr;
+    }
+}

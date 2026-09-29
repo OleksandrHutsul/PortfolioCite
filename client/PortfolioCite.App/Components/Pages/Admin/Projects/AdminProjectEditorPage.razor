@@ -1,0 +1,97 @@
+@page "/admin/projects/new"
+@page "/admin/projects/{Id:int}"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Projects</p>
+        <h1>@(Id is null ? "Create project" : "Edit project")</h1>
+    </div>
+
+    <a class="admin-secondary-action" href="/admin/projects">Back to projects</a>
+</header>
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="list" Count="3" />
+}
+else if (LoadError is not null)
+{
+    <ErrorStateComponent Title="Unable to load the project"
+                         Description="@LoadError"
+                         OnRetry="LoadAsync"
+                         IsRetrying="IsLoading" />
+}
+else
+{
+    <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="admin-form-grid">
+            <label class="wide">
+                <span>Name</span>
+                <InputText @bind-Value="Request.Name" />
+            </label>
+
+            <label class="wide">
+                <span>Short description</span>
+                <InputText @bind-Value="Request.ShortDescription" />
+            </label>
+
+            <label class="wide">
+                <span>Description</span>
+                <InputTextArea @bind-Value="Request.Description" rows="7" />
+            </label>
+
+            <label>
+                <span>GitHub URL</span>
+                <InputText @bind-Value="Request.GitHubUrl" />
+            </label>
+
+            <label>
+                <span>Live URL</span>
+                <InputText @bind-Value="Request.LiveUrl" />
+            </label>
+
+            <label class="wide">
+                <span>Image URL</span>
+                <InputText @bind-Value="Request.ImageUrl" />
+            </label>
+
+            <label>
+                <span>Display order</span>
+                <InputNumber @bind-Value="Request.DisplayOrder" />
+            </label>
+
+            <label class="wide">
+                <span>Technologies</span>
+                <InputText @bind-Value="TechnologyNames" />
+                <small>Comma-separated, for example: ASP.NET Core, Blazor, PostgreSQL</small>
+            </label>
+
+            <label class="admin-checkbox">
+                <InputCheckbox @bind-Value="Request.IsFeatured" />
+                <span>Featured project</span>
+            </label>
+
+            <label class="admin-checkbox">
+                <InputCheckbox @bind-Value="Request.IsPublished" />
+                <span>Published publicly</span>
+            </label>
+        </div>
+
+        @if (SaveError is not null)
+        {
+            <div class="admin-form-error" role="alert">@SaveError</div>
+        }
+
+        <div class="admin-form-actions">
+            <button type="submit" disabled="@IsSaving">
+                @(IsSaving ? "Saving…" : "Save project")
+            </button>
+            <a href="/admin/projects">Cancel</a>
+        </div>
+    </EditForm>
+}

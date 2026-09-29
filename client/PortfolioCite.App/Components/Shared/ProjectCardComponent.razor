@@ -1,0 +1,32 @@
+<article class="project-card">
+    @if (!string.IsNullOrWhiteSpace(Project.ImageUrl))
+    {
+        <img src="@Project.ImageUrl" alt="" />
+    }
+    <div class="project-card__body">
+        <div>
+            <h3>@Project.Name</h3>
+            @if (Project.IsFeatured)
+            {
+                <span>Featured</span>
+            }
+        </div>
+        <p>@Project.ShortDescription</p>
+        <ul>
+            @foreach (var technology in Project.Technologies)
+            {
+                <li>@technology</li>
+            }
+        </ul>
+        <div class="project-card__actions">
+            @if (!string.IsNullOrWhiteSpace(Project.GitHubUrl))
+            {
+                <a href="@Project.GitHubUrl" target="_blank" rel="noopener noreferrer">Repository</a>
+            }
+            @if (!string.IsNullOrWhiteSpace(Project.LiveUrl))
+            {
+                <a href="@Project.LiveUrl" target="_blank" rel="noopener noreferrer">Live</a>
+            }
+        </div>
+    </div>
+</article>

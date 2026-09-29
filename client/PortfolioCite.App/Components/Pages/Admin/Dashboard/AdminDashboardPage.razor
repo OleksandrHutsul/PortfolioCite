@@ -1,0 +1,52 @@
+@page "/admin"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Administration</p>
+        <h1>Dashboard</h1>
+    </div>
+</header>
+
+<div class="admin-dashboard-grid">
+    <a href="/admin/profile">
+        <strong>Profile</strong>
+        <span>Edit the portfolio owner, summary, focus, and profile links.</span>
+    </a>
+
+    <a href="/admin/projects">
+        <strong>Projects</strong>
+        <span>Create, edit, publish, and order portfolio work.</span>
+    </a>
+
+    <a href="/admin/skills">
+        <strong>Skills</strong>
+        <span>Organize categories and the skills displayed in each one.</span>
+    </a>
+
+    <a href="/admin/experience">
+        <strong>Experience</strong>
+        <span>Maintain roles, timelines, and career highlights.</span>
+    </a>
+
+    <a href="/admin/education">
+        <strong>Education</strong>
+        <span>Manage institutions, degrees, and dates.</span>
+    </a>
+
+    <a href="/admin/certificates">
+        <strong>Certificates</strong>
+        <span>Add and update professional credentials.</span>
+    </a>
+
+    <a href="/admin/contact-links">
+        <strong>Contact links</strong>
+        <span>Maintain public email and social destinations.</span>
+    </a>
+
+    <a href="/admin/messages">
+        <strong>Messages</strong>
+        <span>Review and manage contact submissions.</span>
+    </a>
+</div>

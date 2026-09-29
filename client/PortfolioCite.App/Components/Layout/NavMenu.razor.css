@@ -1,0 +1,117 @@
+.site-nav {
+    align-items: center;
+    backdrop-filter: blur(20px);
+    background: rgba(7, 17, 31, .82);
+    border-bottom: 1px solid rgba(148, 163, 184, .13);
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: .8rem max(1rem, calc((100vw - 1160px) / 2 + 1.35rem));
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.brand {
+    align-items: center;
+    color: inherit;
+    display: flex;
+    gap: .75rem;
+    min-width: max-content;
+    text-decoration: none;
+}
+
+.brand span {
+    align-items: center;
+    background: linear-gradient(135deg, #63e6be, #79a8ff);
+    border-radius: 8px;
+    color: #06101d;
+    display: inline-flex;
+    font-weight: 900;
+    height: 2.35rem;
+    justify-content: center;
+    width: 2.35rem;
+}
+
+.brand strong,
+.brand small {
+    display: block;
+}
+
+.brand strong {
+    color: #f8fbff;
+    font-size: .95rem;
+}
+
+.brand small {
+    color: #91a4bc;
+    font-size: .78rem;
+}
+
+.nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    justify-content: flex-end;
+}
+
+.nav-list ::deep .nav-link,
+.nav-list .nav-link {
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #a9b7c9;
+    display: inline-flex;
+    font-size: .92rem;
+    font-weight: 750;
+    padding: .55rem .7rem;
+    position: relative;
+    text-decoration: none;
+    transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+}
+
+.nav-list ::deep .nav-link:hover,
+.nav-list ::deep .nav-link.active,
+.nav-list .nav-link:hover,
+.nav-list .nav-link.active {
+    background: rgba(255, 255, 255, .055);
+    border-color: rgba(148, 163, 184, .16);
+    color: #f8fbff;
+    transform: translateY(-1px);
+}
+
+.nav-list ::deep .nav-link::after,
+.nav-list .nav-link::after {
+    background: linear-gradient(90deg, #63e6be, #79a8ff);
+    border-radius: 999px;
+    bottom: .22rem;
+    content: "";
+    height: 2px;
+    left: .7rem;
+    position: absolute;
+    right: .7rem;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .22s ease;
+}
+
+.nav-list ::deep .nav-link:hover::after,
+.nav-list ::deep .nav-link.active::after,
+.nav-list .nav-link:hover::after,
+.nav-list .nav-link.active::after {
+    transform: scaleX(1);
+}
+
+@media (max-width: 760px) {
+    .site-nav {
+        align-items: stretch;
+        flex-direction: column;
+        gap: .75rem;
+    }
+
+    .nav-list {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: .2rem;
+    }
+}

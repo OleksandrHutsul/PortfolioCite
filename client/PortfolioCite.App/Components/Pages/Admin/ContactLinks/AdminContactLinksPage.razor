@@ -1,0 +1,112 @@
+@page "/admin/contact-links"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Content</p>
+        <h1>Contact links</h1>
+        <span>Manage social, professional, and email links.</span>
+    </div>
+
+    <button class="admin-primary-action admin-action-button" type="button" @onclick="StartCreate">
+        Add contact link
+    </button>
+</header>
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="list" Count="4" />
+}
+else if (LoadError is not null)
+{
+    <ErrorStateComponent Title="Unable to load contact links"
+                         Description="@LoadError"
+                         OnRetry="LoadAsync"
+                         IsRetrying="IsLoading" />
+}
+else
+{
+    @if (IsEditing)
+    {
+        <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="admin-form-grid">
+                <label>
+                    <span>Label</span>
+                    <InputText @bind-Value="Request.Label" />
+                </label>
+
+                <label>
+                    <span>URL</span>
+                    <InputText @bind-Value="Request.Url" />
+                </label>
+
+                <label>
+                    <span>Icon name</span>
+                    <InputText @bind-Value="Request.IconName" />
+                </label>
+
+                <label>
+                    <span>Display order</span>
+                    <InputNumber @bind-Value="Request.DisplayOrder" />
+                </label>
+            </div>
+
+            @if (SaveError is not null)
+            {
+                <div class="admin-form-error" role="alert">@SaveError</div>
+            }
+
+            <div class="admin-form-actions">
+                <button type="submit" disabled="@IsSaving">
+                    @(IsSaving ? "Saving…" : "Save link")
+                </button>
+
+                <button type="button" class="admin-cancel-action" @onclick="CancelEdit">
+                    Cancel
+                </button>
+            </div>
+        </EditForm>
+    }
+
+    @if (Links.Count == 0)
+    {
+        <EmptyStateComponent Title="No contact links"
+                             Description="Add a contact destination to show it publicly." />
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Link</th>
+                        <th>Icon</th>
+                        <th>Order</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Links)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@item.Label</strong>
+                                <small>@item.Url</small>
+                            </td>
+                            <td>@item.IconName</td>
+                            <td>@item.DisplayOrder</td>
+                            <td class="admin-row-actions">
+                                <button class="admin-edit-action" @onclick="() => StartEdit(item)">Edit</button>
+                                <button @onclick="() => DeleteAsync(item)">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}

@@ -1,0 +1,111 @@
+@page "/contact"
+
+<section class="contact-page section-reveal">
+    <SectionTitleComponent Eyebrow="Contact" Title="Let's build something useful" />
+
+    @if (IsLoading)
+    {
+        <LoadingSkeletonComponent Variant="contact" Count="2" />
+    }
+    else if (LoadError is not null)
+    {
+        <ErrorStateComponent Title="Unable to load contact details"
+                             Description="The contact service is temporarily unavailable."
+                             IsRetrying="IsLoading"
+                             OnRetry="LoadAsync" />
+    }
+    else
+    {
+        <div class="contact-grid">
+            <aside class="contact-intro">
+                <p class="contact-intro__lead">Have a project, product idea, or .NET challenge in mind?</p>
+                <p>Share a few details and I'll get back to you as soon as possible.</p>
+
+                <a class="contact-email" href="mailto:@Email">
+                    <span>Email</span>
+                    <strong>@Email</strong>
+                </a>
+
+                @if (Links.Count > 0)
+                {
+                    <div class="contact-links" aria-label="Professional links">
+                        @foreach (var link in Links)
+                        {
+                            <a href="@link.Url" target="_blank" rel="noopener noreferrer">
+                                <span>@link.Label</span>
+                                <span aria-hidden="true">↗</span>
+                            </a>
+                        }
+                    </div>
+                }
+            </aside>
+
+            <div class="contact-form-panel">
+                @if (Submitted)
+                {
+                    <div class="contact-success" role="status">
+                        <span aria-hidden="true">✓</span>
+                        <h2>Message sent</h2>
+                        <p>Thanks for reaching out. I'll get back to you soon.</p>
+                        <button type="button" @onclick="ResetForm">Send another message</button>
+                    </div>
+                }
+                else
+                {
+                    <EditForm Model="Submission" OnValidSubmit="SubmitAsync" class="contact-form">
+                        <DataAnnotationsValidator />
+
+                        <div class="contact-form__row">
+                            <label>
+                                <span>Name</span>
+                                <InputText @bind-Value="Submission.Name" autocomplete="name" />
+                                <ValidationMessage For="@(() => Submission.Name)" />
+                            </label>
+
+                            <label>
+                                <span>Email</span>
+                                <InputText @bind-Value="Submission.Email" type="email" autocomplete="email" />
+                                <ValidationMessage For="@(() => Submission.Email)" />
+                            </label>
+                        </div>
+
+                        <label>
+                            <span>Subject</span>
+                            <InputText @bind-Value="Submission.Subject" />
+                            <ValidationMessage For="@(() => Submission.Subject)" />
+                        </label>
+
+                        <label>
+                            <span>Message</span>
+                            <InputTextArea @bind-Value="Submission.Message" rows="7" />
+                            <ValidationMessage For="@(() => Submission.Message)" />
+                        </label>
+
+                        <label class="contact-honeypot" aria-hidden="true">
+                            Website
+                            <InputText @bind-Value="Submission.Website" tabindex="-1" autocomplete="off" />
+                        </label>
+
+                        @if (SubmitError is not null)
+                        {
+                            <div class="contact-submit-error" role="alert">@SubmitError</div>
+                        }
+
+                        <button class="contact-submit" type="submit" disabled="@IsSubmitting">
+                            @if (IsSubmitting)
+                            {
+                                <span class="button-spinner" aria-hidden="true"></span>
+                                <span>Sending…</span>
+                            }
+                            else
+                            {
+                                <span>Send message</span>
+                                <span aria-hidden="true">→</span>
+                            }
+                        </button>
+                    </EditForm>
+                }
+            </div>
+        </div>
+    }
+</section>

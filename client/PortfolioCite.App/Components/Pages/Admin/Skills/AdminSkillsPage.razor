@@ -1,0 +1,156 @@
+@page "/admin/skills"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Content</p>
+        <h1>Skills</h1>
+        <span>Manage skill categories and the skills within each category.</span>
+    </div>
+
+    <button class="admin-primary-action admin-action-button" type="button" @onclick="StartCreate">
+        Add category
+    </button>
+</header>
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="list" Count="4" />
+}
+else if (LoadError is not null)
+{
+    <ErrorStateComponent Title="Unable to load skills"
+                         Description="@LoadError"
+                         OnRetry="LoadAsync"
+                         IsRetrying="IsLoading" />
+}
+else
+{
+    @if (IsEditing)
+    {
+        <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="admin-form-grid">
+                <label>
+                    <span>Category name</span>
+                    <InputText @bind-Value="Request.Name" />
+                </label>
+
+                <label>
+                    <span>Display order</span>
+                    <InputNumber @bind-Value="Request.DisplayOrder" />
+                </label>
+            </div>
+
+            <div class="admin-nested-header">
+                <h2>Skills</h2>
+                <button type="button" class="admin-secondary-action admin-action-button" @onclick="AddSkill">
+                    Add skill
+                </button>
+            </div>
+
+            @foreach (var skill in Request.Skills)
+            {
+                <div class="admin-nested-item">
+                    <div class="admin-form-grid">
+                        <label>
+                            <span>Name</span>
+                            <InputText @bind-Value="skill.Name" />
+                        </label>
+
+                        <label>
+                            <span>Badge</span>
+                            <InputText @bind-Value="skill.Badge" />
+                        </label>
+
+                        <label class="wide">
+                            <span>Description</span>
+                            <InputTextArea @bind-Value="skill.Description" rows="3" />
+                        </label>
+
+                        <label>
+                            <span>Icon name</span>
+                            <InputText @bind-Value="skill.IconName" />
+                        </label>
+
+                        <label>
+                            <span>Accent color</span>
+                            <InputText @bind-Value="skill.AccentColor" />
+                        </label>
+
+                        <label>
+                            <span>Display order</span>
+                            <InputNumber @bind-Value="skill.DisplayOrder" />
+                        </label>
+                    </div>
+
+                    <button type="button" class="admin-danger-action" @onclick="() => RemoveSkill(skill)">
+                        Remove skill
+                    </button>
+                </div>
+            }
+
+            @if (SaveError is not null)
+            {
+                <div class="admin-form-error" role="alert">@SaveError</div>
+            }
+
+            <div class="admin-form-actions">
+                <button type="submit" disabled="@IsSaving">
+                    @(IsSaving ? "Saving…" : "Save category")
+                </button>
+
+                <button type="button" class="admin-cancel-action" @onclick="CancelEdit">
+                    Cancel
+                </button>
+            </div>
+        </EditForm>
+    }
+
+    @if (Categories.Count == 0)
+    {
+        <EmptyStateComponent Title="No skill categories"
+                             Description="Add the first category to populate the skills section." />
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Skills</th>
+                        <th>Order</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Categories)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@category.Name</strong>
+                            </td>
+                            <td>
+                                <div class="admin-tags">
+                                    @foreach (var skill in category.Skills)
+                                    {
+                                        <span>@skill.Name</span>
+                                    }
+                                </div>
+                            </td>
+                            <td>@category.DisplayOrder</td>
+                            <td class="admin-row-actions">
+                                <button class="admin-edit-action" @onclick="() => StartEdit(category)">Edit</button>
+                                <button @onclick="() => DeleteAsync(category)">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}

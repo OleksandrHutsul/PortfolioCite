@@ -1,0 +1,82 @@
+.error-state {
+    align-items: center;
+    animation: state-enter .3s ease both;
+    background: rgba(255, 107, 129, .07);
+    border: 1px solid rgba(255, 107, 129, .28);
+    border-radius: 8px;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: auto 1fr auto;
+    padding: 1.1rem;
+}
+
+    .error-state > span {
+        align-items: center;
+        background: rgba(255, 107, 129, .12);
+        border-radius: 50%;
+        color: #ff9aaa;
+        display: flex;
+        font-weight: 900;
+        height: 2.5rem;
+        justify-content: center;
+        width: 2.5rem;
+    }
+
+    .error-state h2,
+    .error-state p {
+        margin: 0;
+    }
+
+    .error-state h2 {
+        color: #f8fbff;
+        font-size: 1.05rem;
+    }
+
+    .error-state p {
+        color: #a9b7c9;
+        margin-top: .3rem;
+    }
+
+    .error-state button {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, .22);
+        border-radius: 7px;
+        color: #f8fbff;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 800;
+        padding: .65rem .9rem;
+        transition: background .2s ease, transform .2s ease;
+    }
+
+        .error-state button:hover {
+            background: rgba(255, 255, 255, .07);
+            transform: translateY(-1px);
+        }
+
+        .error-state button:disabled {
+            cursor: wait;
+            opacity: .65;
+        }
+
+@keyframes state-enter {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 560px) {
+    .error-state {
+        grid-template-columns: auto 1fr;
+    }
+
+        .error-state button {
+            grid-column: 1 / -1;
+        }
+}

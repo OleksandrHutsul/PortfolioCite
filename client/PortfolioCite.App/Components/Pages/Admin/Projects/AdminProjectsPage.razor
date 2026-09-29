@@ -1,0 +1,77 @@
+@page "/admin/projects"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Content</p>
+        <h1>Projects</h1>
+        <span>Manage published work and drafts.</span>
+    </div>
+
+    <a class="admin-primary-action" href="/admin/projects/new">Add project</a>
+</header>
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="list" Count="4" />
+}
+else if (Error is not null)
+{
+    <ErrorStateComponent Title="Unable to load projects"
+                         Description="@Error"
+                         OnRetry="LoadAsync"
+                         IsRetrying="IsLoading" />
+}
+else if (Projects.Count == 0)
+{
+    <EmptyStateComponent Title="No projects yet"
+                         Description="Create the first project to get started." />
+}
+else
+{
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Technologies</th>
+                    <th>Status</th>
+                    <th>Featured</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var project in Projects)
+                {
+                    <tr>
+                        <td>
+                            <strong>@project.Name</strong>
+                            <small>@project.ShortDescription</small>
+                        </td>
+                        <td>
+                            <div class="admin-tags">
+                                @foreach (var technology in project.Technologies)
+                                {
+                                    <span>@technology</span>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <button class="status-pill @(project.IsPublished ? "published" : "draft")"
+                                    @onclick="() => TogglePublishAsync(project)"
+                                    disabled="@IsSaving">
+                                @(project.IsPublished ? "Published" : "Draft")
+                            </button>
+                        </td>
+                        <td>@(project.IsFeatured ? "Yes" : "No")</td>
+                        <td class="admin-row-actions">
+                            <a href="@($"/admin/projects/{project.Id}")">Edit</a>
+                            <button @onclick="() => DeleteAsync(project)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

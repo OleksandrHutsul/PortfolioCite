@@ -1,0 +1,28 @@
+@inherits LayoutComponentBase
+
+<div class="admin-shell">
+    <aside class="admin-sidebar">
+        <a class="admin-brand" href="/admin">
+            Portfolio<span>Admin</span>
+        </a>
+
+        <nav aria-label="Administration">
+            <NavLink href="admin" Match="NavLinkMatch.All">Dashboard</NavLink>
+            <NavLink href="admin/profile">Profile</NavLink>
+            <NavLink href="admin/projects">Projects</NavLink>
+            <NavLink href="admin/skills">Skills</NavLink>
+            <NavLink href="admin/experience">Experience</NavLink>
+            <NavLink href="admin/education">Education</NavLink>
+            <NavLink href="admin/certificates">Certificates</NavLink>
+            <NavLink href="admin/contact-links">Contact links</NavLink>
+            <NavLink href="admin/messages">Messages</NavLink>
+        </nav>
+
+        <a class="view-site" href="/">View portfolio ↗</a>
+        <button type="button" @onclick="LogoutAsync">Sign out</button>
+    </aside>
+
+    <main class="admin-main">
+        @Body
+    </main>
+</div>

@@ -1,0 +1,90 @@
+@page "/admin/profile"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Content</p>
+        <h1>Profile</h1>
+        <span>Edit the identity and introduction shown across the portfolio.</span>
+    </div>
+</header>
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="list" Count="4" />
+}
+else if (LoadError is not null)
+{
+    <ErrorStateComponent Title="Unable to load the profile"
+                         Description="@LoadError"
+                         OnRetry="LoadAsync"
+                         IsRetrying="IsLoading" />
+}
+else
+{
+    <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="admin-form-grid">
+            <label>
+                <span>Full name</span>
+                <InputText @bind-Value="Request.FullName" />
+            </label>
+
+            <label>
+                <span>Role</span>
+                <InputText @bind-Value="Request.Role" />
+            </label>
+
+            <label>
+                <span>Location</span>
+                <InputText @bind-Value="Request.Location" />
+            </label>
+
+            <label>
+                <span>Email</span>
+                <InputText @bind-Value="Request.Email" />
+            </label>
+
+            <label class="wide">
+                <span>Summary</span>
+                <InputTextArea @bind-Value="Request.Summary" rows="7" />
+            </label>
+
+            <label class="wide">
+                <span>Current focus</span>
+                <InputTextArea @bind-Value="Request.CurrentFocus" rows="4" />
+            </label>
+
+            <label class="wide">
+                <span>Languages</span>
+                <InputText @bind-Value="Request.Languages" />
+            </label>
+
+            <label>
+                <span>Avatar URL</span>
+                <InputText @bind-Value="Request.AvatarUrl" />
+            </label>
+
+            <label>
+                <span>Résumé URL</span>
+                <InputText @bind-Value="Request.ResumeUrl" />
+            </label>
+        </div>
+
+        @if (SaveMessage is not null)
+        {
+            <div class="@(SaveSucceeded ? "admin-form-success" : "admin-form-error")" role="status">
+                @SaveMessage
+            </div>
+        }
+
+        <div class="admin-form-actions">
+            <button type="submit" disabled="@IsSaving">
+                @(IsSaving ? "Saving…" : "Save profile")
+            </button>
+        </div>
+    </EditForm>
+}

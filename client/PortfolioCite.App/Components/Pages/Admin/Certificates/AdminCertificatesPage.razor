@@ -1,0 +1,110 @@
+@page "/admin/certificates"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Content</p>
+        <h1>Certificates</h1>
+        <span>Manage credentials displayed on the public certificates page.</span>
+    </div>
+
+    <button class="admin-primary-action admin-action-button" type="button" @onclick="StartCreate">
+        Add certificate
+    </button>
+</header>
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="list" Count="4" />
+}
+else if (LoadError is not null)
+{
+    <ErrorStateComponent Title="Unable to load certificates"
+                         Description="@LoadError"
+                         OnRetry="LoadAsync"
+                         IsRetrying="IsLoading" />
+}
+else
+{
+    @if (IsEditing)
+    {
+        <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="admin-form-grid">
+                <label>
+                    <span>Name</span>
+                    <InputText @bind-Value="Request.Name" />
+                </label>
+
+                <label>
+                    <span>Issuer</span>
+                    <InputText @bind-Value="Request.Issuer" />
+                </label>
+
+                <label>
+                    <span>Issued on</span>
+                    <InputDate @bind-Value="Request.IssuedOn" />
+                </label>
+
+                <label>
+                    <span>Credential URL</span>
+                    <InputText @bind-Value="Request.CredentialUrl" />
+                </label>
+            </div>
+
+            @if (SaveError is not null)
+            {
+                <div class="admin-form-error" role="alert">@SaveError</div>
+            }
+
+            <div class="admin-form-actions">
+                <button type="submit" disabled="@IsSaving">
+                    @(IsSaving ? "Saving…" : "Save certificate")
+                </button>
+
+                <button type="button" class="admin-cancel-action" @onclick="CancelEdit">
+                    Cancel
+                </button>
+            </div>
+        </EditForm>
+    }
+
+    @if (Certificates.Count == 0)
+    {
+        <EmptyStateComponent Title="No certificates"
+                             Description="Add the first credential to populate the public page." />
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Certificate</th>
+                        <th>Issued</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Certificates)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@item.Name</strong>
+                                <small>@item.Issuer</small>
+                            </td>
+                            <td>@item.IssuedOn.ToString("MMM yyyy")</td>
+                            <td class="admin-row-actions">
+                                <button class="admin-edit-action" @onclick="() => StartEdit(item)">Edit</button>
+                                <button @onclick="() => DeleteAsync(item)">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}

@@ -1,0 +1,130 @@
+@page "/admin/experience"
+@attribute [Authorize(Policy = "PortfolioAdmin")]
+@layout AdminLayout
+
+<header class="admin-page-header">
+    <div>
+        <p>Content</p>
+        <h1>Experience</h1>
+        <span>Maintain roles, dates, summaries, and highlights.</span>
+    </div>
+
+    <button class="admin-primary-action admin-action-button" type="button" @onclick="StartCreate">
+        Add experience
+    </button>
+</header>
+
+@if (IsLoading)
+{
+    <LoadingSkeletonComponent Variant="list" Count="4" />
+}
+else if (LoadError is not null)
+{
+    <ErrorStateComponent Title="Unable to load experience"
+                         Description="@LoadError"
+                         OnRetry="LoadAsync"
+                         IsRetrying="IsLoading" />
+}
+else
+{
+    @if (IsEditing)
+    {
+        <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="admin-form-grid">
+                <label>
+                    <span>Company</span>
+                    <InputText @bind-Value="Request.Company" />
+                </label>
+
+                <label>
+                    <span>Position</span>
+                    <InputText @bind-Value="Request.Position" />
+                </label>
+
+                <label>
+                    <span>Start date</span>
+                    <InputDate @bind-Value="Request.StartedOn" />
+                </label>
+
+                <label>
+                    <span>End date</span>
+                    <InputDate @bind-Value="Request.EndedOn" />
+                </label>
+
+                <label>
+                    <span>Display order</span>
+                    <InputNumber @bind-Value="Request.DisplayOrder" />
+                </label>
+
+                <label class="wide">
+                    <span>Summary</span>
+                    <InputTextArea @bind-Value="Request.Summary" rows="5" />
+                </label>
+
+                <label class="wide">
+                    <span>Highlights</span>
+                    <InputTextArea @bind-Value="HighlightsText" rows="6" />
+                    <small>Enter one highlight per line.</small>
+                </label>
+            </div>
+
+            @if (SaveError is not null)
+            {
+                <div class="admin-form-error" role="alert">@SaveError</div>
+            }
+
+            <div class="admin-form-actions">
+                <button type="submit" disabled="@IsSaving">
+                    @(IsSaving ? "Saving…" : "Save experience")
+                </button>
+
+                <button type="button" class="admin-cancel-action" @onclick="CancelEdit">
+                    Cancel
+                </button>
+            </div>
+        </EditForm>
+    }
+
+    @if (Experiences.Count == 0)
+    {
+        <EmptyStateComponent Title="No experience entries"
+                             Description="Add the first role to populate the experience section." />
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Dates</th>
+                        <th>Order</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Experiences)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@item.Position</strong>
+                                <small>@item.Company</small>
+                            </td>
+                            <td>
+                                @item.StartedOn.ToString("MMM yyyy") – @(item.EndedOn?.ToString("MMM yyyy") ?? "Present")
+                            </td>
+                            <td>@item.DisplayOrder</td>
+                            <td class="admin-row-actions">
+                                <button class="admin-edit-action" @onclick="() => StartEdit(item)">Edit</button>
+                                <button @onclick="() => DeleteAsync(item)">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
