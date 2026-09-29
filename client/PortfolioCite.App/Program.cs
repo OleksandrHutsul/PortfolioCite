@@ -22,7 +22,7 @@ builder.Services.AddScoped<AdminAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
     provider.GetRequiredService<AdminAuthenticationStateProvider>());
 
-var apiBaseUrl = builder.Configuration["PortfolioApi:BaseUrl"] ?? "https://localhost:7254";
+var apiBaseUrl = builder.Configuration["PortfolioApi:BaseUrl"];
 
 builder.Services.AddHttpClient("PortfolioApi", client =>
 {
