@@ -58,54 +58,58 @@
                     <EditForm Model="Submission" OnValidSubmit="SubmitAsync" class="contact-form">
                         <DataAnnotationsValidator />
 
-                        <div class="contact-form__row">
+                        <div class="contact-form__fields">
+                            <div class="contact-form__row">
+                                <label>
+                                    <span>Name<RequiredIndicatorComponent For="@(() => Submission.Name)" /></span>
+                                    <InputText @bind-Value="Submission.Name" aria-required="true" autocomplete="name" />
+                                    <ValidationMessage For="@(() => Submission.Name)" />
+                                </label>
+
+                                <label>
+                                    <span>Email<RequiredIndicatorComponent For="@(() => Submission.Email)" /></span>
+                                    <InputText @bind-Value="Submission.Email" type="email" aria-required="true" autocomplete="email" />
+                                    <ValidationMessage For="@(() => Submission.Email)" />
+                                </label>
+                            </div>
+
                             <label>
-                                <span>Name</span>
-                                <InputText @bind-Value="Submission.Name" autocomplete="name" />
-                                <ValidationMessage For="@(() => Submission.Name)" />
+                                <span>Subject<RequiredIndicatorComponent For="@(() => Submission.Subject)" /></span>
+                                <InputText @bind-Value="Submission.Subject" aria-required="true" />
+                                <ValidationMessage For="@(() => Submission.Subject)" />
                             </label>
 
                             <label>
-                                <span>Email</span>
-                                <InputText @bind-Value="Submission.Email" type="email" autocomplete="email" />
-                                <ValidationMessage For="@(() => Submission.Email)" />
+                                <span>Message<RequiredIndicatorComponent For="@(() => Submission.Message)" /></span>
+                                <InputTextArea @bind-Value="Submission.Message" rows="7" aria-required="true" />
+                                <ValidationMessage For="@(() => Submission.Message)" />
+                            </label>
+
+                            <label class="contact-honeypot" aria-hidden="true">
+                                Website
+                                <InputText @bind-Value="Submission.Website" tabindex="-1" autocomplete="off" />
                             </label>
                         </div>
 
-                        <label>
-                            <span>Subject</span>
-                            <InputText @bind-Value="Submission.Subject" />
-                            <ValidationMessage For="@(() => Submission.Subject)" />
-                        </label>
-
-                        <label>
-                            <span>Message</span>
-                            <InputTextArea @bind-Value="Submission.Message" rows="7" />
-                            <ValidationMessage For="@(() => Submission.Message)" />
-                        </label>
-
-                        <label class="contact-honeypot" aria-hidden="true">
-                            Website
-                            <InputText @bind-Value="Submission.Website" tabindex="-1" autocomplete="off" />
-                        </label>
-
-                        @if (SubmitError is not null)
-                        {
-                            <div class="contact-submit-error" role="alert">@SubmitError</div>
-                        }
-
-                        <button class="contact-submit" type="submit" disabled="@IsSubmitting">
-                            @if (IsSubmitting)
+                        <div class="contact-form__actions">
+                            @if (SubmitError is not null)
                             {
-                                <span class="button-spinner" aria-hidden="true"></span>
-                                <span>Sending…</span>
+                                <div class="contact-submit-error" role="alert">@SubmitError</div>
                             }
-                            else
-                            {
-                                <span>Send message</span>
-                                <span aria-hidden="true">→</span>
-                            }
-                        </button>
+
+                            <button class="contact-submit" type="submit" disabled="@IsSubmitting">
+                                @if (IsSubmitting)
+                                {
+                                    <span class="button-spinner" aria-hidden="true"></span>
+                                    <span>Sending…</span>
+                                }
+                                else
+                                {
+                                    <span>Send message</span>
+                                    <span aria-hidden="true">→</span>
+                                }
+                            </button>
+                        </div>
                     </EditForm>
                 }
             </div>

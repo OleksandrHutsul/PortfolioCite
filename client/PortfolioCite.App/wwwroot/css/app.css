@@ -283,7 +283,8 @@ p {
     margin-inline-start: .25rem;
 }
 
-.admin-form .validation-message {
+.admin-form .validation-message,
+.contact-form .validation-message {
     color: #ff9aaa;
     font-size: .76rem;
     font-weight: 650;
@@ -297,7 +298,9 @@ p {
 .admin-form input,
 .admin-form textarea,
 .admin-form select,
-.login-form input {
+.login-form input,
+.contact-form input,
+.contact-form textarea {
     background: #07111f;
     border: 1px solid rgba(148, 163, 184, .24);
     border-radius: 7px;
@@ -309,15 +312,29 @@ p {
 
     .admin-form input::placeholder,
     .admin-form textarea::placeholder,
-    .login-form input::placeholder {
+    .login-form input::placeholder,
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
         color: #71849d;
         opacity: 1;
+    }
+
+    .contact-form input:hover,
+    .contact-form textarea:hover {
+        border-color: rgba(148, 163, 184, .42);
+    }
+
+    .contact-form input.invalid,
+    .contact-form textarea.invalid {
+        border-color: rgba(255, 107, 129, .75);
     }
 
     .admin-form input:focus,
     .admin-form textarea:focus,
     .admin-form select:focus,
-    .login-form input:focus {
+    .login-form input:focus,
+    .contact-form input:focus,
+    .contact-form textarea:focus {
         border-color: #79a8ff;
         box-shadow: 0 0 0 3px rgba(121, 168, 255, .1);
     }
@@ -325,9 +342,13 @@ p {
     .admin-form input:autofill,
     .admin-form textarea:autofill,
     .login-form input:autofill,
+    .contact-form input:autofill,
+    .contact-form textarea:autofill,
     .admin-form input:-webkit-autofill,
     .admin-form textarea:-webkit-autofill,
-    .login-form input:-webkit-autofill {
+    .login-form input:-webkit-autofill,
+    .contact-form input:-webkit-autofill,
+    .contact-form textarea:-webkit-autofill {
         -webkit-text-fill-color: #f8fbff;
         caret-color: #f8fbff;
         box-shadow: 0 0 0 1000px #07111f inset;
@@ -337,12 +358,21 @@ p {
     .admin-form input:focus:autofill,
     .admin-form textarea:focus:autofill,
     .login-form input:focus:autofill,
+    .contact-form input:focus:autofill,
+    .contact-form textarea:focus:autofill,
     .admin-form input:focus:-webkit-autofill,
     .admin-form textarea:focus:-webkit-autofill,
-    .login-form input:focus:-webkit-autofill {
+    .login-form input:focus:-webkit-autofill,
+    .contact-form input:focus:-webkit-autofill,
+    .contact-form textarea:focus:-webkit-autofill {
         border-color: #79a8ff;
         box-shadow: 0 0 0 1000px #07111f inset, 0 0 0 3px rgba(121, 168, 255, .1);
     }
+
+.contact-form textarea {
+    min-height: 10rem;
+    resize: vertical;
+}
 
 .admin-form label small {
     color: #71849d;
