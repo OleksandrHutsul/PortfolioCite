@@ -170,11 +170,14 @@ p {
         text-transform: uppercase;
     }
 
-    .admin-table th, .admin-table td {
-        border-bottom: 1px solid rgba(148, 163, 184, .13);
-        padding: .85rem .7rem;
-        vertical-align: top;
-    }
+.admin-table tr {
+    border-bottom: 1px solid rgba(148, 163, 184, .13);
+}
+
+.admin-table th, .admin-table td {
+    padding: .85rem .7rem;
+    vertical-align: middle;
+}
 
         .admin-table td strong {
             color: #f8fbff;
@@ -217,19 +220,24 @@ p {
     }
 
 .admin-row-actions {
-    display: flex;
-    gap: .65rem;
     white-space: nowrap;
+    width: 1%;
 }
+
+    .admin-row-actions > * + * {
+        margin-inline-start: .65rem;
+    }
 
     .admin-row-actions a, .admin-row-actions button {
         background: transparent;
         border: 0;
         color: #79a8ff;
         cursor: pointer;
+        display: inline-flex;
         font: inherit;
         padding: 0;
         text-decoration: none;
+        vertical-align: middle;
     }
 
     .admin-row-actions button {
