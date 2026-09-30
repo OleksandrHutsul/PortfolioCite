@@ -280,11 +280,15 @@ p {
     font-weight: 650;
 }
 
-.admin-form .invalid {
+.admin-form .invalid,
+.login-form .invalid {
     border-color: rgba(255, 107, 129, .75);
 }
 
-.admin-form input, .admin-form textarea, .admin-form select {
+.admin-form input,
+.admin-form textarea,
+.admin-form select,
+.login-form input {
     background: #07111f;
     border: 1px solid rgba(148, 163, 184, .24);
     border-radius: 7px;
@@ -294,9 +298,41 @@ p {
     padding: .75rem;
 }
 
-    .admin-form input:focus, .admin-form textarea:focus, .admin-form select:focus {
+    .admin-form input::placeholder,
+    .admin-form textarea::placeholder,
+    .login-form input::placeholder {
+        color: #71849d;
+        opacity: 1;
+    }
+
+    .admin-form input:focus,
+    .admin-form textarea:focus,
+    .admin-form select:focus,
+    .login-form input:focus {
         border-color: #79a8ff;
         box-shadow: 0 0 0 3px rgba(121, 168, 255, .1);
+    }
+
+    .admin-form input:autofill,
+    .admin-form textarea:autofill,
+    .login-form input:autofill,
+    .admin-form input:-webkit-autofill,
+    .admin-form textarea:-webkit-autofill,
+    .login-form input:-webkit-autofill {
+        -webkit-text-fill-color: #f8fbff;
+        caret-color: #f8fbff;
+        box-shadow: 0 0 0 1000px #07111f inset;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    .admin-form input:focus:autofill,
+    .admin-form textarea:focus:autofill,
+    .login-form input:focus:autofill,
+    .admin-form input:focus:-webkit-autofill,
+    .admin-form textarea:focus:-webkit-autofill,
+    .login-form input:focus:-webkit-autofill {
+        border-color: #79a8ff;
+        box-shadow: 0 0 0 1000px #07111f inset, 0 0 0 3px rgba(121, 168, 255, .1);
     }
 
 .admin-form label small {

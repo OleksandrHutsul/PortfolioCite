@@ -47,21 +47,6 @@
         gap: .4rem;
     }
 
-    .login-form input {
-        background: #07111f;
-        border: 1px solid rgba(148, 163, 184, .25);
-        border-radius: 7px;
-        color: #f8fbff;
-        font: inherit;
-        outline: 0;
-        padding: .78rem;
-    }
-
-        .login-form input:focus {
-            border-color: #79a8ff;
-            box-shadow: 0 0 0 3px rgba(121, 168, 255, .12);
-        }
-
     .login-form ::deep .validation-message {
         color: #ff9aaa;
         font-size: .76rem;
