@@ -35,37 +35,37 @@ else
 
             <div class="admin-form-grid">
                 <label>
-                    <span>Institution</span>
+                    <span>Institution<RequiredIndicatorComponent For="@(() => Request.Institution)" /></span>
                     <InputText @bind-Value="Request.Institution" />
                 </label>
 
                 <label>
-                    <span>Degree</span>
+                    <span>Degree<RequiredIndicatorComponent For="@(() => Request.Degree)" /></span>
                     <InputText @bind-Value="Request.Degree" />
                 </label>
 
                 <label>
-                    <span>Field of study</span>
+                    <span>Field of study<RequiredIndicatorComponent For="@(() => Request.FieldOfStudy)" /></span>
                     <InputText @bind-Value="Request.FieldOfStudy" />
                 </label>
 
                 <label>
-                    <span>Display order</span>
+                    <span>Display order<RequiredIndicatorComponent For="@(() => Request.DisplayOrder)" /></span>
                     <InputNumber @bind-Value="Request.DisplayOrder" />
                 </label>
 
                 <label>
-                    <span>Start date</span>
+                    <span>Start date<RequiredIndicatorComponent For="@(() => Request.StartedOn)" /></span>
                     <InputDate @bind-Value="Request.StartedOn" />
                 </label>
 
                 <label>
-                    <span>End date</span>
+                    <span>End date<RequiredIndicatorComponent For="@(() => Request.EndedOn)" /></span>
                     <InputDate @bind-Value="Request.EndedOn" />
                 </label>
 
                 <label class="wide">
-                    <span>Description</span>
+                    <span>Description<RequiredIndicatorComponent For="@(() => Request.Description)" /></span>
                     <InputTextArea @bind-Value="Request.Description" rows="5" />
                 </label>
             </div>

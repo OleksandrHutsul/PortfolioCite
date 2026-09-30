@@ -31,54 +31,54 @@ else
 
         <div class="admin-form-grid">
             <label class="wide">
-                <span>Name</span>
+                <span>Name<RequiredIndicatorComponent For="@(() => Request.Name)" /></span>
                 <InputText @bind-Value="Request.Name" />
             </label>
 
             <label class="wide">
-                <span>Short description</span>
+                <span>Short description<RequiredIndicatorComponent For="@(() => Request.ShortDescription)" /></span>
                 <InputText @bind-Value="Request.ShortDescription" />
             </label>
 
             <label class="wide">
-                <span>Description</span>
+                <span>Description<RequiredIndicatorComponent For="@(() => Request.Description)" /></span>
                 <InputTextArea @bind-Value="Request.Description" rows="7" />
             </label>
 
             <label>
-                <span>GitHub URL</span>
+                <span>GitHub URL<RequiredIndicatorComponent For="@(() => Request.GitHubUrl)" /></span>
                 <InputText @bind-Value="Request.GitHubUrl" />
             </label>
 
             <label>
-                <span>Live URL</span>
+                <span>Live URL<RequiredIndicatorComponent For="@(() => Request.LiveUrl)" /></span>
                 <InputText @bind-Value="Request.LiveUrl" />
             </label>
 
             <label class="wide">
-                <span>Image URL</span>
+                <span>Image URL<RequiredIndicatorComponent For="@(() => Request.ImageUrl)" /></span>
                 <InputText @bind-Value="Request.ImageUrl" />
             </label>
 
             <label>
-                <span>Display order</span>
+                <span>Display order<RequiredIndicatorComponent For="@(() => Request.DisplayOrder)" /></span>
                 <InputNumber @bind-Value="Request.DisplayOrder" />
             </label>
 
             <label class="wide">
-                <span>Technologies</span>
+                <span>Technologies<RequiredIndicatorComponent For="@(() => Request.Technologies)" /></span>
                 <InputText @bind-Value="TechnologyNames" />
                 <small>Comma-separated, for example: ASP.NET Core, Blazor, PostgreSQL</small>
             </label>
 
             <label class="admin-checkbox">
                 <InputCheckbox @bind-Value="Request.IsFeatured" />
-                <span>Featured project</span>
+                <span>Featured project<RequiredIndicatorComponent For="@(() => Request.IsFeatured)" /></span>
             </label>
 
             <label class="admin-checkbox">
                 <InputCheckbox @bind-Value="Request.IsPublished" />
-                <span>Published publicly</span>
+                <span>Published publicly<RequiredIndicatorComponent For="@(() => Request.IsPublished)" /></span>
             </label>
         </div>
 

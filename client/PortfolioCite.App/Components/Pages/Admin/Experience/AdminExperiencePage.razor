@@ -35,37 +35,37 @@ else
 
             <div class="admin-form-grid">
                 <label>
-                    <span>Company</span>
+                    <span>Company<RequiredIndicatorComponent For="@(() => Request.Company)" /></span>
                     <InputText @bind-Value="Request.Company" />
                 </label>
 
                 <label>
-                    <span>Position</span>
+                    <span>Position<RequiredIndicatorComponent For="@(() => Request.Position)" /></span>
                     <InputText @bind-Value="Request.Position" />
                 </label>
 
                 <label>
-                    <span>Start date</span>
+                    <span>Start date<RequiredIndicatorComponent For="@(() => Request.StartedOn)" /></span>
                     <InputDate @bind-Value="Request.StartedOn" />
                 </label>
 
                 <label>
-                    <span>End date</span>
+                    <span>End date<RequiredIndicatorComponent For="@(() => Request.EndedOn)" /></span>
                     <InputDate @bind-Value="Request.EndedOn" />
                 </label>
 
                 <label>
-                    <span>Display order</span>
+                    <span>Display order<RequiredIndicatorComponent For="@(() => Request.DisplayOrder)" /></span>
                     <InputNumber @bind-Value="Request.DisplayOrder" />
                 </label>
 
                 <label class="wide">
-                    <span>Summary</span>
+                    <span>Summary<RequiredIndicatorComponent For="@(() => Request.Summary)" /></span>
                     <InputTextArea @bind-Value="Request.Summary" rows="5" />
                 </label>
 
                 <label class="wide">
-                    <span>Highlights</span>
+                    <span>Highlights<RequiredIndicatorComponent For="@(() => Request.Highlights)" /></span>
                     <InputTextArea @bind-Value="HighlightsText" rows="6" />
                     <small>Enter one highlight per line.</small>
                 </label>

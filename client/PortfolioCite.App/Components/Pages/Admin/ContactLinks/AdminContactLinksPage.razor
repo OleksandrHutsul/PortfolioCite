@@ -35,22 +35,22 @@ else
 
             <div class="admin-form-grid">
                 <label>
-                    <span>Label</span>
+                    <span>Label<RequiredIndicatorComponent For="@(() => Request.Label)" /></span>
                     <InputText @bind-Value="Request.Label" />
                 </label>
 
                 <label>
-                    <span>URL</span>
+                    <span>URL<RequiredIndicatorComponent For="@(() => Request.Url)" /></span>
                     <InputText @bind-Value="Request.Url" />
                 </label>
 
                 <label>
-                    <span>Icon name</span>
+                    <span>Icon name<RequiredIndicatorComponent For="@(() => Request.IconName)" /></span>
                     <InputText @bind-Value="Request.IconName" />
                 </label>
 
                 <label>
-                    <span>Display order</span>
+                    <span>Display order<RequiredIndicatorComponent For="@(() => Request.DisplayOrder)" /></span>
                     <InputNumber @bind-Value="Request.DisplayOrder" />
                 </label>
             </div>

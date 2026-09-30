@@ -12,13 +12,13 @@
         <DataAnnotationsValidator />
 
         <label>
-            <span>Email</span>
+            <span>Email<RequiredIndicatorComponent For="@(() => Request.Email)" /></span>
             <InputText @bind-Value="Request.Email" type="email" autocomplete="username" />
             <ValidationMessage For="@(() => Request.Email)" />
         </label>
 
         <label>
-            <span>Password</span>
+            <span>Password<RequiredIndicatorComponent For="@(() => Request.Password)" /></span>
             <InputText @bind-Value="Request.Password" type="password" autocomplete="current-password" />
             <ValidationMessage For="@(() => Request.Password)" />
         </label>

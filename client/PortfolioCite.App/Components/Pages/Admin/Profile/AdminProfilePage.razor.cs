@@ -12,7 +12,6 @@ public partial class AdminProfilePage : ComponentBase, IDisposable
 {
     private readonly CancellationTokenSource _lifetime = new();
     private bool _disposed;
-    private ValidationMessageStore _languageErrors = null!;
     private PendingUpload? _pendingAvatar;
     private PendingUpload? _pendingResume;
 
@@ -54,8 +53,9 @@ public partial class AdminProfilePage : ComponentBase, IDisposable
     protected string? AvatarDetail => HasPendingAvatar ? FormatSize(_pendingAvatar!.Content.Length) : null;
     protected string? ResumeDetail => HasPendingResume ? FormatSize(_pendingResume!.Content.Length) : null;
     protected string AvatarAlt => HasPendingAvatar ? $"Preview of {_pendingAvatar!.Name}" : "Current profile image";
-    protected string Description => !IsLoading && LoadError is null && !HasProfile ? "No profile exists yet. Enter the details below to create it."
-            : "Edit the identity and introduction shown across the portfolio.";
+    protected string Description => !IsLoading && LoadError is null && !HasProfile
+        ? "No profile exists yet. Enter the details below to create it."
+        : "Edit the identity and introduction shown across the portfolio.";
 
     protected override void OnInitialized()
     {
@@ -148,7 +148,6 @@ public partial class AdminProfilePage : ComponentBase, IDisposable
         if (_disposed) return;
 
         _disposed = true;
-        DetachEditor();
         _lifetime.Cancel();
         _lifetime.Dispose();
     }

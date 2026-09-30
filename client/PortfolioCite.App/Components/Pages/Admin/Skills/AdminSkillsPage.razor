@@ -35,12 +35,12 @@ else
 
             <div class="admin-form-grid">
                 <label>
-                    <span>Category name</span>
+                    <span>Category name<RequiredIndicatorComponent For="@(() => Request.Name)" /></span>
                     <InputText @bind-Value="Request.Name" />
                 </label>
 
                 <label>
-                    <span>Display order</span>
+                    <span>Display order<RequiredIndicatorComponent For="@(() => Request.DisplayOrder)" /></span>
                     <InputNumber @bind-Value="Request.DisplayOrder" />
                 </label>
             </div>
@@ -57,32 +57,32 @@ else
                 <div class="admin-nested-item">
                     <div class="admin-form-grid">
                         <label>
-                            <span>Name</span>
+                            <span>Name<RequiredIndicatorComponent For="@(() => skill.Name)" /></span>
                             <InputText @bind-Value="skill.Name" />
                         </label>
 
                         <label>
-                            <span>Badge</span>
+                            <span>Badge<RequiredIndicatorComponent For="@(() => skill.Badge)" /></span>
                             <InputText @bind-Value="skill.Badge" />
                         </label>
 
                         <label class="wide">
-                            <span>Description</span>
+                            <span>Description<RequiredIndicatorComponent For="@(() => skill.Description)" /></span>
                             <InputTextArea @bind-Value="skill.Description" rows="3" />
                         </label>
 
                         <label>
-                            <span>Icon name</span>
+                            <span>Icon name<RequiredIndicatorComponent For="@(() => skill.IconName)" /></span>
                             <InputText @bind-Value="skill.IconName" />
                         </label>
 
                         <label>
-                            <span>Accent color</span>
+                            <span>Accent color<RequiredIndicatorComponent For="@(() => skill.AccentColor)" /></span>
                             <InputText @bind-Value="skill.AccentColor" />
                         </label>
 
                         <label>
-                            <span>Display order</span>
+                            <span>Display order<RequiredIndicatorComponent For="@(() => skill.DisplayOrder)" /></span>
                             <InputNumber @bind-Value="skill.DisplayOrder" />
                         </label>
                     </div>

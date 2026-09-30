@@ -29,37 +29,37 @@ else
 
         <div class="admin-form-grid">
             <label>
-                <span>Full name <span class="required-indicator" aria-hidden="true">*</span></span>
+                <span>Full name<RequiredIndicatorComponent For="@(() => Request.FullName)" /></span>
                 <InputText @bind-Value="Request.FullName" aria-required="true" autocomplete="name" />
                 <ValidationMessage For="@(() => Request.FullName)" />
             </label>
 
             <label>
-                <span>Role <span class="required-indicator" aria-hidden="true">*</span></span>
+                <span>Role<RequiredIndicatorComponent For="@(() => Request.Role)" /></span>
                 <InputText @bind-Value="Request.Role" aria-required="true" />
                 <ValidationMessage For="@(() => Request.Role)" />
             </label>
 
             <label>
-                <span>Location <span class="required-indicator" aria-hidden="true">*</span></span>
+                <span>Location<RequiredIndicatorComponent For="@(() => Request.Location)" /></span>
                 <InputText @bind-Value="Request.Location" aria-required="true" autocomplete="address-level2" />
                 <ValidationMessage For="@(() => Request.Location)" />
             </label>
 
             <label>
-                <span>Email <span class="required-indicator" aria-hidden="true">*</span></span>
+                <span>Email<RequiredIndicatorComponent For="@(() => Request.Email)" /></span>
                 <InputText @bind-Value="Request.Email" type="email" aria-required="true" autocomplete="email" />
                 <ValidationMessage For="@(() => Request.Email)" />
             </label>
 
             <label class="wide">
-                <span>Summary <span class="required-indicator" aria-hidden="true">*</span></span>
+                <span>Summary<RequiredIndicatorComponent For="@(() => Request.Summary)" /></span>
                 <InputTextArea @bind-Value="Request.Summary" rows="7" aria-required="true" />
                 <ValidationMessage For="@(() => Request.Summary)" />
             </label>
 
             <label class="wide">
-                <span>Current focus <span class="required-indicator" aria-hidden="true">*</span></span>
+                <span>Current focus<RequiredIndicatorComponent For="@(() => Request.CurrentFocus)" /></span>
                 <InputTextArea @bind-Value="Request.CurrentFocus" rows="4" aria-required="true" />
                 <ValidationMessage For="@(() => Request.CurrentFocus)" />
             </label>
@@ -84,13 +84,13 @@ else
 
                         <li class="admin-language-row" @key="language">
                             <label>
-                                <span>Language <span class="required-indicator" aria-hidden="true">*</span></span>
+                                <span>Language<RequiredIndicatorComponent For="@(() => language.Name)" /></span>
                                 <InputText @bind-Value="language.Name" aria-required="true" />
                                 <ValidationMessage For="@(() => language.Name)" />
                             </label>
 
                             <label>
-                                <span>Proficiency <span class="required-indicator" aria-hidden="true">*</span></span>
+                                <span>Proficiency<RequiredIndicatorComponent For="@(() => language.Proficiency)" /></span>
                                 <InputSelect @bind-Value="language.Proficiency" aria-required="true">
                                     <option value="">Select proficiency</option>
                                     @foreach (var option in LanguageProficiencies.All)
@@ -102,7 +102,7 @@ else
                             </label>
 
                             <label>
-                                <span>Order</span>
+                                <span>Order<RequiredIndicatorComponent For="@(() => language.DisplayOrder)" /></span>
                                 <InputNumber @bind-Value="language.DisplayOrder" aria-label="Display order" />
                                 <ValidationMessage For="@(() => language.DisplayOrder)" />
                             </label>
