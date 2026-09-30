@@ -67,7 +67,7 @@
     transform: translateY(-2px);
 }
 
-.hero__actions a:last-child {
+.hero__actions a.hero__action--ghost {
     background: rgba(255, 255, 255, .055);
     color: #f8fbff;
 }
@@ -87,14 +87,31 @@
     transform: rotate(2deg);
 }
 
-.hero__portrait img {
+.hero__portrait img,
+.hero__portrait-fallback {
     border: 1px solid rgba(148, 163, 184, .24);
     border-radius: 8px;
     box-shadow: 0 32px 90px rgba(0, 0, 0, .35);
     height: 100%;
-    object-fit: cover;
     position: relative;
     width: 100%;
+}
+
+.hero__portrait img {
+    object-fit: cover;
+}
+
+.hero__portrait-fallback {
+    align-items: center;
+    background:
+        radial-gradient(circle at 28% 18%, rgba(99, 230, 190, .38), transparent 42%),
+        linear-gradient(165deg, #16324d, #0c1b2e 58%, #10283d);
+    color: #f8fbff;
+    display: flex;
+    font-size: clamp(3.2rem, 6vw, 4.6rem);
+    font-weight: 750;
+    justify-content: center;
+    letter-spacing: .06em;
 }
 
 .hero__signal {
@@ -157,6 +174,30 @@
 .timeline li {
     color: #a9b7c9;
     line-height: 1.65;
+}
+
+.language-list {
+    display: grid;
+    gap: .7rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.language-list li {
+    display: grid;
+    gap: .12rem;
+}
+
+.language-list strong {
+    color: #f8fbff;
+    font-size: .95rem;
+}
+
+.language-list span {
+    color: #63e6be;
+    font-size: .82rem;
+    font-weight: 750;
 }
 
 .skill-category,

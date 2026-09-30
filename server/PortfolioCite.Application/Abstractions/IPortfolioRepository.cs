@@ -10,6 +10,9 @@ public interface IPortfolioRepository
 
     Task<Profile?> GetProfileAsync(CancellationToken cancellationToken);
     Task<Profile?> GetProfileForUpdateAsync(CancellationToken cancellationToken);
+    Task<IReadOnlyList<ProfileFile>> GetProfileFileSummariesAsync(int profileId, CancellationToken cancellationToken);
+    Task<ProfileFile?> GetProfileFileForUpdateAsync(int profileId, ProfileFileKind kind, CancellationToken cancellationToken);
+    Task<ProfileFile?> GetProfileFileAsync(ProfileFileKind kind, CancellationToken cancellationToken);
 
     Task<IReadOnlyList<Project>> GetProjectsAsync(CancellationToken cancellationToken);
     Task<Project?> GetPublishedProjectAsync(int id, CancellationToken cancellationToken);

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortfolioCite.Application.Services.Content;
-using PortfolioCite.Contracts.Administration;
+using PortfolioCite.Contracts.Administration.Models;
 
 namespace PortfolioCite.Api.Controllers;
 

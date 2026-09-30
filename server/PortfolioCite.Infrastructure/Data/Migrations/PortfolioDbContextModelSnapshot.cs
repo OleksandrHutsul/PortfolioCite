@@ -202,11 +202,6 @@ namespace PortfolioCite.Infrastructure.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AvatarUrl")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
                     b.Property<string>("CurrentFocus")
                         .IsRequired()
                         .HasMaxLength(1200)
@@ -222,19 +217,10 @@ namespace PortfolioCite.Infrastructure.Data.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("character varying(120)");
 
-                    b.Property<string>("Languages")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(160)
                         .HasColumnType("character varying(160)");
-
-                    b.Property<string>("ResumeUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -252,6 +238,78 @@ namespace PortfolioCite.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Profiles");
+                });
+
+            modelBuilder.Entity("PortfolioCite.Domain.Entities.ProfileFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(180)
+                        .HasColumnType("character varying(180)");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProfileId", "Kind")
+                        .IsUnique();
+
+                    b.ToTable("ProfileFiles");
+                });
+
+            modelBuilder.Entity("PortfolioCite.Domain.Entities.ProfileLanguage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<string>("Proficiency")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProfileId");
+
+                    b.ToTable("ProfileLanguages");
                 });
 
             modelBuilder.Entity("PortfolioCite.Domain.Entities.Project", b =>
@@ -486,6 +544,28 @@ namespace PortfolioCite.Infrastructure.Data.Migrations
                     b.ToTable("WorkHighlights");
                 });
 
+            modelBuilder.Entity("PortfolioCite.Domain.Entities.ProfileFile", b =>
+                {
+                    b.HasOne("PortfolioCite.Domain.Entities.Profile", "Profile")
+                        .WithMany("Files")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("PortfolioCite.Domain.Entities.ProfileLanguage", b =>
+                {
+                    b.HasOne("PortfolioCite.Domain.Entities.Profile", "Profile")
+                        .WithMany("Languages")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Profile");
+                });
+
             modelBuilder.Entity("PortfolioCite.Domain.Entities.ProjectTechnology", b =>
                 {
                     b.HasOne("PortfolioCite.Domain.Entities.Project", "Project")
@@ -525,6 +605,13 @@ namespace PortfolioCite.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("WorkExperience");
+                });
+
+            modelBuilder.Entity("PortfolioCite.Domain.Entities.Profile", b =>
+                {
+                    b.Navigation("Files");
+
+                    b.Navigation("Languages");
                 });
 
             modelBuilder.Entity("PortfolioCite.Domain.Entities.Project", b =>

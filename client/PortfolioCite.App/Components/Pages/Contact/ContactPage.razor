@@ -21,10 +21,13 @@
                 <p class="contact-intro__lead">Have a project, product idea, or .NET challenge in mind?</p>
                 <p>Share a few details and I'll get back to you as soon as possible.</p>
 
-                <a class="contact-email" href="mailto:@Email">
-                    <span>Email</span>
-                    <strong>@Email</strong>
-                </a>
+                @if (!string.IsNullOrWhiteSpace(Email))
+                {
+                    <a class="contact-email" href="mailto:@Email">
+                        <span>Email</span>
+                        <strong>@Email</strong>
+                    </a>
+                }
 
                 @if (Links.Count > 0)
                 {

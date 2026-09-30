@@ -1,4 +1,5 @@
 @page "/"
+@using PortfolioCite.Contracts.Portfolio.Rules
 
 @if (IsLoading)
 {
@@ -13,22 +14,33 @@ else if (LoadError is not null)
                              OnRetry="LoadAsync" />
     </section>
 }
-else if (Portfolio is not null)
+else if (Portfolio is { Profile: { } profile })
 {
     <section class="hero section-reveal" id="profile">
         <div class="hero__content">
             <p class="hero__eyebrow">Software developer</p>
-            <h1>@Portfolio.Profile.FullName</h1>
-            <strong>@Portfolio.Profile.Role</strong>
-            <p>@Portfolio.Profile.Summary</p>
+            <h1>@profile.FullName</h1>
+            <strong>@profile.Role</strong>
+            <p>@profile.Summary</p>
             <div class="hero__actions">
                 <a href="#projects-preview">View work</a>
-                <a href="contact">Contact</a>
+                <a class="hero__action--ghost" href="contact">Contact</a>
+                @if (!string.IsNullOrWhiteSpace(profile.ResumeUrl))
+                {
+                    <a class="hero__action--ghost" href="@profile.ResumeUrl" target="_blank" rel="noopener noreferrer">Download résumé</a>
+                }
             </div>
         </div>
 
         <div class="hero__portrait">
-            <img src="@Portfolio.Profile.AvatarUrl" alt="Portrait of @Portfolio.Profile.FullName" />
+            @if (string.IsNullOrWhiteSpace(profile.AvatarUrl))
+            {
+                <div class="hero__portrait-fallback" role="img" aria-label="Portrait of @profile.FullName">@Initials(profile.FullName)</div>
+            }
+            else
+            {
+                <img src="@profile.AvatarUrl" alt="Portrait of @profile.FullName" />
+            }
             <div class="hero__signal" aria-hidden="true">
                 @foreach (var skill in Portfolio.SkillCategories.SelectMany(category => category.Skills).Take(3))
                 {
@@ -43,7 +55,7 @@ else if (Portfolio is not null)
         <div class="about-grid">
             <article>
                 <h3>Current focus</h3>
-                <p>@Portfolio.Profile.CurrentFocus</p>
+                <p>@profile.CurrentFocus</p>
             </article>
             <article>
                 <h3>Education</h3>
@@ -61,7 +73,22 @@ else if (Portfolio is not null)
             </article>
             <article>
                 <h3>Languages</h3>
-                <p>@Portfolio.Profile.Languages</p>
+                @if (profile.Languages.Count == 0)
+                {
+                    <p>Languages will be added soon.</p>
+                }
+                else
+                {
+                    <ul class="language-list">
+                        @foreach (var language in profile.Languages)
+                        {
+                            <li>
+                                <strong>@language.Name</strong>
+                                <span>@LanguageProficiencies.PublicLabel(language.Proficiency)</span>
+                            </li>
+                        }
+                    </ul>
+                }
             </article>
         </div>
     </section>
@@ -135,4 +162,8 @@ else if (Portfolio is not null)
             </div>
         }
     </section>
+}
+else
+{
+    <PortfolioPreparingComponent />
 }

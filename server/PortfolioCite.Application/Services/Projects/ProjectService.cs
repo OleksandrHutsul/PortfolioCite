@@ -1,5 +1,5 @@
 using PortfolioCite.Application.Abstractions;
-using PortfolioCite.Contracts.Portfolio;
+using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Contracts.Projects;
 using PortfolioCite.Domain.Entities;
 

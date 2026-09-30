@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PortfolioCite.Application.Services.PortfolioQuery;
-using PortfolioCite.Contracts.Portfolio;
+using PortfolioCite.Contracts.Portfolio.Models;
 
 namespace PortfolioCite.Api.Controllers;
 

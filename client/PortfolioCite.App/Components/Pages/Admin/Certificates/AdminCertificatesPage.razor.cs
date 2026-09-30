@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Administration;
+using PortfolioCite.Contracts.Administration.Models;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Certificates;
 

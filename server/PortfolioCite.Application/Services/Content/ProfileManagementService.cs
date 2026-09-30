@@ -1,10 +1,10 @@
 using PortfolioCite.Application.Abstractions;
-using PortfolioCite.Contracts.Administration;
+using PortfolioCite.Contracts.Administration.Models;
 using PortfolioCite.Domain.Entities;
 
 namespace PortfolioCite.Application.Services.Content;
 
-public class ProfileManagementService : IProfileManagementService
+public partial class ProfileManagementService : IProfileManagementService
 {
     private readonly IPortfolioRepository _repository;
 
@@ -17,7 +17,7 @@ public class ProfileManagementService : IProfileManagementService
     {
         var profile = await _repository.GetProfileAsync(cancellationToken);
 
-        return profile is null ? null : Map(profile);
+        return profile is null ? null : await MapAsync(profile, cancellationToken);
     }
 
     public async Task<ProfileAdminDto> SaveAsync(SaveProfileRequest request, CancellationToken cancellationToken)
@@ -35,24 +35,37 @@ public class ProfileManagementService : IProfileManagementService
         profile.Location = request.Location.Trim();
         profile.Summary = request.Summary.Trim();
         profile.CurrentFocus = request.CurrentFocus.Trim();
-        profile.Languages = request.Languages.Trim();
         profile.Email = request.Email.Trim();
-        profile.AvatarUrl = request.AvatarUrl.Trim();
-        profile.ResumeUrl = NullIfWhiteSpace(request.ResumeUrl);
         profile.UpdatedAt = DateTimeOffset.UtcNow;
+        ReplaceLanguages(profile, request);
 
         await _repository.SaveChangesAsync(cancellationToken);
 
-        return Map(profile);
+        return await MapAsync(profile, cancellationToken);
     }
 
-    private static ProfileAdminDto Map(Profile profile)
+    private static void ReplaceLanguages(Profile profile, SaveProfileRequest request)
     {
-        return new ProfileAdminDto(profile.FullName, profile.Role, profile.Location, profile.Summary, profile.CurrentFocus, profile.Languages, profile.Email, profile.AvatarUrl, profile.ResumeUrl, profile.UpdatedAt);
+        profile.Languages.Clear();
+        profile.Languages.AddRange((request.Languages ?? []).Select(language => new ProfileLanguage
+        {
+            Name = language.Name.Trim(),
+            Proficiency = language.Proficiency,
+            DisplayOrder = language.DisplayOrder
+        }));
     }
 
-    private static string? NullIfWhiteSpace(string? value)
+    private async Task<ProfileAdminDto> MapAsync(Profile profile, CancellationToken cancellationToken)
     {
-        return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+        var languages = profile.Languages
+            .OrderBy(language => language.DisplayOrder)
+            .ThenBy(language => language.Id)
+            .Select(language => new ProfileLanguageAdminDto(language.Id, language.Name, language.Proficiency, language.DisplayOrder))
+            .ToList();
+
+        var files = await _repository.GetProfileFileSummariesAsync(profile.Id, cancellationToken);
+
+        return new ProfileAdminDto(profile.FullName, profile.Role, profile.Location, profile.Summary, profile.CurrentFocus, languages, profile.Email,
+            ProfileFileLocations.Avatar(files, profile.UpdatedAt), ProfileFileLocations.Resume(files, profile.UpdatedAt), profile.UpdatedAt);
     }
 }

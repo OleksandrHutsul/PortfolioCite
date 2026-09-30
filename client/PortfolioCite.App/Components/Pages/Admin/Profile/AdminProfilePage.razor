@@ -1,4 +1,5 @@
 @page "/admin/profile"
+@using PortfolioCite.Contracts.Portfolio.Rules
 @attribute [Authorize(Policy = "PortfolioAdmin")]
 @layout AdminLayout
 
@@ -6,7 +7,7 @@
     <div>
         <p>Content</p>
         <h1>Profile</h1>
-        <span>Edit the identity and introduction shown across the portfolio.</span>
+        <span>@Description</span>
     </div>
 </header>
 
@@ -23,55 +24,221 @@ else if (LoadError is not null)
 }
 else
 {
-    <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form">
+    <EditForm EditContext="ProfileEditContext" OnValidSubmit="SaveAsync" class="admin-form" aria-busy="@IsSaving">
         <DataAnnotationsValidator />
-        <ValidationSummary />
 
         <div class="admin-form-grid">
             <label>
-                <span>Full name</span>
-                <InputText @bind-Value="Request.FullName" />
+                <span>Full name <span class="required-indicator" aria-hidden="true">*</span></span>
+                <InputText @bind-Value="Request.FullName" aria-required="true" autocomplete="name" />
+                <ValidationMessage For="@(() => Request.FullName)" />
             </label>
 
             <label>
-                <span>Role</span>
-                <InputText @bind-Value="Request.Role" />
+                <span>Role <span class="required-indicator" aria-hidden="true">*</span></span>
+                <InputText @bind-Value="Request.Role" aria-required="true" />
+                <ValidationMessage For="@(() => Request.Role)" />
             </label>
 
             <label>
-                <span>Location</span>
-                <InputText @bind-Value="Request.Location" />
+                <span>Location <span class="required-indicator" aria-hidden="true">*</span></span>
+                <InputText @bind-Value="Request.Location" aria-required="true" autocomplete="address-level2" />
+                <ValidationMessage For="@(() => Request.Location)" />
             </label>
 
             <label>
-                <span>Email</span>
-                <InputText @bind-Value="Request.Email" />
+                <span>Email <span class="required-indicator" aria-hidden="true">*</span></span>
+                <InputText @bind-Value="Request.Email" type="email" aria-required="true" autocomplete="email" />
+                <ValidationMessage For="@(() => Request.Email)" />
             </label>
 
             <label class="wide">
-                <span>Summary</span>
-                <InputTextArea @bind-Value="Request.Summary" rows="7" />
+                <span>Summary <span class="required-indicator" aria-hidden="true">*</span></span>
+                <InputTextArea @bind-Value="Request.Summary" rows="7" aria-required="true" />
+                <ValidationMessage For="@(() => Request.Summary)" />
             </label>
 
             <label class="wide">
-                <span>Current focus</span>
-                <InputTextArea @bind-Value="Request.CurrentFocus" rows="4" />
+                <span>Current focus <span class="required-indicator" aria-hidden="true">*</span></span>
+                <InputTextArea @bind-Value="Request.CurrentFocus" rows="4" aria-required="true" />
+                <ValidationMessage For="@(() => Request.CurrentFocus)" />
             </label>
+        </div>
 
-            <label class="wide">
-                <span>Languages</span>
-                <InputText @bind-Value="Request.Languages" />
-            </label>
+        <section class="admin-languages" aria-labelledby="languages-heading">
+            <div class="admin-languages__header">
+                <h2 id="languages-heading">Languages</h2>
+                <button type="button" class="admin-add-button" disabled="@(!CanAddLanguage)" @onclick="AddLanguage">+ Add language</button>
+            </div>
 
-            <label>
-                <span>Avatar URL</span>
-                <InputText @bind-Value="Request.AvatarUrl" />
-            </label>
+            @if (Request.Languages.Count == 0)
+            {
+                <p class="admin-languages__empty">No languages added.</p>
+            }
+            else
+            {
+                <ul class="admin-language-list">
+                    @for (var index = 0; index < Request.Languages.Count; index++)
+                    {
+                        var language = Request.Languages[index];
 
-            <label>
-                <span>Résumé URL</span>
-                <InputText @bind-Value="Request.ResumeUrl" />
-            </label>
+                        <li class="admin-language-row" @key="language">
+                            <label>
+                                <span>Language <span class="required-indicator" aria-hidden="true">*</span></span>
+                                <InputText @bind-Value="language.Name" aria-required="true" />
+                                <ValidationMessage For="@(() => language.Name)" />
+                            </label>
+
+                            <label>
+                                <span>Proficiency <span class="required-indicator" aria-hidden="true">*</span></span>
+                                <InputSelect @bind-Value="language.Proficiency" aria-required="true">
+                                    <option value="">Select proficiency</option>
+                                    @foreach (var option in LanguageProficiencies.All)
+                                    {
+                                        <option value="@option.Code">@option.AdminLabel</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => language.Proficiency)" />
+                            </label>
+
+                            <label>
+                                <span>Order</span>
+                                <InputNumber @bind-Value="language.DisplayOrder" aria-label="Display order" />
+                                <ValidationMessage For="@(() => language.DisplayOrder)" />
+                            </label>
+
+                            <div class="admin-language-row__remove">
+                                <button type="button" class="admin-danger-action" disabled="@IsSaving" aria-label="@RemoveLanguageLabel(language)" @onclick="() => RemoveLanguage(language)">Remove</button>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+
+            <ValidationMessage For="@(() => Request.Languages)" />
+        </section>
+
+        <div class="admin-media-grid">
+            <section class="admin-media" aria-labelledby="avatar-heading">
+                <h2 id="avatar-heading">Avatar</h2>
+
+                <div class="admin-media__body">
+                    <div class="admin-media__mark admin-media__mark--round @(AvatarRemovePending ? "is-removed" : null)">
+                        @if (ShowAvatarImage)
+                        {
+                            <img src="@AvatarPreviewUrl" alt="@AvatarAlt" />
+                        }
+                        else
+                        {
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M6 19c1.2-2.6 3.2-3.8 6-3.8s4.8 1.2 6 3.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        }
+                    </div>
+
+                    <div class="admin-media__copy">
+                        <p class="admin-media__status">@AvatarStatus</p>
+
+                        @if (AvatarDetail is not null)
+                        {
+                            <p class="admin-media__meta">@AvatarDetail</p>
+                        }
+
+                        <div class="admin-media__actions">
+                            <div class="admin-file-button @(IsSaving ? "is-disabled" : null)">
+                                <label for="profile-avatar">@AvatarActionLabel</label>
+                                <InputFile id="profile-avatar"
+                                           @key="AvatarInputVersion"
+                                           class="media-file-input"
+                                           OnChange="SelectAvatarAsync"
+                                           accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                                           aria-label="@AvatarActionLabel" />
+                            </div>
+
+                            @if (HasPendingAvatar)
+                            {
+                                <button type="button" class="admin-text-button" disabled="@IsSaving" @onclick="ClearAvatarSelection">Clear</button>
+                            }
+                            else if (AvatarRemovePending)
+                            {
+                                <button type="button" class="admin-text-button" disabled="@IsSaving" @onclick="UndoAvatarRemoval">Undo</button>
+                            }
+                            else if (HasStoredAvatar)
+                            {
+                                <button type="button" class="admin-text-button" disabled="@IsSaving" @onclick="MarkAvatarForRemoval">Remove</button>
+                            }
+                        </div>
+
+                        <p class="admin-media__hint">@AvatarHint</p>
+
+                        @if (AvatarMessage is not null)
+                        {
+                            <p class="admin-media__error" role="alert">@AvatarMessage</p>
+                        }
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-media" aria-labelledby="resume-heading">
+                <h2 id="resume-heading">Résumé</h2>
+
+                <div class="admin-media__body">
+                    <div class="admin-media__mark @(ResumeRemovePending ? "is-removed" : null)">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M7 3.5h7.2L19 8.2V20a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 20V5A1.5 1.5 0 0 1 7.5 3.5H7z" fill="none" stroke="currentColor" stroke-width="1.5" />
+                            <path d="M14 3.8V8.5h4.6" fill="none" stroke="currentColor" stroke-width="1.5" />
+                            <path d="M9 13h6M9 16.5h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    </div>
+
+                    <div class="admin-media__copy">
+                        <p class="admin-media__status">@ResumeStatus</p>
+
+                        @if (ResumeDetail is not null)
+                        {
+                            <p class="admin-media__meta">@ResumeDetail</p>
+                        }
+
+                        <div class="admin-media__actions">
+                            @if (CanViewResume)
+                            {
+                                <a class="admin-media__link" href="@ResumeUrl" target="_blank" rel="noopener noreferrer">View résumé</a>
+                            }
+
+                            <div class="admin-file-button @(IsSaving ? "is-disabled" : null)">
+                                <label for="profile-resume">@ResumeActionLabel</label>
+                                <InputFile id="profile-resume"
+                                           @key="ResumeInputVersion"
+                                           class="media-file-input"
+                                           OnChange="SelectResumeAsync"
+                                           accept=".pdf,application/pdf"
+                                           aria-label="@ResumeActionLabel" />
+                            </div>
+
+                            @if (HasPendingResume)
+                            {
+                                <button type="button" class="admin-text-button" disabled="@IsSaving" @onclick="ClearResumeSelection">Clear</button>
+                            }
+                            else if (ResumeRemovePending)
+                            {
+                                <button type="button" class="admin-text-button" disabled="@IsSaving" @onclick="UndoResumeRemoval">Undo</button>
+                            }
+                            else if (HasStoredResume)
+                            {
+                                <button type="button" class="admin-text-button" disabled="@IsSaving" @onclick="MarkResumeForRemoval">Remove</button>
+                            }
+                        </div>
+
+                        <p class="admin-media__hint">@ResumeHint</p>
+
+                        @if (ResumeMessage is not null)
+                        {
+                            <p class="admin-media__error" role="alert">@ResumeMessage</p>
+                        }
+                    </div>
+                </div>
+            </section>
         </div>
 
         @if (SaveMessage is not null)

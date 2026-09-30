@@ -1,5 +1,5 @@
 using PortfolioCite.Application.Abstractions;
-using PortfolioCite.Contracts.Administration;
+using PortfolioCite.Contracts.Administration.Models;
 using PortfolioCite.Domain.Entities;
 
 namespace PortfolioCite.Application.Services.Content;

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PortfolioCite.Domain.Entities;
 
@@ -30,22 +30,16 @@ public class ProfileConfiguration : IEntityTypeConfiguration<Profile>
             .HasMaxLength(1200)
             .IsRequired();
 
-        builder.Property(profile => profile.Languages)
-            .HasMaxLength(500)
-            .IsRequired();
-
         builder.Property(profile => profile.Email)
             .HasMaxLength(320)
             .IsRequired();
 
-        builder.Property(profile => profile.AvatarUrl)
-            .HasMaxLength(500)
-            .IsRequired();
-
-        builder.Property(profile => profile.ResumeUrl)
-            .HasMaxLength(500);
-
         builder.Property(profile => profile.UpdatedAt)
             .IsRequired();
+
+        builder.HasMany(profile => profile.Languages)
+            .WithOne(language => language.Profile)
+            .HasForeignKey(language => language.ProfileId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

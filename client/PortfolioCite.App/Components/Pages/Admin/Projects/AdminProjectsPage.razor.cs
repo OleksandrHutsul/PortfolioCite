@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PortfolioCite.App.Services;
-using PortfolioCite.Contracts.Portfolio;
+using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Contracts.Projects;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Projects;

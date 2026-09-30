@@ -1,5 +1,7 @@
 using PortfolioCite.Application.Abstractions;
-using PortfolioCite.Contracts.Portfolio;
+using PortfolioCite.Application.Models;
+using PortfolioCite.Application.Services.Content;
+using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Domain.Entities;
 
 namespace PortfolioCite.Application.Services.PortfolioQuery;
@@ -15,8 +17,7 @@ public class PortfolioQueryService : IPortfolioQueryService
 
     public async Task<PortfolioSnapshotDto> GetSnapshotAsync(CancellationToken cancellationToken)
     {
-        var profile = await _repository.GetProfileAsync(cancellationToken)
-            ?? throw new InvalidOperationException("Portfolio profile has not been configured.");
+        var profile = await _repository.GetProfileAsync(cancellationToken);
 
         var categories = await _repository.GetSkillCategoriesAsync(cancellationToken);
         var projects = await _repository.GetProjectsAsync(cancellationToken);
@@ -25,8 +26,12 @@ public class PortfolioQueryService : IPortfolioQueryService
         var education = await _repository.GetEducationAsync(cancellationToken);
         var links = await _repository.GetContactLinksAsync(cancellationToken);
 
+        IReadOnlyList<ProfileFile> files = profile is null
+            ? []
+            : await _repository.GetProfileFileSummariesAsync(profile.Id, cancellationToken);
+
         return new PortfolioSnapshotDto(
-            MapProfile(profile),
+            profile is null ? null : MapProfile(profile, files),
             categories.Select(MapCategory).ToList(),
             projects.Select(MapProject).ToList(),
             certificates.Select(MapCertificate).ToList(),
@@ -49,6 +54,23 @@ public class PortfolioQueryService : IPortfolioQueryService
         return project is null ? null : MapProject(project);
     }
 
+    public Task<ProfileFileDownload?> GetAvatarAsync(CancellationToken cancellationToken)
+    {
+        return GetFileAsync(ProfileFileKind.Avatar, cancellationToken);
+    }
+
+    public Task<ProfileFileDownload?> GetResumeAsync(CancellationToken cancellationToken)
+    {
+        return GetFileAsync(ProfileFileKind.Resume, cancellationToken);
+    }
+
+    private async Task<ProfileFileDownload?> GetFileAsync(ProfileFileKind kind, CancellationToken cancellationToken)
+    {
+        var file = await _repository.GetProfileFileAsync(kind, cancellationToken);
+
+        return file is null ? null : new ProfileFileDownload(file.FileName, file.ContentType, file.Content);
+    }
+
     private static ProjectDto MapProject(Project project)
     {
         var technologies = project.ProjectTechnologies
@@ -59,10 +81,16 @@ public class PortfolioQueryService : IPortfolioQueryService
         return new ProjectDto(project.Id, project.Name, project.ShortDescription, project.Description, project.GitHubUrl, project.LiveUrl, project.ImageUrl, project.DisplayOrder, project.IsFeatured, project.IsPublished, technologies, project.CreatedAt, project.UpdatedAt);
     }
 
-    private static ProfileDto MapProfile(Profile profile)
+    private static ProfileDto MapProfile(Profile profile, IReadOnlyList<ProfileFile> files)
     {
-        return new ProfileDto(profile.FullName, profile.Role, profile.Location, profile.Summary, profile.CurrentFocus, profile.Languages, profile.Email,
-            profile.AvatarUrl, profile.ResumeUrl);
+        var languages = profile.Languages
+            .OrderBy(language => language.DisplayOrder)
+            .ThenBy(language => language.Id)
+            .Select(language => new ProfileLanguageDto(language.Name, language.Proficiency, language.DisplayOrder))
+            .ToList();
+
+        return new ProfileDto(profile.FullName, profile.Role, profile.Location, profile.Summary, profile.CurrentFocus, languages, profile.Email,
+            ProfileFileLocations.Avatar(files, profile.UpdatedAt), ProfileFileLocations.Resume(files, profile.UpdatedAt));
     }
 
     private static SkillCategoryDto MapCategory(SkillCategory category)

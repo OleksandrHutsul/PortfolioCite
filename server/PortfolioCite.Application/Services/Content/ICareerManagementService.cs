@@ -1,4 +1,4 @@
-using PortfolioCite.Contracts.Administration;
+using PortfolioCite.Contracts.Administration.Models;
 
 namespace PortfolioCite.Application.Services.Content;
 

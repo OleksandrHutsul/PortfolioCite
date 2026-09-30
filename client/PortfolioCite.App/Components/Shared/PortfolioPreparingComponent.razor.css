@@ -1,0 +1,114 @@
+.portfolio-preparing {
+    align-content: center;
+    display: grid;
+    justify-items: center;
+    min-height: calc(100vh - 8.5rem);
+    padding: 4.5rem 0 3.75rem;
+    text-align: center;
+}
+
+.portfolio-preparing__mark {
+    height: 8.5rem;
+    margin-bottom: 1.75rem;
+    position: relative;
+    width: 8.5rem;
+}
+
+.portfolio-preparing__mark::before {
+    background: radial-gradient(circle, rgba(99, 230, 190, .18), rgba(121, 168, 255, .05) 46%, transparent 70%);
+    content: "";
+    inset: -1.75rem;
+    position: absolute;
+}
+
+.portfolio-preparing__ring,
+.portfolio-preparing__core {
+    border-radius: 50%;
+    position: absolute;
+}
+
+.portfolio-preparing__ring {
+    animation: portfolio-spin 14s linear infinite;
+    border: 1px solid rgba(121, 168, 255, .32);
+    inset: 0;
+}
+
+.portfolio-preparing__ring::after {
+    background: #63e6be;
+    border-radius: 50%;
+    box-shadow: 0 0 14px rgba(99, 230, 190, .85);
+    content: "";
+    height: .55rem;
+    left: 50%;
+    position: absolute;
+    top: -.28rem;
+    transform: translateX(-50%);
+    width: .55rem;
+}
+
+.portfolio-preparing__ring--inner {
+    animation-direction: reverse;
+    animation-duration: 9s;
+    border-color: rgba(99, 230, 190, .38);
+    inset: 1.15rem;
+}
+
+.portfolio-preparing__ring--inner::after {
+    background: #79a8ff;
+    box-shadow: 0 0 12px rgba(121, 168, 255, .8);
+    height: .42rem;
+    width: .42rem;
+}
+
+.portfolio-preparing__core {
+    animation: portfolio-pulse 2.8s ease-in-out infinite;
+    background: radial-gradient(circle, rgba(99, 230, 190, .95) 0%, rgba(121, 168, 255, .4) 46%, rgba(121, 168, 255, 0) 72%);
+    inset: 2.35rem;
+}
+
+.portfolio-preparing h1 {
+    color: #f8fbff;
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    font-weight: 750;
+    line-height: 1.35;
+    margin: 0;
+    max-width: 16ch;
+}
+
+@keyframes portfolio-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes portfolio-pulse {
+    0%,
+    100% {
+        opacity: .72;
+        transform: scale(.92);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 880px) {
+    .portfolio-preparing {
+        min-height: 70vh;
+        padding: 3.25rem 0 2.5rem;
+    }
+
+    .portfolio-preparing__mark {
+        height: 6.75rem;
+        width: 6.75rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .portfolio-preparing__ring,
+    .portfolio-preparing__core {
+        animation: none;
+    }
+}

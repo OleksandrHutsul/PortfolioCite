@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
 using PortfolioCite.Contracts.Contact;
-using PortfolioCite.Contracts.Portfolio;
+using PortfolioCite.Contracts.Portfolio.Models;
 
 namespace PortfolioCite.App.Services;
 

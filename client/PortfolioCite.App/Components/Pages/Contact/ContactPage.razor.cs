@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Contact;
-using PortfolioCite.Contracts.Portfolio;
+using PortfolioCite.Contracts.Portfolio.Models;
 
 namespace PortfolioCite.App.Components.Pages.Contact;
 
@@ -32,7 +32,7 @@ public partial class ContactPage : ComponentBase
         {
             var snapshot = await PortfolioContentService.GetSnapshotAsync();
 
-            Email = snapshot.Profile.Email;
+            Email = snapshot.Profile?.Email ?? string.Empty;
             Links = snapshot.ContactLinks;
         }
         catch (Exception)

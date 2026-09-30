@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using PortfolioCite.App.Services;
-using PortfolioCite.Contracts.Portfolio;
+using PortfolioCite.Contracts.Portfolio.Models;
 
 namespace PortfolioCite.App.Components.Pages.Projects;
 

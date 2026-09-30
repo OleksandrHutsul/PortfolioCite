@@ -10,6 +10,8 @@ public class PortfolioDbContext : DbContext
     }
 
     public DbSet<Profile> Profiles => Set<Profile>();
+    public DbSet<ProfileLanguage> ProfileLanguages => Set<ProfileLanguage>();
+    public DbSet<ProfileFile> ProfileFiles => Set<ProfileFile>();
     public DbSet<SkillCategory> SkillCategories => Set<SkillCategory>();
     public DbSet<Skill> Skills => Set<Skill>();
     public DbSet<Project> Projects => Set<Project>();
