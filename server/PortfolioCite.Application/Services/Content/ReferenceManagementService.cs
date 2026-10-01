@@ -1,6 +1,7 @@
 using PortfolioCite.Application.Abstractions;
 using PortfolioCite.Application.Validation;
 using PortfolioCite.Contracts.Administration.Models;
+using PortfolioCite.Contracts.Portfolio.Rules;
 using PortfolioCite.Domain.Entities;
 
 namespace PortfolioCite.Application.Services.Content;
@@ -63,6 +64,7 @@ public class ReferenceManagementService : IReferenceManagementService
 
     public async Task<ContactLinkAdminDto> CreateContactLinkAsync(SaveContactLinkRequest request, CancellationToken cancellationToken)
     {
+        EnsureIcon(request);
         var links = await _repository.ListForUpdateAsync<ContactLink>(cancellationToken);
         var link = new ContactLink();
 
@@ -77,6 +79,7 @@ public class ReferenceManagementService : IReferenceManagementService
 
     public async Task<ContactLinkAdminDto?> UpdateContactLinkAsync(int id, SaveContactLinkRequest request, CancellationToken cancellationToken)
     {
+        EnsureIcon(request);
         var links = await _repository.ListForUpdateAsync<ContactLink>(cancellationToken);
         var link = links.FirstOrDefault(item => item.Id == id);
         if (link is null) return null;
@@ -109,11 +112,18 @@ public class ReferenceManagementService : IReferenceManagementService
         certificate.CredentialUrl = request.CredentialUrl.Trim();
     }
 
+    private static void EnsureIcon(SaveContactLinkRequest request)
+    {
+        var validator = new ContentValidator();
+        validator.AddSkillIcon(request.IconName, nameof(SaveContactLinkRequest.IconName));
+        validator.ThrowIfInvalid();
+    }
+
     private static void Apply(ContactLink link, SaveContactLinkRequest request)
     {
         link.Label = request.Label.Trim();
         link.Url = request.Url.Trim();
-        link.IconName = request.IconName.Trim();
+        link.IconName = SkillIcons.Canonical(request.IconName) ?? request.IconName.Trim();
     }
 
     private static CertificateAdminDto Map(Certificate certificate)

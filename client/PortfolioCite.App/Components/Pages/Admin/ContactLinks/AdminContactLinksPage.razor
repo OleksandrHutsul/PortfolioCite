@@ -1,4 +1,5 @@
 @page "/admin/contact-links"
+@using PortfolioCite.Contracts.Portfolio.Rules
 @attribute [Authorize(Policy = "PortfolioAdmin")]
 @layout AdminLayout
 
@@ -44,10 +45,7 @@ else
                     <InputText @bind-Value="Request.Url" />
                 </label>
 
-                <label>
-                    <span>Icon name<RequiredIndicatorComponent For="@(() => Request.IconName)" /></span>
-                    <InputText @bind-Value="Request.IconName" />
-                </label>
+                <SkillIconField @bind-Value="Request.IconName" />
 
                 <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />
             </div>
@@ -94,7 +92,12 @@ else
                                 <strong>@item.Label</strong>
                                 <small>@item.Url</small>
                             </td>
-                            <td>@item.IconName</td>
+                            <td>
+                                <span class="skill-icon-choice">
+                                    <SkillIconMark Name="@item.IconName" />
+                                    <span class="skill-icon-choice__label">@(SkillIcons.Find(item.IconName)?.Label ?? item.IconName)</span>
+                                </span>
+                            </td>
                             <td>@item.DisplayOrder</td>
                             <td class="admin-row-actions">
                                 <button class="admin-edit-action" @onclick="() => StartEdit(item)">Edit</button>

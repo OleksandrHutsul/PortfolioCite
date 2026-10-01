@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using PortfolioCite.Contracts.Portfolio.Rules;
 
 namespace PortfolioCite.Contracts.Administration.Models;
 
@@ -11,8 +12,8 @@ public class SaveContactLinkRequest
     [RegularExpression(@"^(?i)\s*(https?://.+|mailto:.*)\s*$", ErrorMessage = "Contact URL must use HTTP, HTTPS, or mailto.")]
     public string Url { get; set; } = string.Empty;
 
-    [Required, StringLength(40)] 
-    public string IconName { get; set; } = string.Empty;
+    [Required, StringLength(40), SkillIconName]
+    public string IconName { get; set; } = "link";
 
     public int DisplayOrder { get; set; }
 }
