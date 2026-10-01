@@ -1,3 +1,4 @@
+using PortfolioCite.Application.Models;
 using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Contracts.Projects;
 
@@ -10,4 +11,6 @@ public interface IProjectService
     Task<ProjectDto> CreateAsync(SaveProjectRequest request, CancellationToken cancellationToken);
     Task<ProjectDto?> UpdateAsync(int id, SaveProjectRequest request, CancellationToken cancellationToken);
     Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
+    Task<ProjectImageResult> SaveImageAsync(int id, ProfileFileContent file, CancellationToken cancellationToken);
+    Task<ProjectImageResult> RemoveImageAsync(int id, CancellationToken cancellationToken);
 }

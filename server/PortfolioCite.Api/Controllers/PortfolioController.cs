@@ -24,7 +24,7 @@ public class PortfolioController : ControllerBase
     {
         var portfolio = await _queryService.GetSnapshotAsync(cancellationToken);
 
-        return Ok(ProfileMediaLinks.Apply(Request, portfolio));
+        return Ok(ProjectMediaLinks.Apply(Request, ProfileMediaLinks.Apply(Request, portfolio)));
     }
 
     [HttpGet("avatar/{fileName}")]
@@ -37,6 +37,12 @@ public class PortfolioController : ControllerBase
     public Task<IActionResult> Resume(string fileName, CancellationToken cancellationToken)
     {
         return SendFileAsync(_queryService.GetResumeAsync, cancellationToken);
+    }
+
+    [HttpGet("projects/{id:int}/image/{fileName}")]
+    public Task<IActionResult> ProjectImage(int id, string fileName, CancellationToken cancellationToken)
+    {
+        return SendFileAsync(token => _queryService.GetProjectImageAsync(id, token), cancellationToken);
     }
 
     private async Task<IActionResult> SendFileAsync(Func<CancellationToken, Task<ProfileFileDownload?>> load, CancellationToken cancellationToken)

@@ -10,4 +10,5 @@ public interface IPortfolioQueryService
     Task<ProjectDto?> GetProjectAsync(int id, CancellationToken cancellationToken);
     Task<ProfileFileDownload?> GetAvatarAsync(CancellationToken cancellationToken);
     Task<ProfileFileDownload?> GetResumeAsync(CancellationToken cancellationToken);
+    Task<ProfileFileDownload?> GetProjectImageAsync(int projectId, CancellationToken cancellationToken);
 }

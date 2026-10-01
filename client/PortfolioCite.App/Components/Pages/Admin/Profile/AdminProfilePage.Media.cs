@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Administration.Rules;
-using PortfolioCite.Contracts.Portfolio.Models;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Profile;
 
@@ -12,7 +12,7 @@ public partial class AdminProfilePage
 
         AvatarInputVersion++;
 
-        var result = await ReadFileAsync(args.File, true);
+        var result = await MediaFileReader.ReadImageAsync(args.File, _lifetime.Token);
 
         if (result.File is null)
         {
@@ -60,7 +60,7 @@ public partial class AdminProfilePage
 
         ResumeInputVersion++;
 
-        var result = await ReadFileAsync(args.File, false);
+        var result = await MediaFileReader.ReadResumeAsync(args.File, _lifetime.Token);
 
         if (result.File is null)
         {
@@ -116,12 +116,12 @@ public partial class AdminProfilePage
         if (_pendingResume is not null)
         {
             if (!await UploadResumeAsync())
-                problems.Add("the résumé could not be uploaded");
+                problems.Add("the resume could not be uploaded");
         }
         else if (ResumeRemovePending && HasStoredResume)
         {
             if (!await RemoveStoredResumeAsync())
-                problems.Add("the résumé could not be removed");
+                problems.Add("the resume could not be removed");
         }
 
         return problems;
@@ -136,7 +136,7 @@ public partial class AdminProfilePage
 
         if (!result.IsSuccess || result.Value is null)
         {
-            AvatarMessage = FriendlyMediaError(result.Error, "The image could not be saved. Try again.");
+            AvatarMessage = MediaFileReader.FriendlyError(result.Error, "The image could not be saved. Try again.");
             return false;
         }
 
@@ -154,7 +154,7 @@ public partial class AdminProfilePage
 
         if (!result.IsSuccess || result.Value is null)
         {
-            AvatarMessage = FriendlyMediaError(result.Error, "The image could not be removed. Try again.");
+            AvatarMessage = MediaFileReader.FriendlyError(result.Error, "The image could not be removed. Try again.");
             return false;
         }
 
@@ -174,7 +174,7 @@ public partial class AdminProfilePage
 
         if (!result.IsSuccess || result.Value is null)
         {
-            ResumeMessage = FriendlyMediaError(result.Error, "The résumé could not be saved. Try again.");
+            ResumeMessage = MediaFileReader.FriendlyError(result.Error, "The resume could not be saved. Try again.");
             return false;
         }
 
@@ -191,7 +191,7 @@ public partial class AdminProfilePage
 
         if (!result.IsSuccess || result.Value is null)
         {
-            ResumeMessage = FriendlyMediaError(result.Error, "The résumé could not be removed. Try again.");
+            ResumeMessage = MediaFileReader.FriendlyError(result.Error, "The resume could not be removed. Try again.");
             return false;
         }
 
@@ -199,56 +199,6 @@ public partial class AdminProfilePage
         ResumeRemovePending = false;
 
         return true;
-    }
-
-    private async Task<(PendingUpload? File, string? Error)> ReadFileAsync(IBrowserFile file, bool avatar)
-    {
-        var extension = ProfileMediaRules.ExtensionOf(file.Name);
-        var contentType = ProfileMediaRules.ContentTypeFor(extension);
-        var typeIsValid = avatar ? ProfileMediaRules.IsAvatarExtension(extension) : ProfileMediaRules.IsResumeExtension(extension);
-        var maxBytes = avatar ? ProfileMediaRules.AvatarMaxBytes : ProfileMediaRules.ResumeMaxBytes;
-
-        if (contentType is null || !typeIsValid)
-            return (null, avatar ? ProfileMediaRules.AvatarTypeError : ProfileMediaRules.ResumeTypeError);
-
-        if (file.Size <= 0)
-            return (null, ProfileMediaRules.EmptyFileError);
-
-        if (file.Size > maxBytes)
-            return (null, avatar ? ProfileMediaRules.AvatarSizeError : ProfileMediaRules.ResumeSizeError);
-
-        try
-        {
-            await using var stream = file.OpenReadStream(maxBytes);
-            using var memory = new MemoryStream();
-
-            await stream.CopyToAsync(memory, _lifetime.Token);
-
-            var name = Path.GetFileName(file.Name);
-            var pending = new PendingUpload(memory.ToArray(), string.IsNullOrWhiteSpace(name) ? "upload" : name, contentType);
-
-            return (pending, null);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch
-        {
-            return (null, avatar ? "The image could not be read." : "The résumé could not be read.");
-        }
-    }
-
-    private static string FriendlyMediaError(string? error, string fallback)
-    {
-        if (string.IsNullOrWhiteSpace(error))
-            return fallback;
-
-        if (error.Contains("Exception", StringComparison.OrdinalIgnoreCase) || error.Contains("HTTP", StringComparison.OrdinalIgnoreCase)
-            || error.Any(char.IsDigit) && error.Contains("status", StringComparison.OrdinalIgnoreCase))
-            return fallback;
-
-        return error;
     }
 
     private static string? FileNameFromUrl(string? url)
@@ -260,16 +210,5 @@ public partial class AdminProfilePage
         var name = Path.GetFileName(Uri.UnescapeDataString(path));
 
         return string.IsNullOrWhiteSpace(name) ? null : name;
-    }
-
-    private static string FormatSize(long bytes)
-    {
-        if (bytes < 1024)
-            return $"{bytes} B";
-
-        if (bytes < 1024 * 1024)
-            return $"{bytes / 1024d:0.#} KB";
-
-        return $"{bytes / (1024d * 1024d):0.#} MB";
     }
 }

@@ -20,6 +20,8 @@ public interface IPortfolioRepository
     Task<IReadOnlyList<Project>> GetAllProjectsForAdminAsync(CancellationToken cancellationToken);
     Task<Project?> GetProjectForAdminAsync(int id, CancellationToken cancellationToken);
     Task<Project?> GetProjectForUpdateAsync(int id, CancellationToken cancellationToken);
+    Task<ProjectImage?> GetProjectImageAsync(int projectId, CancellationToken cancellationToken);
+    Task<ProjectImage?> GetProjectImageForUpdateAsync(int projectId, CancellationToken cancellationToken);
 
     Task<IReadOnlyDictionary<string, Technology>> GetTechnologiesAsync(IEnumerable<string> names, CancellationToken cancellationToken);
 

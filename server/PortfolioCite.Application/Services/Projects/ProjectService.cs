@@ -6,7 +6,7 @@ using PortfolioCite.Domain.Entities;
 
 namespace PortfolioCite.Application.Services.Projects;
 
-public class ProjectService : IProjectService
+public partial class ProjectService : IProjectService
 {
     private readonly IPortfolioRepository _repository;
 
@@ -84,7 +84,6 @@ public class ProjectService : IProjectService
         project.Description = request.Description.Trim();
         project.GitHubUrl = NullIfWhiteSpace(request.GitHubUrl);
         project.LiveUrl = NullIfWhiteSpace(request.LiveUrl);
-        project.ImageUrl = NullIfWhiteSpace(request.ImageUrl);
         project.IsFeatured = request.IsFeatured;
         project.IsPublished = request.IsPublished;
 

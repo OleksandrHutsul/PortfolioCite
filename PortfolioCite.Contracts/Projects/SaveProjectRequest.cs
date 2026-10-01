@@ -19,9 +19,6 @@ public class SaveProjectRequest
     [Url, StringLength(500)]
     public string? LiveUrl { get; set; }
     
-    [StringLength(500)]
-    public string? ImageUrl { get; set; }
-    
     public int DisplayOrder { get; set; }
     
     public bool IsFeatured { get; set; }

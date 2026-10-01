@@ -9,8 +9,8 @@ public static class ProfileMediaLinks
     {
         return profile with
         {
-            AvatarUrl = Absolute(request, profile.AvatarUrl),
-            ResumeUrl = Absolute(request, profile.ResumeUrl)
+            AvatarUrl = MediaLinks.Absolute(request, profile.AvatarUrl),
+            ResumeUrl = MediaLinks.Absolute(request, profile.ResumeUrl)
         };
     }
 
@@ -23,31 +23,10 @@ public static class ProfileMediaLinks
         {
             Profile = snapshot.Profile with
             {
-                AvatarUrl = Absolute(request, snapshot.Profile.AvatarUrl),
-                ResumeUrl = Absolute(request, snapshot.Profile.ResumeUrl)
+                AvatarUrl = MediaLinks.Absolute(request, snapshot.Profile.AvatarUrl),
+                ResumeUrl = MediaLinks.Absolute(request, snapshot.Profile.ResumeUrl)
             }
         };
     }
 
-    private static string? Absolute(HttpRequest request, string? url)
-    {
-        if (string.IsNullOrWhiteSpace(url) || Uri.TryCreate(url, UriKind.Absolute, out _))
-            return url;
-
-        var scheme = Header(request, "X-Forwarded-Proto") ?? request.Scheme;
-        var host = Header(request, "X-Forwarded-Host") ?? request.Host.Value;
-        var path = url.StartsWith('/') ? url : $"/{url}";
-
-        return $"{scheme}://{host}{request.PathBase}{path}";
-    }
-
-    private static string? Header(HttpRequest request, string name)
-    {
-        if (!request.Headers.TryGetValue(name, out var values))
-            return null;
-
-        var value = values.ToString().Split(',')[0].Trim();
-
-        return value.Length == 0 ? null : value;
-    }
 }

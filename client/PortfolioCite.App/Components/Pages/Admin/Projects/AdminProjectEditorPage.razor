@@ -59,11 +59,67 @@ else
                 <ValidationMessage For="@(() => Request.LiveUrl)" />
             </label>
 
-            <label class="wide">
-                <span>Image URL<RequiredIndicatorComponent For="@(() => Request.ImageUrl)" /></span>
-                <InputText @bind-Value="Request.ImageUrl" />
-                <ValidationMessage For="@(() => Request.ImageUrl)" />
-            </label>
+            <section class="admin-media" aria-labelledby="project-image-heading">
+                <h2 id="project-image-heading">Project image</h2>
+
+                <div class="admin-media__body">
+                    <div class="admin-media__mark @(ImageRemovePending ? "is-removed" : null)">
+                        @if (ShowProjectImage)
+                        {
+                            <img src="@ImagePreviewUrl" alt="@ImageAlt" />
+                        }
+                        else
+                        {
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <rect x="3.5" y="5" width="17" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+                                <circle cx="8.5" cy="9.5" r="1.4" fill="none" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M4.5 16.5l4.2-3.4 2.6 2.1 3.1-3.7 5.1 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        }
+                    </div>
+
+                    <div class="admin-media__copy">
+                        <p class="admin-media__status">@ImageStatus</p>
+
+                        @if (ImageDetail is not null)
+                        {
+                            <p class="admin-media__meta">@ImageDetail</p>
+                        }
+
+                        <div class="admin-media__actions">
+                            <div class="admin-file-button @(IsSaving ? "is-disabled" : null)">
+                                <label for="project-image">@ImageActionLabel</label>
+                                <InputFile id="project-image"
+                                           @key="ImageInputVersion"
+                                           class="media-file-input"
+                                           OnChange="SelectImageAsync"
+                                           accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                                           aria-label="@ImageActionLabel" />
+                            </div>
+
+                            @if (HasPendingImage)
+                            {
+                                <button type="button" class="admin-text-button" disabled="@IsSaving" @onclick="ClearImageSelection">Clear</button>
+                            }
+                            else if (ImageRemovePending)
+                            {
+                                <button type="button" class="admin-text-button" disabled="@IsSaving" @onclick="UndoImageRemoval">Undo</button>
+                            }
+                            else if (HasStoredImage)
+                            {
+                                <button type="button" class="admin-text-button" disabled="@IsSaving" @onclick="MarkImageForRemoval">Remove image</button>
+                            }
+                        </div>
+
+                        <p class="admin-media__hint">@ImageHint</p>
+
+                        @if (ImageMessage is not null)
+                        {
+                            <p class="admin-media__error" role="alert">@ImageMessage</p>
+                        }
+                    </div>
+                </div>
+            </section>
 
             <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />
 

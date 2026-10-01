@@ -55,6 +55,19 @@ public partial class PortfolioRepository
             .FirstOrDefaultAsync(project => project.Id == id, cancellationToken);
     }
 
+    public Task<ProjectImage?> GetProjectImageAsync(int projectId, CancellationToken cancellationToken)
+    {
+        return _dbContext.ProjectImages
+            .AsNoTracking()
+            .FirstOrDefaultAsync(image => image.ProjectId == projectId, cancellationToken);
+    }
+
+    public Task<ProjectImage?> GetProjectImageForUpdateAsync(int projectId, CancellationToken cancellationToken)
+    {
+        return _dbContext.ProjectImages
+            .FirstOrDefaultAsync(image => image.ProjectId == projectId, cancellationToken);
+    }
+
     public async Task<IReadOnlyDictionary<string, Technology>> GetTechnologiesAsync(IEnumerable<string> names, CancellationToken cancellationToken)
     {
         var normalizedNames = names

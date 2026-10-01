@@ -42,16 +42,16 @@ public partial class AdminProfilePage : ComponentBase, IDisposable
     protected bool ShowAvatarImage => !AvatarRemovePending && !string.IsNullOrWhiteSpace(AvatarPreviewUrl);
     protected bool CanViewResume => HasStoredResume && !ResumeRemovePending && !HasPendingResume;
     protected bool CanAddLanguage => !IsSaving && Request.Languages.Count < LanguageProficiencies.MaxCount;
-    protected string AvatarHint => $"JPG, PNG or WebP · Max {ProfileMediaRules.AvatarMaxBytes / (1024 * 1024)} MB";
+    protected string AvatarHint => $"JPG, PNG or WebP · Max {MediaRules.ImageMaxBytes / (1024 * 1024)} MB";
     protected string ResumeHint => $"PDF only · Max {ProfileMediaRules.ResumeMaxBytes / (1024 * 1024)} MB";
     protected string AvatarActionLabel => HasPendingAvatar ? "Change image" : HasStoredAvatar && !AvatarRemovePending ? "Replace image" : "Choose image";
     protected string ResumeActionLabel => HasPendingResume ? "Change PDF" : HasStoredResume && !ResumeRemovePending ? "Replace" : "Choose PDF";
     protected string AvatarStatus => AvatarRemovePending ? "Will be removed when you save." : HasPendingAvatar ? _pendingAvatar!.Name
         : HasStoredAvatar ? "Current profile image" : "No profile image uploaded";
     protected string ResumeStatus => ResumeRemovePending ? "Will be removed when you save." : HasPendingResume ? _pendingResume!.Name
-        : HasStoredResume ? FileNameFromUrl(ResumeUrl) ?? "Résumé uploaded" : "No résumé uploaded";
-    protected string? AvatarDetail => HasPendingAvatar ? FormatSize(_pendingAvatar!.Content.Length) : null;
-    protected string? ResumeDetail => HasPendingResume ? FormatSize(_pendingResume!.Content.Length) : null;
+        : HasStoredResume ? FileNameFromUrl(ResumeUrl) ?? "Resume uploaded" : "No resume uploaded";
+    protected string? AvatarDetail => HasPendingAvatar ? MediaFileReader.FormatSize(_pendingAvatar!.Content.Length) : null;
+    protected string? ResumeDetail => HasPendingResume ? MediaFileReader.FormatSize(_pendingResume!.Content.Length) : null;
     protected string AvatarAlt => HasPendingAvatar ? $"Preview of {_pendingAvatar!.Name}" : "Current profile image";
     protected string Description => !IsLoading && LoadError is null && !HasProfile
         ? "No profile exists yet. Enter the details below to create it."

@@ -64,6 +64,13 @@ public class PortfolioQueryService : IPortfolioQueryService
         return GetFileAsync(ProfileFileKind.Resume, cancellationToken);
     }
 
+    public async Task<ProfileFileDownload?> GetProjectImageAsync(int projectId, CancellationToken cancellationToken)
+    {
+        var image = await _repository.GetProjectImageAsync(projectId, cancellationToken);
+
+        return image is null ? null : new ProfileFileDownload(image.FileName, image.ContentType, image.Content);
+    }
+
     private async Task<ProfileFileDownload?> GetFileAsync(ProfileFileKind kind, CancellationToken cancellationToken)
     {
         var file = await _repository.GetProfileFileAsync(kind, cancellationToken);

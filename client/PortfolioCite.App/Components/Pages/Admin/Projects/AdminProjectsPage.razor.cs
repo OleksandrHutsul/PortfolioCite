@@ -92,7 +92,6 @@ public partial class AdminProjectsPage : ComponentBase
             Description = project.Description,
             GitHubUrl = project.GitHubUrl,
             LiveUrl = project.LiveUrl,
-            ImageUrl = project.ImageUrl,
             DisplayOrder = project.DisplayOrder,
             IsFeatured = project.IsFeatured,
             IsPublished = isPublished,

@@ -39,11 +39,11 @@ public class AdminProfileController : ControllerBase
 
     [HttpPost("avatar")]
     [Consumes("multipart/form-data")]
-    [RequestSizeLimit(ProfileMediaRules.AvatarRequestBytes)]
-    [RequestFormLimits(MultipartBodyLengthLimit = ProfileMediaRules.AvatarRequestBytes)]
+    [RequestSizeLimit(MediaRules.ImageRequestBytes)]
+    [RequestFormLimits(MultipartBodyLengthLimit = MediaRules.ImageRequestBytes)]
     public Task<ActionResult<ProfileAdminDto>> UploadAvatar(IFormFile? file, CancellationToken cancellationToken)
     {
-        return SaveFileAsync(file, ProfileMediaRules.AvatarMaxBytes, ProfileMediaRules.AvatarSizeError, _profileService.SaveAvatarAsync, cancellationToken);
+        return SaveFileAsync(file, MediaRules.ImageMaxBytes, MediaRules.ImageSizeError, _profileService.SaveAvatarAsync, cancellationToken);
     }
 
     [HttpDelete("avatar")]
@@ -69,8 +69,8 @@ public class AdminProfileController : ControllerBase
         return ProfileMediaResultMapper.Map(this, result);
     }
 
-    private async Task<ActionResult<ProfileAdminDto>> SaveFileAsync(IFormFile? file, long maxBytes, string sizeError, Func<ProfileFileContent, CancellationToken, 
-        Task<ProfileMediaResult>> save, CancellationToken cancellationToken)
+    private async Task<ActionResult<ProfileAdminDto>> SaveFileAsync(IFormFile? file, long maxBytes, string sizeError,
+        Func<ProfileFileContent, CancellationToken, Task<ProfileMediaResult>> save, CancellationToken cancellationToken)
     {
         var validationError = ProfileFileValidator.Validate(file, maxBytes, sizeError);
 

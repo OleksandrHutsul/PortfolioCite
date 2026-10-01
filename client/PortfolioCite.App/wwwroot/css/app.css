@@ -833,6 +833,10 @@ p {
     margin-top: 1.25rem;
 }
 
+.admin-form-grid > .admin-media {
+    grid-column: 1 / -1;
+}
+
 .admin-media {
     background: rgba(7, 17, 31, .45);
     border: 1px solid rgba(148, 163, 184, .16);

@@ -30,4 +30,14 @@ public partial class AdminApiService
     {
         return DeleteAsync($"api/admin/projects/{id}", cancellationToken);
     }
+
+    public Task<ApiResult<ProjectDto>> UploadProjectImageAsync(int id, Stream content, string fileName, string contentType, CancellationToken cancellationToken = default)
+    {
+        return UploadAsync<ProjectDto>($"api/admin/projects/{id}/image", content, fileName, contentType, cancellationToken);
+    }
+
+    public Task<ApiResult<ProjectDto>> RemoveProjectImageAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return SendWithoutBodyAsync<ProjectDto>(HttpMethod.Delete, $"api/admin/projects/{id}/image", cancellationToken);
+    }
 }

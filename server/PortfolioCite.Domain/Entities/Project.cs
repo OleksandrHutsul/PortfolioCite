@@ -15,4 +15,5 @@ public class Project
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
     public List<ProjectTechnology> ProjectTechnologies { get; set; } = [];
+    public ProjectImage? Image { get; set; }
 }

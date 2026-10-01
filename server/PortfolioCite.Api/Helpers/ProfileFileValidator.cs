@@ -8,7 +8,7 @@ public static class ProfileFileValidator
     public static ActionResult? Validate(IFormFile? file, long maxBytes, string sizeError)
     {
         if (file is null || file.Length <= 0)
-            return BadRequest(ProfileMediaRules.EmptyFileError);
+            return BadRequest(MediaRules.EmptyFileError);
 
         if (file.Length > maxBytes)
             return StatusCode(sizeError, StatusCodes.Status413PayloadTooLarge);

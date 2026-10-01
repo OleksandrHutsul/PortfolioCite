@@ -1,4 +1,6 @@
-﻿using PortfolioCite.Application.Models;
+﻿using PortfolioCite.Application.Enums;
+using PortfolioCite.Application.Models;
+using PortfolioCite.Application.Services;
 using PortfolioCite.Contracts.Administration.Rules;
 using PortfolioCite.Domain.Entities;
 
@@ -40,17 +42,18 @@ public partial class ProfileManagementService
         if (validation is not null)
             return validation;
 
-        await using var content = new MemoryStream();
-        var read = await CopyLimitedAsync(file.Content, content, Limit(kind), cancellationToken);
+        var read = await MediaContentInspector.ReadLimitedAsync(file.Content, Limit(kind), cancellationToken);
 
-        if (read.Failure is not null)
-            return read.Failure;
+        if (read.Status == MediaBytesStatus.TooLarge)
+            return ProfileMediaResult.TooLarge(SizeError(kind));
 
-        content.Position = 0;
+        if (read.Status == MediaBytesStatus.Empty || read.Content is null)
+            return ProfileMediaResult.Invalid(MediaRules.EmptyFileError);
 
-        var extension = ProfileMediaRules.ExtensionOf(file.FileName);
+        var extension = MediaRules.ExtensionOf(file.FileName);
+        var headerLength = Math.Min(read.Content.Length, 16);
 
-        if (!HasSignature(extension, content.GetBuffer().AsSpan(0, (int)Math.Min(content.Length, 16))))
+        if (!MediaContentInspector.HasSignature(extension, read.Content.AsSpan(0, headerLength)))
             return ProfileMediaResult.Invalid(TypeError(kind));
 
         var stored = await _repository.GetProfileFileForUpdateAsync(profile.Id, kind, cancellationToken);
@@ -67,9 +70,9 @@ public partial class ProfileManagementService
         }
 
         stored.FileName = StoredFileName(kind, file.FileName, extension);
-        stored.ContentType = ProfileMediaRules.ContentTypeFor(extension)!;
-        stored.Size = content.Length;
-        stored.Content = content.ToArray();
+        stored.ContentType = MediaRules.ContentTypeFor(extension)!;
+        stored.Size = read.Content.LongLength;
+        stored.Content = read.Content;
         profile.UpdatedAt = DateTimeOffset.UtcNow;
 
         await _repository.SaveChangesAsync(cancellationToken);

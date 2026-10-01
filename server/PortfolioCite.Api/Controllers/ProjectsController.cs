@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PortfolioCite.Api.Helpers;
 using PortfolioCite.Application.Services.PortfolioQuery;
 using PortfolioCite.Contracts.Portfolio.Models;
 
@@ -19,7 +20,7 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType<IReadOnlyList<ProjectDto>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<ProjectDto>>> GetAll(CancellationToken cancellationToken)
     {
-        return Ok(await _queryService.GetProjectsAsync(cancellationToken));
+        return Ok(ProjectMediaLinks.Apply(Request, await _queryService.GetProjectsAsync(cancellationToken)));
     }
 
     [HttpGet("{id:int}")]
@@ -29,6 +30,6 @@ public class ProjectsController : ControllerBase
     {
         var project = await _queryService.GetProjectAsync(id, cancellationToken);
 
-        return project is null ? NotFound() : Ok(project);
+        return project is null ? NotFound() : Ok(ProjectMediaLinks.Apply(Request, project));
     }
 }

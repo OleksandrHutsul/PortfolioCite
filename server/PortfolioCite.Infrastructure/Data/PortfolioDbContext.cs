@@ -15,6 +15,7 @@ public class PortfolioDbContext : DbContext
     public DbSet<SkillCategory> SkillCategories => Set<SkillCategory>();
     public DbSet<Skill> Skills => Set<Skill>();
     public DbSet<Project> Projects => Set<Project>();
+    public DbSet<ProjectImage> ProjectImages => Set<ProjectImage>();
     public DbSet<Technology> Technologies => Set<Technology>();
     public DbSet<ProjectTechnology> ProjectTechnologies => Set<ProjectTechnology>();
     public DbSet<Certificate> Certificates => Set<Certificate>();
