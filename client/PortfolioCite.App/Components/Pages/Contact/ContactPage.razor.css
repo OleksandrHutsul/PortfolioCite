@@ -61,7 +61,6 @@
 .contact-links {
     display: grid;
     gap: .55rem;
-    margin-top: auto;
 }
 
     .contact-links a {
