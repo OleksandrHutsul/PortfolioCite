@@ -12,6 +12,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddScoped<IContactService, ContactService>();
+        services.AddScoped<IContactNotification, ContactOwnerNotification>();
         services.AddScoped<IContactMessageService, ContactMessageService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IProjectService, ProjectService>();
