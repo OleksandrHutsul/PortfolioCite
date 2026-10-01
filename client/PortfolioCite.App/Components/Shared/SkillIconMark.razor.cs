@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Contracts.Portfolio.Rules;
 
 namespace PortfolioCite.App.Components.Shared;

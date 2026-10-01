@@ -20,7 +20,7 @@ public partial class AdminSkillsPage : ComponentBase
     protected string? LoadError { get; private set; }
     protected string? SaveError { get; private set; }
     protected int CategoryOrderItemCount => DisplayOrderRules.ItemCount(Categories.Count, EditingId is null);
-    protected int SkillOrderItemCount => DisplayOrderRules.ItemCount(Request.Skills.Count, includesNewItem: false);
+    protected int SkillOrderItemCount => DisplayOrderRules.ItemCount(Request.Skills.Count, isCreating: false);
 
     protected override Task OnInitializedAsync()
     {

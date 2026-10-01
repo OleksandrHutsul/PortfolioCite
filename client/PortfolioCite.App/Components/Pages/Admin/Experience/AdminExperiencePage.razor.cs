@@ -13,6 +13,7 @@ public partial class AdminExperiencePage : ComponentBase
 
     protected List<ExperienceAdminDto> Experiences { get; private set; } = [];
     protected SaveExperienceRequest Request { get; private set; } = new();
+    protected bool IsCurrent { get; private set; }
     protected string HighlightsText { get; set; } = string.Empty;
     protected int? EditingId { get; private set; }
     protected bool IsEditing { get; private set; }
@@ -46,6 +47,7 @@ public partial class AdminExperiencePage : ComponentBase
         {
             DisplayOrder = DisplayOrderRules.Next(Experiences.Count)
         };
+        IsCurrent = false;
         HighlightsText = string.Empty;
         SaveError = null;
         IsEditing = true;
@@ -63,10 +65,18 @@ public partial class AdminExperiencePage : ComponentBase
             Summary = item.Summary,
             DisplayOrder = item.DisplayOrder
         };
-
+        IsCurrent = item.EndedOn is null;
         HighlightsText = string.Join(Environment.NewLine, item.Highlights);
         SaveError = null;
         IsEditing = true;
+    }
+
+    protected void SetCurrent(ChangeEventArgs args)
+    {
+        IsCurrent = args.Value is true;
+
+        if (IsCurrent)
+            Request.EndedOn = null;
     }
 
     protected void CancelEdit()
@@ -76,6 +86,9 @@ public partial class AdminExperiencePage : ComponentBase
 
     protected async Task SaveAsync()
     {
+        if (IsCurrent)
+            Request.EndedOn = null;
+
         Request.Highlights = HighlightsText
             .Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .ToList();
@@ -106,13 +119,12 @@ public partial class AdminExperiencePage : ComponentBase
 
         var result = await AdminApi.DeleteExperienceAsync(item.Id);
 
-        if (result.IsSuccess)
+        if (!result.IsSuccess)
         {
-            Experiences.Remove(item);
-            Experiences = DisplayOrderRules.Renumber(Experiences, experience => experience.DisplayOrder, (experience, order) => experience with { DisplayOrder = order });
+            LoadError = result.Error;
             return;
         }
 
-        LoadError = result.Error;
+        Experiences.Remove(item);
     }
 }

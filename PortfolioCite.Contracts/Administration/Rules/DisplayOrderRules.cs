@@ -91,6 +91,13 @@ public static class DisplayOrderRules
         Assign(Sort(items, getOrder), setOrder);
     }
 
+    public static List<T> Renumber<T>(IReadOnlyList<T> items, Func<T, int> getOrder, Func<T, int, T> withOrder)
+    {
+        return Sort(items, getOrder)
+            .Select((item, index) => withOrder(item, index))
+            .ToList();
+    }
+
     private static List<T> Sort<T>(IEnumerable<T> items, Func<T, int> getOrder)
     {
         return items.OrderBy(getOrder).ToList();

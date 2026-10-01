@@ -410,6 +410,41 @@ p {
     font-weight: 500;
 }
 
+.admin-experience-end {
+    align-content: start;
+    color: #d7e2f0;
+    display: grid;
+    font-size: .86rem;
+    font-weight: 750;
+    gap: .4rem;
+    grid-template-rows: auto auto minmax(var(--admin-field-message, 1.15rem), auto);
+    min-width: 0;
+}
+
+.admin-experience-end__body {
+    display: grid;
+    gap: .7rem;
+}
+
+.admin-experience-end__date {
+    border: 0;
+    margin: 0;
+    min-inline-size: 0;
+    padding: 0;
+}
+
+.admin-experience-end__date input {
+    width: 100%;
+}
+
+.admin-experience-end__date:disabled {
+    opacity: .55;
+}
+
+.admin-experience-end .admin-checkbox {
+    gap: .55rem;
+}
+
 .admin-form .admin-checkbox {
     align-content: center;
     align-items: center;

@@ -45,7 +45,7 @@ public partial class AdminProjectEditorPage : ComponentBase
 
         if (Id is null)
         {
-            OrderItemCount = DisplayOrderRules.ItemCount(existingCount, includesNewItem: true);
+            OrderItemCount = DisplayOrderRules.ItemCount(existingCount, isCreating: true);
             Request = new SaveProjectRequest
             {
                 DisplayOrder = DisplayOrderRules.Next(existingCount)
@@ -65,7 +65,7 @@ public partial class AdminProjectEditorPage : ComponentBase
             return;
         }
 
-        OrderItemCount = DisplayOrderRules.ItemCount(existingCount, includesNewItem: false);
+        OrderItemCount = DisplayOrderRules.ItemCount(existingCount, isCreating: false);
         Request = ToRequest(result.Value);
         TechnologyNames = string.Join(", ", result.Value.Technologies);
     }

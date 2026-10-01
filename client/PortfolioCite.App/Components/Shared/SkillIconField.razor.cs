@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
+using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Contracts.Portfolio.Rules;
 
 namespace PortfolioCite.App.Components.Shared;
