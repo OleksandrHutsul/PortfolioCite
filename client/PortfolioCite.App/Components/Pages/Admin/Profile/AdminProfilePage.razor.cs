@@ -178,7 +178,7 @@ public partial class AdminProfilePage : ComponentBase, IDisposable
 
     private static SaveProfileRequest ToRequest(ProfileAdminDto profile)
     {
-        return new SaveProfileRequest
+        var request = new SaveProfileRequest
         {
             FullName = profile.FullName,
             Role = profile.Role,
@@ -195,6 +195,9 @@ public partial class AdminProfilePage : ComponentBase, IDisposable
                 .ToList(),
             Email = profile.Email
         };
+
+        DisplayOrderRules.Normalize(request.Languages, language => language.DisplayOrder, (language, order) => language.DisplayOrder = order);
+        return request;
     }
 
     private static string? BlankToNull(string? value)

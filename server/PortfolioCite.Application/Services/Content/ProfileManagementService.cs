@@ -1,4 +1,5 @@
 using PortfolioCite.Application.Abstractions;
+using PortfolioCite.Application.Validation;
 using PortfolioCite.Contracts.Administration.Models;
 using PortfolioCite.Domain.Entities;
 
@@ -37,11 +38,18 @@ public partial class ProfileManagementService : IProfileManagementService
         profile.CurrentFocus = request.CurrentFocus.Trim();
         profile.Email = request.Email.Trim();
         profile.UpdatedAt = DateTimeOffset.UtcNow;
+        EnsureLanguages(request);
         ReplaceLanguages(profile, request);
 
         await _repository.SaveChangesAsync(cancellationToken);
 
         return await MapAsync(profile, cancellationToken);
+    }
+
+    private static void EnsureLanguages(SaveProfileRequest request)
+    {
+        var orders = (request.Languages ?? []).Select(language => language.DisplayOrder).ToList();
+        DisplayOrderEditor.RequireSequence(orders, index => $"Languages[{index}].DisplayOrder");
     }
 
     private static void ReplaceLanguages(Profile profile, SaveProfileRequest request)

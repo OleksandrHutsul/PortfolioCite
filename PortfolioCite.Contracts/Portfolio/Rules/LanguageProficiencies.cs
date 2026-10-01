@@ -6,7 +6,6 @@ public static class LanguageProficiencies
 {
     public const int MaxNameLength = 80;
     public const int MaxCount = 20;
-    public const int MaxDisplayOrder = 9999;
 
     public static readonly IReadOnlyList<LanguageProficiency> All =
     [

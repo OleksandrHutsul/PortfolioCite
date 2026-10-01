@@ -19,7 +19,6 @@ public class SaveEducationRequest : IValidatableObject
     [StringLength(1200)]
     public string? Description { get; set; }
 
-    [Range(0, int.MaxValue)]
     public int DisplayOrder { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

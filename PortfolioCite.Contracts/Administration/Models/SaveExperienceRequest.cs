@@ -16,7 +16,6 @@ public class SaveExperienceRequest : IValidatableObject
     [Required, StringLength(2000)]
     public string Summary { get; set; } = string.Empty;
 
-    [Range(0, int.MaxValue)]
     public int DisplayOrder { get; set; }
 
     [MaxLength(30)]

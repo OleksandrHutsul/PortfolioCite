@@ -34,11 +34,13 @@
     border-radius: 8px;
     color: var(--skill-accent);
     display: inline-flex;
-    font-family: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
-    font-size: .8rem;
-    font-weight: 850;
     height: 2.8rem;
     justify-content: center;
+}
+
+.technology-card__icon .skill-icon {
+    height: 1.4rem;
+    width: 1.4rem;
 }
 
 .technology-card__content {

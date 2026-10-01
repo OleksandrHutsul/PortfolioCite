@@ -11,6 +11,5 @@ public class SaveProfileLanguageRequest
     [Required]
     public string Proficiency { get; set; } = string.Empty;
 
-    [Range(0, LanguageProficiencies.MaxDisplayOrder)]
     public int DisplayOrder { get; set; }
 }

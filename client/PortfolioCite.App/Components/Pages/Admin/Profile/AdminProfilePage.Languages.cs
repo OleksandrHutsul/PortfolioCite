@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using PortfolioCite.Contracts.Administration.Models;
-using PortfolioCite.Contracts.Portfolio.Rules;
+using PortfolioCite.Contracts.Administration.Rules;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Profile;
 
@@ -10,18 +10,24 @@ public partial class AdminProfilePage
     {
         if (!CanAddLanguage) return;
 
-        var order = Request.Languages.Count == 0
-            ? 1
-            : Math.Min(LanguageProficiencies.MaxDisplayOrder, Request.Languages.Max(language => language.DisplayOrder) + 1);
+        Request.Languages.Add(new SaveProfileLanguageRequest
+        {
+            DisplayOrder = DisplayOrderRules.Next(Request.Languages.Count)
+        });
 
-        Request.Languages.Add(new SaveProfileLanguageRequest { DisplayOrder = order });
+        DisplayOrderRules.Normalize(Request.Languages, language => language.DisplayOrder, (language, order) => language.DisplayOrder = order);
+    }
+
+    protected void ChangeLanguageOrder(SaveProfileLanguageRequest language, int order)
+    {
+        DisplayOrderRules.TryMove(Request.Languages, language, order, item => item.DisplayOrder, (item, value) => item.DisplayOrder = value);
     }
 
     protected void RemoveLanguage(SaveProfileLanguageRequest language)
     {
         if (IsSaving) return;
 
-        Request.Languages.Remove(language);
+        DisplayOrderRules.Remove(Request.Languages, language, item => item.DisplayOrder, (item, value) => item.DisplayOrder = value);
     }
 
     protected static string RemoveLanguageLabel(SaveProfileLanguageRequest language)

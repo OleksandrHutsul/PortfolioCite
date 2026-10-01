@@ -1,0 +1,16 @@
+@using PortfolioCite.Contracts.Administration.Rules
+
+<label class="@CssClass">
+    <span>@Label<RequiredIndicatorComponent TValue="int" For="@ValueExpression" /></span>
+    <InputNumber TValue="int"
+                 Value="@Value"
+                 ValueChanged="@ValueChanged"
+                 ValueExpression="@ValueExpression"
+                 min="@DisplayOrderRules.Minimum"
+                 max="@Maximum"
+                 step="1" />
+
+    <div class="admin-field-message">
+        <ValidationMessage For="@ValueExpression" />
+    </div>
+</label>

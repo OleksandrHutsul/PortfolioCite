@@ -19,6 +19,11 @@ public partial class PortfolioRepository : IPortfolioRepository
         return _dbContext.Set<T>().FindAsync([id], cancellationToken).AsTask();
     }
 
+    public Task<List<T>> ListForUpdateAsync<T>(CancellationToken cancellationToken) where T : class
+    {
+        return _dbContext.Set<T>().ToListAsync(cancellationToken);
+    }
+
     public Task AddAsync<T>(T entity, CancellationToken cancellationToken) where T : class
     {
         return _dbContext.Set<T>().AddAsync(entity, cancellationToken).AsTask();

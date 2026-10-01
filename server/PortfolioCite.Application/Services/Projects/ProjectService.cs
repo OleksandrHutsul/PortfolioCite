@@ -1,4 +1,5 @@
 using PortfolioCite.Application.Abstractions;
+using PortfolioCite.Application.Validation;
 using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Contracts.Projects;
 using PortfolioCite.Domain.Entities;
@@ -28,14 +29,15 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectDto> CreateAsync(SaveProjectRequest request, CancellationToken cancellationToken)
     {
+        var projects = await _repository.ListForUpdateAsync<Project>(cancellationToken);
         var now = DateTimeOffset.UtcNow;
-
         var project = new Project
         {
             CreatedAt = now,
             UpdatedAt = now
         };
 
+        DisplayOrderEditor.Insert(projects, project, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         await ApplyAsync(project, request, cancellationToken);
 
         await _repository.AddAsync(project, cancellationToken);
@@ -49,6 +51,9 @@ public class ProjectService : IProjectService
         var project = await _repository.GetProjectForUpdateAsync(id, cancellationToken);
         if (project is null) return null;
 
+        var projects = await _repository.ListForUpdateAsync<Project>(cancellationToken);
+
+        DisplayOrderEditor.Move(projects, project, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         await ApplyAsync(project, request, cancellationToken);
 
         project.UpdatedAt = DateTimeOffset.UtcNow;
@@ -63,7 +68,10 @@ public class ProjectService : IProjectService
         var project = await _repository.GetProjectForUpdateAsync(id, cancellationToken);
         if (project is null) return false;
 
+        var projects = await _repository.ListForUpdateAsync<Project>(cancellationToken);
+
         _repository.Remove(project);
+        DisplayOrderEditor.CloseGap(projects, project, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         await _repository.SaveChangesAsync(cancellationToken);
 
         return true;
@@ -77,7 +85,6 @@ public class ProjectService : IProjectService
         project.GitHubUrl = NullIfWhiteSpace(request.GitHubUrl);
         project.LiveUrl = NullIfWhiteSpace(request.LiveUrl);
         project.ImageUrl = NullIfWhiteSpace(request.ImageUrl);
-        project.DisplayOrder = request.DisplayOrder;
         project.IsFeatured = request.IsFeatured;
         project.IsPublished = request.IsPublished;
 

@@ -14,6 +14,5 @@ public class SaveContactLinkRequest
     [Required, StringLength(40)] 
     public string IconName { get; set; } = string.Empty;
 
-    [Range(0, int.MaxValue)] 
     public int DisplayOrder { get; set; }
 }

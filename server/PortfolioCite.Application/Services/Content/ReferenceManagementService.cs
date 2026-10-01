@@ -1,4 +1,5 @@
 using PortfolioCite.Application.Abstractions;
+using PortfolioCite.Application.Validation;
 using PortfolioCite.Contracts.Administration.Models;
 using PortfolioCite.Domain.Entities;
 
@@ -62,7 +63,10 @@ public class ReferenceManagementService : IReferenceManagementService
 
     public async Task<ContactLinkAdminDto> CreateContactLinkAsync(SaveContactLinkRequest request, CancellationToken cancellationToken)
     {
+        var links = await _repository.ListForUpdateAsync<ContactLink>(cancellationToken);
         var link = new ContactLink();
+
+        DisplayOrderEditor.Insert(links, link, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         Apply(link, request);
 
         await _repository.AddAsync(link, cancellationToken);
@@ -73,9 +77,11 @@ public class ReferenceManagementService : IReferenceManagementService
 
     public async Task<ContactLinkAdminDto?> UpdateContactLinkAsync(int id, SaveContactLinkRequest request, CancellationToken cancellationToken)
     {
-        var link = await _repository.GetForUpdateAsync<ContactLink>(id, cancellationToken);
+        var links = await _repository.ListForUpdateAsync<ContactLink>(cancellationToken);
+        var link = links.FirstOrDefault(item => item.Id == id);
         if (link is null) return null;
 
+        DisplayOrderEditor.Move(links, link, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         Apply(link, request);
         await _repository.SaveChangesAsync(cancellationToken);
 
@@ -84,10 +90,12 @@ public class ReferenceManagementService : IReferenceManagementService
 
     public async Task<bool> DeleteContactLinkAsync(int id, CancellationToken cancellationToken)
     {
-        var link = await _repository.GetForUpdateAsync<ContactLink>(id, cancellationToken);
+        var links = await _repository.ListForUpdateAsync<ContactLink>(cancellationToken);
+        var link = links.FirstOrDefault(item => item.Id == id);
         if (link is null) return false;
 
         _repository.Remove(link);
+        DisplayOrderEditor.CloseGap(links, link, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         await _repository.SaveChangesAsync(cancellationToken);
 
         return true;
@@ -106,7 +114,6 @@ public class ReferenceManagementService : IReferenceManagementService
         link.Label = request.Label.Trim();
         link.Url = request.Url.Trim();
         link.IconName = request.IconName.Trim();
-        link.DisplayOrder = request.DisplayOrder;
     }
 
     private static CertificateAdminDto Map(Certificate certificate)

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Administration.Models;
+using PortfolioCite.Contracts.Administration.Rules;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Education;
 
@@ -18,6 +19,7 @@ public partial class AdminEducationPage : ComponentBase
     protected bool IsSaving { get; private set; }
     protected string? LoadError { get; private set; }
     protected string? SaveError { get; private set; }
+    protected int OrderItemCount => DisplayOrderRules.ItemCount(EducationItems.Count, EditingId is null);
 
     protected override Task OnInitializedAsync()
     {
@@ -39,7 +41,10 @@ public partial class AdminEducationPage : ComponentBase
     protected void StartCreate()
     {
         EditingId = null;
-        Request = new SaveEducationRequest();
+        Request = new SaveEducationRequest
+        {
+            DisplayOrder = DisplayOrderRules.Next(EducationItems.Count)
+        };
         SaveError = null;
         IsEditing = true;
     }
@@ -98,6 +103,7 @@ public partial class AdminEducationPage : ComponentBase
         if (result.IsSuccess)
         {
             EducationItems.Remove(item);
+            EducationItems = DisplayOrderRules.Renumber(EducationItems, education => education.DisplayOrder, (education, order) => education with { DisplayOrder = order });
             return;
         }
 

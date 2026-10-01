@@ -8,7 +8,7 @@ public class Skill
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Badge { get; set; } = string.Empty;
-    public string IconName { get; set; } = "code";
+    public string IconName { get; set; } = "component";
     public string AccentColor { get; set; } = "#58a6ff";
     public int DisplayOrder { get; set; }
 }

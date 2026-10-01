@@ -54,10 +54,7 @@ else
                     <InputDate @bind-Value="Request.EndedOn" />
                 </label>
 
-                <label>
-                    <span>Display order<RequiredIndicatorComponent For="@(() => Request.DisplayOrder)" /></span>
-                    <InputNumber @bind-Value="Request.DisplayOrder" />
-                </label>
+                <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />
 
                 <label class="wide">
                     <span>Summary<RequiredIndicatorComponent For="@(() => Request.Summary)" /></span>

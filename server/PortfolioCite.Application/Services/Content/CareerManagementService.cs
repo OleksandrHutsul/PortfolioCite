@@ -1,4 +1,5 @@
 using PortfolioCite.Application.Abstractions;
+using PortfolioCite.Application.Validation;
 using PortfolioCite.Contracts.Administration.Models;
 using PortfolioCite.Domain.Entities;
 
@@ -22,7 +23,10 @@ public class CareerManagementService : ICareerManagementService
 
     public async Task<ExperienceAdminDto> CreateExperienceAsync(SaveExperienceRequest request, CancellationToken cancellationToken)
     {
+        var experiences = await _repository.ListForUpdateAsync<WorkExperience>(cancellationToken);
         var experience = new WorkExperience();
+
+        DisplayOrderEditor.Insert(experiences, experience, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         Apply(experience, request);
 
         await _repository.AddAsync(experience, cancellationToken);
@@ -36,6 +40,9 @@ public class CareerManagementService : ICareerManagementService
         var experience = await _repository.GetWorkExperienceForUpdateAsync(id, cancellationToken);
         if (experience is null) return null;
 
+        var experiences = await _repository.ListForUpdateAsync<WorkExperience>(cancellationToken);
+
+        DisplayOrderEditor.Move(experiences, experience, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         Apply(experience, request);
         await _repository.SaveChangesAsync(cancellationToken);
 
@@ -47,7 +54,10 @@ public class CareerManagementService : ICareerManagementService
         var experience = await _repository.GetWorkExperienceForUpdateAsync(id, cancellationToken);
         if (experience is null) return false;
 
+        var experiences = await _repository.ListForUpdateAsync<WorkExperience>(cancellationToken);
+
         _repository.Remove(experience);
+        DisplayOrderEditor.CloseGap(experiences, experience, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         await _repository.SaveChangesAsync(cancellationToken);
 
         return true;
@@ -62,7 +72,10 @@ public class CareerManagementService : ICareerManagementService
 
     public async Task<EducationAdminDto> CreateEducationAsync(SaveEducationRequest request, CancellationToken cancellationToken)
     {
+        var educationItems = await _repository.ListForUpdateAsync<Education>(cancellationToken);
         var education = new Education();
+
+        DisplayOrderEditor.Insert(educationItems, education, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         Apply(education, request);
 
         await _repository.AddAsync(education, cancellationToken);
@@ -73,9 +86,11 @@ public class CareerManagementService : ICareerManagementService
 
     public async Task<EducationAdminDto?> UpdateEducationAsync(int id, SaveEducationRequest request, CancellationToken cancellationToken)
     {
-        var education = await _repository.GetForUpdateAsync<Education>(id, cancellationToken);
+        var educationItems = await _repository.ListForUpdateAsync<Education>(cancellationToken);
+        var education = educationItems.FirstOrDefault(item => item.Id == id);
         if (education is null) return null;
 
+        DisplayOrderEditor.Move(educationItems, education, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         Apply(education, request);
         await _repository.SaveChangesAsync(cancellationToken);
 
@@ -84,10 +99,12 @@ public class CareerManagementService : ICareerManagementService
 
     public async Task<bool> DeleteEducationAsync(int id, CancellationToken cancellationToken)
     {
-        var education = await _repository.GetForUpdateAsync<Education>(id, cancellationToken);
+        var educationItems = await _repository.ListForUpdateAsync<Education>(cancellationToken);
+        var education = educationItems.FirstOrDefault(item => item.Id == id);
         if (education is null) return false;
 
         _repository.Remove(education);
+        DisplayOrderEditor.CloseGap(educationItems, education, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         await _repository.SaveChangesAsync(cancellationToken);
 
         return true;
@@ -100,7 +117,6 @@ public class CareerManagementService : ICareerManagementService
         experience.StartedOn = request.StartedOn;
         experience.EndedOn = request.EndedOn;
         experience.Summary = request.Summary.Trim();
-        experience.DisplayOrder = request.DisplayOrder;
 
         experience.Highlights.Clear();
         experience.Highlights.AddRange(request.Highlights.Select((text, index) => new WorkHighlight
@@ -118,7 +134,6 @@ public class CareerManagementService : ICareerManagementService
         education.StartedOn = request.StartedOn;
         education.EndedOn = request.EndedOn;
         education.Description = NullIfWhiteSpace(request.Description);
-        education.DisplayOrder = request.DisplayOrder;
     }
 
     private static ExperienceAdminDto MapExperience(WorkExperience experience)

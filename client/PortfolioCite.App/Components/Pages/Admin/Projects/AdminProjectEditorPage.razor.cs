@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using PortfolioCite.App.Services;
+using PortfolioCite.Contracts.Administration.Rules;
 using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Contracts.Projects;
 
@@ -18,6 +19,7 @@ public partial class AdminProjectEditorPage : ComponentBase
     protected bool IsSaving { get; private set; }
     protected string? LoadError { get; private set; }
     protected string? SaveError { get; private set; }
+    protected int OrderItemCount { get; private set; } = 1;
 
     protected override Task OnParametersSetAsync()
     {
@@ -28,16 +30,30 @@ public partial class AdminProjectEditorPage : ComponentBase
     {
         LoadError = null;
         SaveError = null;
+        IsLoading = true;
 
-        if (Id is null)
+        var projects = await AdminApi.GetProjectsAsync();
+
+        if (!projects.IsSuccess)
         {
-            Request = new SaveProjectRequest();
-            TechnologyNames = string.Empty;
+            LoadError = projects.Error;
             IsLoading = false;
             return;
         }
 
-        IsLoading = true;
+        var existingCount = projects.Value?.Count ?? 0;
+
+        if (Id is null)
+        {
+            OrderItemCount = DisplayOrderRules.ItemCount(existingCount, includesNewItem: true);
+            Request = new SaveProjectRequest
+            {
+                DisplayOrder = DisplayOrderRules.Next(existingCount)
+            };
+            TechnologyNames = string.Empty;
+            IsLoading = false;
+            return;
+        }
 
         var result = await AdminApi.GetProjectAsync(Id.Value);
 
@@ -49,6 +65,7 @@ public partial class AdminProjectEditorPage : ComponentBase
             return;
         }
 
+        OrderItemCount = DisplayOrderRules.ItemCount(existingCount, includesNewItem: false);
         Request = ToRequest(result.Value);
         TechnologyNames = string.Join(", ", result.Value.Technologies);
     }

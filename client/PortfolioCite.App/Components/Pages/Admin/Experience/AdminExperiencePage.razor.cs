@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Administration.Models;
+using PortfolioCite.Contracts.Administration.Rules;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Experience;
 
@@ -19,6 +20,7 @@ public partial class AdminExperiencePage : ComponentBase
     protected bool IsSaving { get; private set; }
     protected string? LoadError { get; private set; }
     protected string? SaveError { get; private set; }
+    protected int OrderItemCount => DisplayOrderRules.ItemCount(Experiences.Count, EditingId is null);
 
     protected override Task OnInitializedAsync()
     {
@@ -40,7 +42,10 @@ public partial class AdminExperiencePage : ComponentBase
     protected void StartCreate()
     {
         EditingId = null;
-        Request = new SaveExperienceRequest();
+        Request = new SaveExperienceRequest
+        {
+            DisplayOrder = DisplayOrderRules.Next(Experiences.Count)
+        };
         HighlightsText = string.Empty;
         SaveError = null;
         IsEditing = true;
@@ -104,6 +109,7 @@ public partial class AdminExperiencePage : ComponentBase
         if (result.IsSuccess)
         {
             Experiences.Remove(item);
+            Experiences = DisplayOrderRules.Renumber(Experiences, experience => experience.DisplayOrder, (experience, order) => experience with { DisplayOrder = order });
             return;
         }
 

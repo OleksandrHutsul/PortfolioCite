@@ -101,11 +101,11 @@ else
                                 <ValidationMessage For="@(() => language.Proficiency)" />
                             </label>
 
-                            <label>
-                                <span>Order<RequiredIndicatorComponent For="@(() => language.DisplayOrder)" /></span>
-                                <InputNumber @bind-Value="language.DisplayOrder" aria-label="Display order" />
-                                <ValidationMessage For="@(() => language.DisplayOrder)" />
-                            </label>
+                            <DisplayOrderField Value="language.DisplayOrder"
+                                               ValueChanged="@(order => ChangeLanguageOrder(language, order))"
+                                               ValueExpression="@(() => language.DisplayOrder)"
+                                               Label="Order"
+                                               ItemCount="Request.Languages.Count" />
 
                             <div class="admin-language-row__remove">
                                 <button type="button" class="admin-danger-action" disabled="@IsSaving" aria-label="@RemoveLanguageLabel(language)" @onclick="() => RemoveLanguage(language)">Remove</button>

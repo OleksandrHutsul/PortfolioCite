@@ -22,7 +22,6 @@ public class SaveProjectRequest
     [StringLength(500)]
     public string? ImageUrl { get; set; }
     
-    [Range(0, int.MaxValue)]
     public int DisplayOrder { get; set; }
     
     public bool IsFeatured { get; set; }

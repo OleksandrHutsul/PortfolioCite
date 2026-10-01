@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Administration.Models;
+using PortfolioCite.Contracts.Administration.Rules;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Skills;
 
@@ -18,6 +19,8 @@ public partial class AdminSkillsPage : ComponentBase
     protected bool IsSaving { get; private set; }
     protected string? LoadError { get; private set; }
     protected string? SaveError { get; private set; }
+    protected int CategoryOrderItemCount => DisplayOrderRules.ItemCount(Categories.Count, EditingId is null);
+    protected int SkillOrderItemCount => DisplayOrderRules.ItemCount(Request.Skills.Count, includesNewItem: false);
 
     protected override Task OnInitializedAsync()
     {
@@ -41,6 +44,7 @@ public partial class AdminSkillsPage : ComponentBase
         EditingId = null;
         Request = new SaveSkillCategoryRequest
         {
+            DisplayOrder = DisplayOrderRules.Next(Categories.Count),
             Skills = [new SaveSkillRequest()]
         };
 
@@ -52,6 +56,7 @@ public partial class AdminSkillsPage : ComponentBase
     {
         EditingId = category.Id;
         Request = ToRequest(category);
+        DisplayOrderRules.Normalize(Request.Skills, skill => skill.DisplayOrder, (skill, order) => skill.DisplayOrder = order);
         SaveError = null;
         IsEditing = true;
     }
@@ -60,13 +65,26 @@ public partial class AdminSkillsPage : ComponentBase
     {
         Request.Skills.Add(new SaveSkillRequest
         {
-            DisplayOrder = Request.Skills.Count
+            DisplayOrder = DisplayOrderRules.Next(Request.Skills.Count)
         });
+
+        DisplayOrderRules.Normalize(Request.Skills, skill => skill.DisplayOrder, (skill, order) => skill.DisplayOrder = order);
+    }
+
+    protected void ChangeSkillOrder(SaveSkillRequest skill, int order)
+    {
+        DisplayOrderRules.TryMove(Request.Skills, skill, order, item => item.DisplayOrder, (item, value) => item.DisplayOrder = value);
     }
 
     protected void RemoveSkill(SaveSkillRequest skill)
     {
-        Request.Skills.Remove(skill);
+        DisplayOrderRules.Remove(Request.Skills, skill, item => item.DisplayOrder, (item, value) => item.DisplayOrder = value);
+    }
+
+    protected static string RemoveSkillLabel(SaveSkillRequest skill)
+    {
+        var name = skill.Name.Trim();
+        return name.Length == 0 ? "Remove skill" : $"Remove {name}";
     }
 
     protected void CancelEdit()
@@ -105,6 +123,7 @@ public partial class AdminSkillsPage : ComponentBase
         if (result.IsSuccess)
         {
             Categories.Remove(category);
+            Categories = DisplayOrderRules.Renumber(Categories, item => item.DisplayOrder, (item, order) => item with { DisplayOrder = order });
             return;
         }
 

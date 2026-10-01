@@ -39,10 +39,7 @@ else
                     <InputText @bind-Value="Request.Name" />
                 </label>
 
-                <label>
-                    <span>Display order<RequiredIndicatorComponent For="@(() => Request.DisplayOrder)" /></span>
-                    <InputNumber @bind-Value="Request.DisplayOrder" />
-                </label>
+                <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="CategoryOrderItemCount" />
             </div>
 
             <div class="admin-nested-header">
@@ -52,44 +49,50 @@ else
                 </button>
             </div>
 
-            @foreach (var skill in Request.Skills)
+            @if (Request.Skills.Count == 0)
             {
-                <div class="admin-nested-item">
-                    <div class="admin-form-grid">
-                        <label>
-                            <span>Name<RequiredIndicatorComponent For="@(() => skill.Name)" /></span>
-                            <InputText @bind-Value="skill.Name" />
-                        </label>
+                <p class="admin-nested-empty">No skills in this category.</p>
+            }
+            else
+            {
+                <div class="admin-skill-list">
+                    @foreach (var skill in Request.Skills)
+                    {
+                        <div class="admin-nested-item" @key="skill">
+                            <div class="admin-form-grid">
+                                <label>
+                                    <span>Name<RequiredIndicatorComponent For="@(() => skill.Name)" /></span>
+                                    <InputText @bind-Value="skill.Name" />
+                                </label>
 
-                        <label>
-                            <span>Badge<RequiredIndicatorComponent For="@(() => skill.Badge)" /></span>
-                            <InputText @bind-Value="skill.Badge" />
-                        </label>
+                                <label>
+                                    <span>Badge<RequiredIndicatorComponent For="@(() => skill.Badge)" /></span>
+                                    <InputText @bind-Value="skill.Badge" />
+                                </label>
 
-                        <label class="wide">
-                            <span>Description<RequiredIndicatorComponent For="@(() => skill.Description)" /></span>
-                            <InputTextArea @bind-Value="skill.Description" rows="3" />
-                        </label>
+                                <label class="wide">
+                                    <span>Description<RequiredIndicatorComponent For="@(() => skill.Description)" /></span>
+                                    <InputTextArea @bind-Value="skill.Description" rows="3" />
+                                </label>
 
-                        <label>
-                            <span>Icon name<RequiredIndicatorComponent For="@(() => skill.IconName)" /></span>
-                            <InputText @bind-Value="skill.IconName" />
-                        </label>
+                                <SkillIconField @bind-Value="skill.IconName" />
 
-                        <label>
-                            <span>Accent color<RequiredIndicatorComponent For="@(() => skill.AccentColor)" /></span>
-                            <InputText @bind-Value="skill.AccentColor" />
-                        </label>
+                                <label>
+                                    <span>Accent color<RequiredIndicatorComponent For="@(() => skill.AccentColor)" /></span>
+                                    <InputText @bind-Value="skill.AccentColor" />
+                                </label>
 
-                        <label>
-                            <span>Display order<RequiredIndicatorComponent For="@(() => skill.DisplayOrder)" /></span>
-                            <InputNumber @bind-Value="skill.DisplayOrder" />
-                        </label>
-                    </div>
+                                <DisplayOrderField Value="skill.DisplayOrder"
+                                                   ValueChanged="@(order => ChangeSkillOrder(skill, order))"
+                                                   ValueExpression="@(() => skill.DisplayOrder)"
+                                                   ItemCount="SkillOrderItemCount" />
+                            </div>
 
-                    <button type="button" class="admin-danger-action" @onclick="() => RemoveSkill(skill)">
-                        Remove skill
-                    </button>
+                            <button type="button" class="admin-remove-button" aria-label="@RemoveSkillLabel(skill)" @onclick="() => RemoveSkill(skill)">
+                                Remove skill
+                            </button>
+                        </div>
+                    }
                 </div>
             }
 

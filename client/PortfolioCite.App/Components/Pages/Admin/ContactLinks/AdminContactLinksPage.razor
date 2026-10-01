@@ -49,10 +49,7 @@ else
                     <InputText @bind-Value="Request.IconName" />
                 </label>
 
-                <label>
-                    <span>Display order<RequiredIndicatorComponent For="@(() => Request.DisplayOrder)" /></span>
-                    <InputNumber @bind-Value="Request.DisplayOrder" />
-                </label>
+                <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />
             </div>
 
             @if (SaveError is not null)

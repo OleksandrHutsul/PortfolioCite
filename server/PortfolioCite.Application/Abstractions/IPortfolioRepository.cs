@@ -5,6 +5,7 @@ namespace PortfolioCite.Application.Abstractions;
 public interface IPortfolioRepository
 {
     Task<T?> GetForUpdateAsync<T>(int id, CancellationToken cancellationToken) where T : class;
+    Task<List<T>> ListForUpdateAsync<T>(CancellationToken cancellationToken) where T : class;
     Task AddAsync<T>(T entity, CancellationToken cancellationToken) where T : class;
     void Remove<T>(T entity) where T : class;
 

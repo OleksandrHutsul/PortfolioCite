@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PortfolioCite.App.Services;
+using PortfolioCite.Contracts.Administration.Rules;
 using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Contracts.Projects;
 
@@ -50,12 +51,19 @@ public partial class AdminProjectsPage : ComponentBase
             return;
         }
 
-        if (result.Value is null) return;
+        var ordersWereSequential = DisplayOrderRules.SequenceError(Projects.Select(item => item.DisplayOrder).ToList()) is null;
 
-        var index = Projects.FindIndex(item => item.Id == project.Id);
+        if (ordersWereSequential && result.Value is not null)
+        {
+            var index = Projects.FindIndex(item => item.Id == project.Id);
 
-        if (index >= 0)
-            Projects[index] = result.Value;
+            if (index >= 0)
+                Projects[index] = result.Value;
+
+            return;
+        }
+
+        await LoadAsync();
     }
 
     protected async Task DeleteAsync(ProjectDto project)
@@ -68,6 +76,7 @@ public partial class AdminProjectsPage : ComponentBase
         if (result.IsSuccess)
         {
             Projects.Remove(project);
+            Projects = DisplayOrderRules.Renumber(Projects, item => item.DisplayOrder, (item, order) => item with { DisplayOrder = order });
             return;
         }
 

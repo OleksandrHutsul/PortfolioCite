@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PortfolioCite.Api.Configuration;
+using PortfolioCite.Api.Filters;
 using PortfolioCite.Api.Services;
 using PortfolioCite.Application.Abstractions;
 using PortfolioCite.Application.Services;
@@ -18,7 +19,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new ContentValidationExceptionFilter());
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

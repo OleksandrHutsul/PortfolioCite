@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Administration.Models;
+using PortfolioCite.Contracts.Administration.Rules;
 
 namespace PortfolioCite.App.Components.Pages.Admin.ContactLinks;
 
@@ -18,6 +19,7 @@ public partial class AdminContactLinksPage : ComponentBase
     protected bool IsSaving { get; private set; }
     protected string? LoadError { get; private set; }
     protected string? SaveError { get; private set; }
+    protected int OrderItemCount => DisplayOrderRules.ItemCount(Links.Count, EditingId is null);
 
     protected override Task OnInitializedAsync()
     {
@@ -39,7 +41,10 @@ public partial class AdminContactLinksPage : ComponentBase
     protected void StartCreate()
     {
         EditingId = null;
-        Request = new SaveContactLinkRequest();
+        Request = new SaveContactLinkRequest
+        {
+            DisplayOrder = DisplayOrderRules.Next(Links.Count)
+        };
         SaveError = null;
         IsEditing = true;
     }
@@ -95,6 +100,7 @@ public partial class AdminContactLinksPage : ComponentBase
         if (result.IsSuccess)
         {
             Links.Remove(item);
+            Links = DisplayOrderRules.Renumber(Links, link => link.DisplayOrder, (link, order) => link with { DisplayOrder = order });
             return;
         }
 

@@ -60,10 +60,7 @@ else
                 <InputText @bind-Value="Request.ImageUrl" />
             </label>
 
-            <label>
-                <span>Display order<RequiredIndicatorComponent For="@(() => Request.DisplayOrder)" /></span>
-                <InputNumber @bind-Value="Request.DisplayOrder" />
-            </label>
+            <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />
 
             <label class="wide">
                 <span>Technologies<RequiredIndicatorComponent For="@(() => Request.Technologies)" /></span>
