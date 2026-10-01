@@ -25,7 +25,7 @@ public partial class CertificatesPage : ComponentBase
         try
         {
             var snapshot = await PortfolioContentService.GetSnapshotAsync();
-            Certificates = snapshot.Certificates;
+            Certificates = snapshot.Certificates.OrderBy(certificate => certificate.DisplayOrder).ToList();
         }
         catch (Exception)
         {

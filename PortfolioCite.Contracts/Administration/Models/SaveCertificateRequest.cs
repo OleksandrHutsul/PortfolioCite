@@ -13,4 +13,6 @@ public class SaveCertificateRequest
     
     [Required, Url, StringLength(500)]
     public string CredentialUrl { get; set; } = string.Empty;
+
+    public int DisplayOrder { get; set; }
 }

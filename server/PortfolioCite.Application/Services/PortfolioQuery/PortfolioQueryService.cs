@@ -106,7 +106,7 @@ public class PortfolioQueryService : IPortfolioQueryService
 
     private static CertificateDto MapCertificate(Certificate certificate)
     {
-        return new CertificateDto(certificate.Name, certificate.Issuer, certificate.IssuedOn, certificate.CredentialUrl);
+        return new CertificateDto(certificate.Name, certificate.Issuer, certificate.IssuedOn, certificate.CredentialUrl, certificate.DisplayOrder);
     }
 
     private static WorkExperienceDto MapExperience(WorkExperience experience)

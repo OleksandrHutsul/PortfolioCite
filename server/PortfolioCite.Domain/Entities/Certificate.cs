@@ -7,4 +7,5 @@ public class Certificate
     public string Issuer { get; set; } = string.Empty;
     public DateOnly IssuedOn { get; set; }
     public string CredentialUrl { get; set; } = string.Empty;
+    public int DisplayOrder { get; set; }
 }

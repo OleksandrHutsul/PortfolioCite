@@ -26,7 +26,8 @@ public partial class PortfolioRepository
     {
         return await _dbContext.Certificates
             .AsNoTracking()
-            .OrderByDescending(certificate => certificate.IssuedOn)
+            .OrderBy(certificate => certificate.DisplayOrder)
+            .ThenByDescending(certificate => certificate.IssuedOn)
             .ToListAsync(cancellationToken);
     }
 

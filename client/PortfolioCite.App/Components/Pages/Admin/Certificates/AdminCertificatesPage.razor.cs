@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Administration;
 using PortfolioCite.Contracts.Administration.Models;
+using PortfolioCite.Contracts.Administration.Rules;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Certificates;
 
@@ -19,6 +20,7 @@ public partial class AdminCertificatesPage : ComponentBase
     protected bool IsSaving { get; private set; }
     protected string? LoadError { get; private set; }
     protected string? SaveError { get; private set; }
+    protected int OrderItemCount => DisplayOrderRules.ItemCount(Certificates.Count, EditingId is null);
 
     protected override Task OnInitializedAsync()
     {
@@ -40,7 +42,10 @@ public partial class AdminCertificatesPage : ComponentBase
     protected void StartCreate()
     {
         EditingId = null;
-        Request = new SaveCertificateRequest();
+        Request = new SaveCertificateRequest
+        {
+            DisplayOrder = DisplayOrderRules.Next(Certificates.Count)
+        };
         SaveError = null;
         IsEditing = true;
     }
@@ -53,7 +58,8 @@ public partial class AdminCertificatesPage : ComponentBase
             Name = item.Name,
             Issuer = item.Issuer,
             IssuedOn = item.IssuedOn,
-            CredentialUrl = item.CredentialUrl
+            CredentialUrl = item.CredentialUrl,
+            DisplayOrder = item.DisplayOrder
         };
 
         SaveError = null;
@@ -96,6 +102,7 @@ public partial class AdminCertificatesPage : ComponentBase
         if (result.IsSuccess)
         {
             Certificates.Remove(item);
+            Certificates = DisplayOrderRules.Renumber(Certificates, certificate => certificate.DisplayOrder, (certificate, order) => certificate with { DisplayOrder = order });
             return;
         }
 

@@ -24,7 +24,10 @@ public class ReferenceManagementService : IReferenceManagementService
 
     public async Task<CertificateAdminDto> CreateCertificateAsync(SaveCertificateRequest request, CancellationToken cancellationToken)
     {
+        var certificates = await _repository.ListForUpdateAsync<Certificate>(cancellationToken);
         var certificate = new Certificate();
+
+        DisplayOrderEditor.Insert(certificates, certificate, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         Apply(certificate, request);
 
         await _repository.AddAsync(certificate, cancellationToken);
@@ -35,9 +38,11 @@ public class ReferenceManagementService : IReferenceManagementService
 
     public async Task<CertificateAdminDto?> UpdateCertificateAsync(int id, SaveCertificateRequest request, CancellationToken cancellationToken)
     {
-        var certificate = await _repository.GetForUpdateAsync<Certificate>(id, cancellationToken);
+        var certificates = await _repository.ListForUpdateAsync<Certificate>(cancellationToken);
+        var certificate = certificates.FirstOrDefault(item => item.Id == id);
         if (certificate is null) return null;
 
+        DisplayOrderEditor.Move(certificates, certificate, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         Apply(certificate, request);
         await _repository.SaveChangesAsync(cancellationToken);
 
@@ -46,10 +51,12 @@ public class ReferenceManagementService : IReferenceManagementService
 
     public async Task<bool> DeleteCertificateAsync(int id, CancellationToken cancellationToken)
     {
-        var certificate = await _repository.GetForUpdateAsync<Certificate>(id, cancellationToken);
+        var certificates = await _repository.ListForUpdateAsync<Certificate>(cancellationToken);
+        var certificate = certificates.FirstOrDefault(item => item.Id == id);
         if (certificate is null) return false;
 
         _repository.Remove(certificate);
+        DisplayOrderEditor.CloseGap(certificates, certificate, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         await _repository.SaveChangesAsync(cancellationToken);
 
         return true;
@@ -128,7 +135,7 @@ public class ReferenceManagementService : IReferenceManagementService
 
     private static CertificateAdminDto Map(Certificate certificate)
     {
-        return new CertificateAdminDto(certificate.Id, certificate.Name, certificate.Issuer, certificate.IssuedOn, certificate.CredentialUrl);
+        return new CertificateAdminDto(certificate.Id, certificate.Name, certificate.Issuer, certificate.IssuedOn, certificate.CredentialUrl, certificate.DisplayOrder);
     }
 
     private static ContactLinkAdminDto Map(ContactLink link)

@@ -53,6 +53,8 @@ else
                     <span>Credential URL<RequiredIndicatorComponent For="@(() => Request.CredentialUrl)" /></span>
                     <InputText @bind-Value="Request.CredentialUrl" />
                 </label>
+
+                <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />
             </div>
 
             @if (SaveError is not null)
@@ -85,6 +87,7 @@ else
                     <tr>
                         <th>Certificate</th>
                         <th>Issued</th>
+                        <th>Order</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -97,6 +100,7 @@ else
                                 <small>@item.Issuer</small>
                             </td>
                             <td>@item.IssuedOn.ToString("MMM yyyy")</td>
+                            <td>@item.DisplayOrder</td>
                             <td class="admin-row-actions">
                                 <button class="admin-edit-action" @onclick="() => StartEdit(item)">Edit</button>
                                 <button @onclick="() => DeleteAsync(item)">Delete</button>
