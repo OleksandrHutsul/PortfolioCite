@@ -32,17 +32,18 @@ else
     {
         <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
             <DataAnnotationsValidator />
-            <ValidationSummary />
 
             <div class="admin-form-grid">
                 <label>
                     <span>Label<RequiredIndicatorComponent For="@(() => Request.Label)" /></span>
                     <InputText @bind-Value="Request.Label" />
+                    <ValidationMessage For="@(() => Request.Label)" />
                 </label>
 
                 <label>
                     <span>URL<RequiredIndicatorComponent For="@(() => Request.Url)" /></span>
                     <InputText @bind-Value="Request.Url" />
+                    <ValidationMessage For="@(() => Request.Url)" />
                 </label>
 
                 <SkillIconField @bind-Value="Request.IconName" />

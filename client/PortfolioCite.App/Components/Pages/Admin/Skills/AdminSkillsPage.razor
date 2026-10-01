@@ -31,12 +31,12 @@ else
     {
         <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
             <DataAnnotationsValidator />
-            <ValidationSummary />
 
             <div class="admin-form-grid">
                 <label>
                     <span>Category name<RequiredIndicatorComponent For="@(() => Request.Name)" /></span>
                     <InputText @bind-Value="Request.Name" />
+                    <ValidationMessage For="@(() => Request.Name)" />
                 </label>
 
                 <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="CategoryOrderItemCount" />
@@ -47,6 +47,10 @@ else
                 <button type="button" class="admin-secondary-action admin-action-button" @onclick="AddSkill">
                     Add skill
                 </button>
+            </div>
+
+            <div class="admin-field-message">
+                <ValidationMessage For="@(() => Request.Skills)" />
             </div>
 
             @if (Request.Skills.Count == 0)
@@ -63,16 +67,19 @@ else
                                 <label>
                                     <span>Name<RequiredIndicatorComponent For="@(() => skill.Name)" /></span>
                                     <InputText @bind-Value="skill.Name" />
+                                    <ValidationMessage For="@(() => skill.Name)" />
                                 </label>
 
                                 <label>
                                     <span>Badge<RequiredIndicatorComponent For="@(() => skill.Badge)" /></span>
                                     <InputText @bind-Value="skill.Badge" />
+                                    <ValidationMessage For="@(() => skill.Badge)" />
                                 </label>
 
                                 <label class="wide">
                                     <span>Description<RequiredIndicatorComponent For="@(() => skill.Description)" /></span>
                                     <InputTextArea @bind-Value="skill.Description" rows="3" />
+                                    <ValidationMessage For="@(() => skill.Description)" />
                                 </label>
 
                                 <SkillIconField @bind-Value="skill.IconName" />
@@ -80,6 +87,7 @@ else
                                 <label>
                                     <span>Accent color<RequiredIndicatorComponent For="@(() => skill.AccentColor)" /></span>
                                     <InputText @bind-Value="skill.AccentColor" />
+                                    <ValidationMessage For="@(() => skill.AccentColor)" />
                                 </label>
 
                                 <DisplayOrderField Value="skill.DisplayOrder"

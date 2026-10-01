@@ -46,7 +46,6 @@
         font-size: .88rem;
         font-weight: 750;
         gap: .4rem;
-        grid-template-rows: auto auto minmax(var(--admin-field-message, 1.15rem), auto);
     }
 
     .login-form ::deep .validation-message {

@@ -31,22 +31,24 @@ else
     {
         <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
             <DataAnnotationsValidator />
-            <ValidationSummary />
 
             <div class="admin-form-grid">
                 <label>
                     <span>Company<RequiredIndicatorComponent For="@(() => Request.Company)" /></span>
                     <InputText @bind-Value="Request.Company" />
+                    <ValidationMessage For="@(() => Request.Company)" />
                 </label>
 
                 <label>
                     <span>Position<RequiredIndicatorComponent For="@(() => Request.Position)" /></span>
                     <InputText @bind-Value="Request.Position" />
+                    <ValidationMessage For="@(() => Request.Position)" />
                 </label>
 
                 <label>
                     <span>Start date<RequiredIndicatorComponent For="@(() => Request.StartedOn)" /></span>
                     <InputDate @bind-Value="Request.StartedOn" />
+                    <ValidationMessage For="@(() => Request.StartedOn)" />
                 </label>
 
                 <div class="admin-experience-end">
@@ -68,12 +70,16 @@ else
                 <label class="wide">
                     <span>Summary<RequiredIndicatorComponent For="@(() => Request.Summary)" /></span>
                     <InputTextArea @bind-Value="Request.Summary" rows="5" />
+                    <ValidationMessage For="@(() => Request.Summary)" />
                 </label>
 
                 <label class="wide">
                     <span>Highlights<RequiredIndicatorComponent For="@(() => Request.Highlights)" /></span>
-                    <InputTextArea @bind-Value="HighlightsText" rows="6" />
-                    <small>Enter one highlight per line.</small>
+                    <span class="admin-field-control">
+                        <InputTextArea @bind-Value="HighlightsText" rows="6" />
+                        <small>Enter one highlight per line.</small>
+                    </span>
+                    <ValidationMessage For="@(() => Request.Highlights)" />
                 </label>
             </div>
 

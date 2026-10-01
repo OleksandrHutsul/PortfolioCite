@@ -262,7 +262,8 @@ p {
         }
 
 .admin-form,
-.login-form {
+.login-form,
+.contact-form {
     --admin-field-message: 1.15rem;
 }
 
@@ -287,7 +288,8 @@ p {
 }
 
 .admin-form label,
-.login-form label {
+.login-form label,
+.contact-form label {
     align-content: start;
     color: #d7e2f0;
     display: grid;
@@ -311,13 +313,27 @@ p {
     min-height: var(--admin-field-message, 1.15rem);
 }
 
+.admin-field-control {
+    display: grid;
+    gap: .35rem;
+    min-width: 0;
+}
+
+    .admin-field-control input,
+    .admin-field-control textarea,
+    .admin-field-control select {
+        width: 100%;
+    }
+
 .admin-form .validation-message,
 .login-form .validation-message,
 .contact-form .validation-message {
     color: #ff9aaa;
+    display: block;
     font-size: .76rem;
     font-weight: 650;
     line-height: 1.35;
+    margin: 0;
     overflow-wrap: anywhere;
 }
 

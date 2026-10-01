@@ -31,27 +31,30 @@ else
     {
         <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
             <DataAnnotationsValidator />
-            <ValidationSummary />
 
             <div class="admin-form-grid">
                 <label>
                     <span>Name<RequiredIndicatorComponent For="@(() => Request.Name)" /></span>
                     <InputText @bind-Value="Request.Name" />
+                    <ValidationMessage For="@(() => Request.Name)" />
                 </label>
 
                 <label>
                     <span>Issuer<RequiredIndicatorComponent For="@(() => Request.Issuer)" /></span>
                     <InputText @bind-Value="Request.Issuer" />
+                    <ValidationMessage For="@(() => Request.Issuer)" />
                 </label>
 
                 <label>
                     <span>Issued on<RequiredIndicatorComponent For="@(() => Request.IssuedOn)" /></span>
                     <InputDate @bind-Value="Request.IssuedOn" />
+                    <ValidationMessage For="@(() => Request.IssuedOn)" />
                 </label>
 
                 <label>
                     <span>Credential URL<RequiredIndicatorComponent For="@(() => Request.CredentialUrl)" /></span>
                     <InputText @bind-Value="Request.CredentialUrl" />
+                    <ValidationMessage For="@(() => Request.CredentialUrl)" />
                 </label>
 
                 <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />

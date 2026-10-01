@@ -27,45 +27,53 @@ else
 {
     <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form">
         <DataAnnotationsValidator />
-        <ValidationSummary />
 
         <div class="admin-form-grid">
             <label class="wide">
                 <span>Name<RequiredIndicatorComponent For="@(() => Request.Name)" /></span>
                 <InputText @bind-Value="Request.Name" />
+                <ValidationMessage For="@(() => Request.Name)" />
             </label>
 
             <label class="wide">
                 <span>Short description<RequiredIndicatorComponent For="@(() => Request.ShortDescription)" /></span>
                 <InputText @bind-Value="Request.ShortDescription" />
+                <ValidationMessage For="@(() => Request.ShortDescription)" />
             </label>
 
             <label class="wide">
                 <span>Description<RequiredIndicatorComponent For="@(() => Request.Description)" /></span>
                 <InputTextArea @bind-Value="Request.Description" rows="7" />
+                <ValidationMessage For="@(() => Request.Description)" />
             </label>
 
             <label>
                 <span>GitHub URL<RequiredIndicatorComponent For="@(() => Request.GitHubUrl)" /></span>
                 <InputText @bind-Value="Request.GitHubUrl" />
+                <ValidationMessage For="@(() => Request.GitHubUrl)" />
             </label>
 
             <label>
                 <span>Live URL<RequiredIndicatorComponent For="@(() => Request.LiveUrl)" /></span>
                 <InputText @bind-Value="Request.LiveUrl" />
+                <ValidationMessage For="@(() => Request.LiveUrl)" />
             </label>
 
             <label class="wide">
                 <span>Image URL<RequiredIndicatorComponent For="@(() => Request.ImageUrl)" /></span>
                 <InputText @bind-Value="Request.ImageUrl" />
+                <ValidationMessage For="@(() => Request.ImageUrl)" />
             </label>
 
             <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />
 
             <label class="wide">
                 <span>Technologies<RequiredIndicatorComponent For="@(() => Request.Technologies)" /></span>
-                <InputText @bind-Value="TechnologyNames" />
-                <small>Comma-separated, for example: ASP.NET Core, Blazor, PostgreSQL</small>
+                <span class="admin-field-control">
+                    <InputText @bind-Value="TechnologyNames" />
+                    <small>Comma-separated, for example: ASP.NET Core, Blazor, PostgreSQL</small>
+                </span>
+                <ValidationMessage For="@(() => Request.Technologies)" />
             </label>
 
             <label class="admin-checkbox">

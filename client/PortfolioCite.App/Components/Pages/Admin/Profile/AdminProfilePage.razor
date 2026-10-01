@@ -115,7 +115,9 @@ else
                 </ul>
             }
 
-            <ValidationMessage For="@(() => Request.Languages)" />
+            <div class="admin-field-message">
+                <ValidationMessage For="@(() => Request.Languages)" />
+            </div>
         </section>
 
         <div class="admin-media-grid">

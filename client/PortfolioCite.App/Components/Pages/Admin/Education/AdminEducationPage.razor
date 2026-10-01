@@ -31,22 +31,24 @@ else
     {
         <EditForm Model="Request" OnValidSubmit="SaveAsync" class="admin-form admin-editor">
             <DataAnnotationsValidator />
-            <ValidationSummary />
 
             <div class="admin-form-grid">
                 <label>
                     <span>Institution<RequiredIndicatorComponent For="@(() => Request.Institution)" /></span>
                     <InputText @bind-Value="Request.Institution" />
+                    <ValidationMessage For="@(() => Request.Institution)" />
                 </label>
 
                 <label>
                     <span>Degree<RequiredIndicatorComponent For="@(() => Request.Degree)" /></span>
                     <InputText @bind-Value="Request.Degree" />
+                    <ValidationMessage For="@(() => Request.Degree)" />
                 </label>
 
                 <label>
                     <span>Field of study<RequiredIndicatorComponent For="@(() => Request.FieldOfStudy)" /></span>
                     <InputText @bind-Value="Request.FieldOfStudy" />
+                    <ValidationMessage For="@(() => Request.FieldOfStudy)" />
                 </label>
 
                 <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />
@@ -54,16 +56,19 @@ else
                 <label>
                     <span>Start date<RequiredIndicatorComponent For="@(() => Request.StartedOn)" /></span>
                     <InputDate @bind-Value="Request.StartedOn" />
+                    <ValidationMessage For="@(() => Request.StartedOn)" />
                 </label>
 
                 <label>
                     <span>End date<RequiredIndicatorComponent For="@(() => Request.EndedOn)" /></span>
                     <InputDate @bind-Value="Request.EndedOn" />
+                    <ValidationMessage For="@(() => Request.EndedOn)" />
                 </label>
 
                 <label class="wide">
                     <span>Description<RequiredIndicatorComponent For="@(() => Request.Description)" /></span>
                     <InputTextArea @bind-Value="Request.Description" rows="5" />
+                    <ValidationMessage For="@(() => Request.Description)" />
                 </label>
             </div>
 
