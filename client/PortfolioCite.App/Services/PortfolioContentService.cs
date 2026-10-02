@@ -15,14 +15,18 @@ public class PortfolioContentService
 
     public async Task<PortfolioSnapshotDto> GetSnapshotAsync(CancellationToken cancellationToken = default)
     {
-        return await _httpClient.GetFromJsonAsync<PortfolioSnapshotDto>("api/portfolio", cancellationToken)
+        var snapshot = await _httpClient.GetFromJsonAsync<PortfolioSnapshotDto>("api/portfolio", cancellationToken)
             ?? throw new InvalidOperationException("The portfolio API returned an empty response.");
+
+        return ApiResourceUrl.Resolve(_httpClient.BaseAddress, snapshot);
     }
 
     public async Task<IReadOnlyList<ProjectDto>> GetProjectsAsync(CancellationToken cancellationToken = default)
     {
-        return await _httpClient.GetFromJsonAsync<IReadOnlyList<ProjectDto>>("api/projects", cancellationToken)
+        var projects = await _httpClient.GetFromJsonAsync<IReadOnlyList<ProjectDto>>("api/projects", cancellationToken)
             ?? throw new InvalidOperationException("The projects API returned an empty response.");
+
+        return ApiResourceUrl.Resolve(_httpClient.BaseAddress, projects);
     }
 
     public async Task SubmitContactAsync(CreateContactSubmissionRequest request, CancellationToken cancellationToken = default)
