@@ -53,16 +53,16 @@ else
 
                 <div class="admin-experience-end">
                     <span>End date</span>
-                    <span class="admin-experience-end__body">
-                        <fieldset class="admin-experience-end__date" disabled="@IsCurrent">
-                            <InputDate @bind-Value="Request.EndedOn" />
-                        </fieldset>
+                    <fieldset class="admin-experience-end__date" disabled="@IsCurrent">
+                        <InputDate @bind-Value="Request.EndedOn" />
+                    </fieldset>
+                    <div class="admin-experience-end__meta">
                         <label class="admin-checkbox">
                             <input type="checkbox" checked="@IsCurrent" @onchange="SetCurrent" />
                             <span>I currently work here</span>
                         </label>
-                    </span>
-                    <ValidationMessage For="@(() => Request.EndedOn)" />
+                        <ValidationMessage For="@(() => Request.EndedOn)" />
+                    </div>
                 </div>
 
                 <DisplayOrderField @bind-Value="Request.DisplayOrder" ItemCount="OrderItemCount" />

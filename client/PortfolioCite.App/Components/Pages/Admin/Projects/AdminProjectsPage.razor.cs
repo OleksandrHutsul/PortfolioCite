@@ -29,7 +29,10 @@ public partial class AdminProjectsPage : ComponentBase
 
         var result = await AdminApi.GetProjectsAsync();
 
-        Projects = result.Value ?? [];
+        Projects = (result.Value ?? [])
+            .OrderBy(project => project.DisplayOrder)
+            .ThenBy(project => project.Name)
+            .ToList();
         Error = result.Error;
         IsLoading = false;
     }

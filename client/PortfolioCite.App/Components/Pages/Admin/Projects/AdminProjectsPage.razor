@@ -38,6 +38,7 @@ else
                     <th>Technologies</th>
                     <th>Status</th>
                     <th>Featured</th>
+                    <th>Order</th>
                     <th></th>
                 </tr>
             </thead>
@@ -65,6 +66,7 @@ else
                             </button>
                         </td>
                         <td>@(project.IsFeatured ? "Yes" : "No")</td>
+                        <td>@project.DisplayOrder</td>
                         <td class="admin-row-actions">
                             <a href="@($"/admin/projects/{project.Id}")">Edit</a>
                             <button @onclick="() => DeleteAsync(project)">Delete</button>

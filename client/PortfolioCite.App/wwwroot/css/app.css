@@ -296,7 +296,10 @@ p {
     font-size: .86rem;
     font-weight: 750;
     gap: .4rem;
-    grid-template-rows: auto auto minmax(var(--admin-field-message, 1.15rem), auto);
+}
+
+.login-form label {
+    grid-template-rows: auto auto minmax(var(--admin-field-message, 1rem), auto);
 }
 
     .admin-form label.wide {
@@ -310,7 +313,10 @@ p {
 
 .admin-field-message {
     display: block;
-    min-height: var(--admin-field-message, 1.15rem);
+}
+
+.admin-field-message:not(:has(.validation-message)) {
+    display: none;
 }
 
 .admin-field-control {
@@ -437,9 +443,9 @@ p {
     min-width: 0;
 }
 
-.admin-experience-end__body {
+.admin-experience-end__meta {
     display: grid;
-    gap: .7rem;
+    gap: .35rem;
 }
 
 .admin-experience-end__date {
@@ -526,7 +532,7 @@ p {
     flex-wrap: wrap;
     gap: .75rem;
     justify-content: space-between;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
 }
 
     .admin-nested-header h2 {
