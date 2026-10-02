@@ -138,6 +138,41 @@
     padding: 3.5rem 0;
 }
 
+.projects-more {
+    display: flex;
+    justify-content: center;
+    margin: 1.35rem 0 0;
+}
+
+.projects-more a {
+    align-items: center;
+    background: rgba(255, 255, 255, .055);
+    border: 1px solid rgba(148, 163, 184, .28);
+    border-radius: 8px;
+    color: #f8fbff;
+    display: inline-flex;
+    font-weight: 850;
+    gap: .55rem;
+    padding: .82rem 1rem;
+    text-decoration: none;
+    transition: border-color .2s ease, transform .2s ease;
+}
+
+.projects-more a:hover {
+    border-color: #79a8ff;
+    transform: translateY(-2px);
+}
+
+.projects-more svg {
+    fill: none;
+    height: .9rem;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.75;
+    width: .9rem;
+}
+
 .about-grid,
 .skill-grid,
 .projects-preview {

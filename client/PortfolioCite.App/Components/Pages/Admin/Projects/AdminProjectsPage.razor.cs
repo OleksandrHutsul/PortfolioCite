@@ -3,7 +3,7 @@ using Microsoft.JSInterop;
 using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Administration.Rules;
 using PortfolioCite.Contracts.Portfolio.Models;
-using PortfolioCite.Contracts.Projects;
+using PortfolioCite.Contracts.Projects.Models;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Projects;
 
@@ -37,7 +37,7 @@ public partial class AdminProjectsPage : ComponentBase
         IsLoading = false;
     }
 
-    protected async Task TogglePublishAsync(ProjectDto project)
+    protected async Task ToggleVisibilityAsync(ProjectDto project)
     {
         if (IsSaving) return;
 

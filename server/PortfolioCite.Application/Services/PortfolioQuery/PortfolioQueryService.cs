@@ -49,7 +49,7 @@ public class PortfolioQueryService : IPortfolioQueryService
 
     public async Task<ProjectDto?> GetProjectAsync(int id, CancellationToken cancellationToken)
     {
-        var project = await _repository.GetPublishedProjectAsync(id, cancellationToken);
+        var project = await _repository.GetProjectAsync(id, cancellationToken);
 
         return project is null ? null : MapProject(project);
     }

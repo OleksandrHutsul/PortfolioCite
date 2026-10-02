@@ -16,7 +16,7 @@ public interface IPortfolioRepository
     Task<ProfileFile?> GetProfileFileAsync(ProfileFileKind kind, CancellationToken cancellationToken);
 
     Task<IReadOnlyList<Project>> GetProjectsAsync(CancellationToken cancellationToken);
-    Task<Project?> GetPublishedProjectAsync(int id, CancellationToken cancellationToken);
+    Task<Project?> GetProjectAsync(int id, CancellationToken cancellationToken);
     Task<IReadOnlyList<Project>> GetAllProjectsForAdminAsync(CancellationToken cancellationToken);
     Task<Project?> GetProjectForAdminAsync(int id, CancellationToken cancellationToken);
     Task<Project?> GetProjectForUpdateAsync(int id, CancellationToken cancellationToken);

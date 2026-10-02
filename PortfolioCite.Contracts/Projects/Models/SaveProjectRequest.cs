@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PortfolioCite.Contracts.Projects;
+namespace PortfolioCite.Contracts.Projects.Models;
 
 public class SaveProjectRequest
 {

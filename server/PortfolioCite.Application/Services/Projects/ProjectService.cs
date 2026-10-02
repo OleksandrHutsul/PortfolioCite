@@ -1,7 +1,8 @@
 using PortfolioCite.Application.Abstractions;
 using PortfolioCite.Application.Validation;
 using PortfolioCite.Contracts.Portfolio.Models;
-using PortfolioCite.Contracts.Projects;
+using PortfolioCite.Contracts.Projects.Models;
+using PortfolioCite.Contracts.Projects.Rules;
 using PortfolioCite.Domain.Entities;
 
 namespace PortfolioCite.Application.Services.Projects;
@@ -30,6 +31,8 @@ public partial class ProjectService : IProjectService
     public async Task<ProjectDto> CreateAsync(SaveProjectRequest request, CancellationToken cancellationToken)
     {
         var projects = await _repository.ListForUpdateAsync<Project>(cancellationToken);
+        EnsureCanBeVisible(projects, current: null, request.IsPublished);
+
         var now = DateTimeOffset.UtcNow;
         var project = new Project
         {
@@ -52,6 +55,7 @@ public partial class ProjectService : IProjectService
         if (project is null) return null;
 
         var projects = await _repository.ListForUpdateAsync<Project>(cancellationToken);
+        EnsureCanBeVisible(projects, project, request.IsPublished);
 
         DisplayOrderEditor.Move(projects, project, request.DisplayOrder, item => item.DisplayOrder, (item, order) => item.DisplayOrder = order);
         await ApplyAsync(project, request, cancellationToken);
@@ -125,6 +129,22 @@ public partial class ProjectService : IProjectService
             .ToList();
 
         return new ProjectDto(project.Id, project.Name, project.ShortDescription, project.Description, project.GitHubUrl, project.LiveUrl, project.ImageUrl, project.DisplayOrder, project.IsFeatured, project.IsPublished, technologies, project.CreatedAt, project.UpdatedAt);
+    }
+
+    private static void EnsureCanBeVisible(IEnumerable<Project> projects, Project? current, bool makeVisible)
+    {
+        if (!makeVisible || current is { IsPublished: true })
+            return;
+
+        var visibleCount = projects.Count(project => project.IsPublished && !ReferenceEquals(project, current));
+
+        if (visibleCount < ProjectVisibilityRules.MaxVisible)
+            return;
+
+        throw new ContentValidationException(new Dictionary<string, string[]>
+        {
+            [nameof(SaveProjectRequest.IsPublished)] = [ProjectVisibilityRules.LimitMessage]
+        });
     }
 
     private static string? NullIfWhiteSpace(string? value)

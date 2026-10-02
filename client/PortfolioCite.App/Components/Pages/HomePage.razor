@@ -1,5 +1,7 @@
 @page "/"
 @using PortfolioCite.Contracts.Portfolio.Rules
+@using PortfolioCite.Contracts.Projects
+@using PortfolioCite.Contracts.Projects.Rules
 
 @if (IsLoading)
 {
@@ -148,18 +150,33 @@ else if (Portfolio is { Profile: { } profile })
 
     <section class="page-section section-reveal" id="projects-preview">
         <SectionTitleComponent Eyebrow="Projects" Title="Selected systems" />
-        @if (Portfolio.Projects.Count == 0)
+        @{
+            var selectedProjects = Portfolio.Projects
+                .Where(item => item.IsPublished)
+                .OrderBy(item => item.DisplayOrder)
+                .Take(ProjectVisibilityRules.MaxVisible)
+                .ToList();
+        }
+        @if (selectedProjects.Count == 0)
         {
-            <EmptyStateComponent Title="No published projects yet" />
+            <EmptyStateComponent Title="No selected projects yet" />
         }
         else
         {
             <div class="projects-preview">
-                @foreach (var project in Portfolio.Projects.Take(3))
+                @foreach (var project in selectedProjects)
                 {
                     <ProjectCardComponent Project="project" />
                 }
             </div>
+            <p class="projects-more">
+                <a href="projects">
+                    View all projects
+                    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                        <path d="M3 8h10M9 4l4 4-4 4" />
+                    </svg>
+                </a>
+            </p>
         }
     </section>
 }

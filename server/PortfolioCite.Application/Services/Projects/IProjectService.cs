@@ -1,6 +1,6 @@
 using PortfolioCite.Application.Models;
 using PortfolioCite.Contracts.Portfolio.Models;
-using PortfolioCite.Contracts.Projects;
+using PortfolioCite.Contracts.Projects.Models;
 
 namespace PortfolioCite.Application.Services.Projects;
 

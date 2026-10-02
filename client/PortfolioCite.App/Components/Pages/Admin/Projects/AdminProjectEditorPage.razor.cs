@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using PortfolioCite.App.Services;
 using PortfolioCite.Contracts.Administration.Rules;
 using PortfolioCite.Contracts.Portfolio.Models;
-using PortfolioCite.Contracts.Projects;
+using PortfolioCite.Contracts.Projects.Models;
 
 namespace PortfolioCite.App.Components.Pages.Admin.Projects;
 

@@ -6,7 +6,7 @@
     <div>
         <p>Content</p>
         <h1>Projects</h1>
-        <span>Manage published work and drafts.</span>
+        <span>Choose which projects appear on the home page. At most 3 can be shown there.</span>
     </div>
 
     <a class="admin-primary-action" href="/admin/projects/new">Add project</a>
@@ -16,7 +16,7 @@
 {
     <LoadingSkeletonComponent Variant="list" Count="4" />
 }
-else if (Error is not null)
+else if (Error is not null && Projects.Count == 0)
 {
     <ErrorStateComponent Title="Unable to load projects"
                          Description="@Error"
@@ -30,14 +30,18 @@ else if (Projects.Count == 0)
 }
 else
 {
+    @if (Error is not null)
+    {
+        <div class="admin-form-error" role="alert">@Error</div>
+    }
+
     <div class="admin-table-wrap">
         <table class="admin-table">
             <thead>
                 <tr>
                     <th>Project</th>
                     <th>Technologies</th>
-                    <th>Status</th>
-                    <th>Featured</th>
+                    <th>Home page</th>
                     <th>Order</th>
                     <th></th>
                 </tr>
@@ -59,13 +63,13 @@ else
                             </div>
                         </td>
                         <td>
-                            <button class="status-pill @(project.IsPublished ? "published" : "draft")"
-                                    @onclick="() => TogglePublishAsync(project)"
+                            <button class="status-pill @(project.IsPublished ? "visible" : "hidden")"
+                                    title="@(project.IsPublished ? "Shown on the home page" : "Not shown on the home page")"
+                                    @onclick="() => ToggleVisibilityAsync(project)"
                                     disabled="@IsSaving">
-                                @(project.IsPublished ? "Published" : "Draft")
+                                @(project.IsPublished ? "Visible" : "Hidden")
                             </button>
                         </td>
-                        <td>@(project.IsFeatured ? "Yes" : "No")</td>
                         <td>@project.DisplayOrder</td>
                         <td class="admin-row-actions">
                             <a href="@($"/admin/projects/{project.Id}")">Edit</a>

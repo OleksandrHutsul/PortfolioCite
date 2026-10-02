@@ -9,7 +9,6 @@ public partial class PortfolioRepository
     {
         return await _dbContext.Projects
             .AsNoTracking()
-            .Where(project => project.IsPublished)
             .Include(project => project.ProjectTechnologies)
                 .ThenInclude(projectTechnology => projectTechnology.Technology)
             .OrderBy(project => project.DisplayOrder)
@@ -17,11 +16,10 @@ public partial class PortfolioRepository
             .ToListAsync(cancellationToken);
     }
 
-    public Task<Project?> GetPublishedProjectAsync(int id, CancellationToken cancellationToken)
+    public Task<Project?> GetProjectAsync(int id, CancellationToken cancellationToken)
     {
         return _dbContext.Projects
             .AsNoTracking()
-            .Where(project => project.IsPublished)
             .Include(project => project.ProjectTechnologies)
                 .ThenInclude(projectTechnology => projectTechnology.Technology)
             .FirstOrDefaultAsync(project => project.Id == id, cancellationToken);

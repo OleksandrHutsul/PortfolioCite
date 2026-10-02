@@ -5,7 +5,7 @@ using PortfolioCite.Application.Models;
 using PortfolioCite.Application.Services.Projects;
 using PortfolioCite.Contracts.Administration.Rules;
 using PortfolioCite.Contracts.Portfolio.Models;
-using PortfolioCite.Contracts.Projects;
+using PortfolioCite.Contracts.Projects.Models;
 
 namespace PortfolioCite.Api.Controllers;
 

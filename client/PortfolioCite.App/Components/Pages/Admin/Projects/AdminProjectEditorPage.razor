@@ -132,14 +132,12 @@ else
                 <ValidationMessage For="@(() => Request.Technologies)" />
             </label>
 
-            <label class="admin-checkbox">
-                <InputCheckbox @bind-Value="Request.IsFeatured" />
-                <span>Featured project<RequiredIndicatorComponent For="@(() => Request.IsFeatured)" /></span>
-            </label>
-
-            <label class="admin-checkbox">
+            <label class="admin-checkbox wide">
                 <InputCheckbox @bind-Value="Request.IsPublished" />
-                <span>Published publicly<RequiredIndicatorComponent For="@(() => Request.IsPublished)" /></span>
+                <span class="admin-field-control">
+                    <span>Show on home page</span>
+                    <small>Controls the home page only. Hidden projects still appear in the full project catalogue. At most 3 can be shown on the home page.</small>
+                </span>
             </label>
         </div>
 
