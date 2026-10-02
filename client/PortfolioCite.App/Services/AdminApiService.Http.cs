@@ -3,6 +3,8 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using PortfolioCite.App.Services.Models;
+using PortfolioCite.Contracts.Administration.Models;
+using PortfolioCite.Contracts.Portfolio.Models;
 
 namespace PortfolioCite.App.Services;
 
@@ -120,16 +122,30 @@ public partial class AdminApiService
             await _authenticationStateProvider.SignOutAsync();
     }
 
-    private static async Task<ApiResult<T>> ReadAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
+    private async Task<ApiResult<T>> ReadAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
     {
         if (!response.IsSuccessStatusCode)
             return ApiResult<T>.Failure(await ReadErrorAsync(response, cancellationToken));
 
         var value = await response.Content.ReadFromJsonAsync<T>(JsonOptions, cancellationToken);
 
-        return value is null
-            ? ApiResult<T>.Failure("The server returned an empty response.")
-            : ApiResult<T>.Success(value);
+        return value is null ? ApiResult<T>.Failure("The server returned an empty response.") : ApiResult<T>.Success(ResolveResources(value));
+    }
+
+    private T ResolveResources<T>(T value)
+    {
+        var apiBase = _httpClient.BaseAddress;
+
+        object resolved = value switch
+        {
+            ProfileAdminDto profile => ApiResourceUrl.Resolve(apiBase, profile),
+            ProfileDto profile => ApiResourceUrl.Resolve(apiBase, profile),
+            ProjectDto project => ApiResourceUrl.Resolve(apiBase, project),
+            IReadOnlyList<ProjectDto> projects => ApiResourceUrl.Resolve(apiBase, projects),
+            _ => value!
+        };
+
+        return (T)resolved;
     }
 
     private static async Task<string> ReadErrorAsync(HttpResponseMessage response, CancellationToken cancellationToken)

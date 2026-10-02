@@ -7,13 +7,31 @@ public static class ApiResourceUrl
 {
     public static string? Resolve(Uri? apiBase, string? url)
     {
-        if (string.IsNullOrWhiteSpace(url) || apiBase is null)
+        if (string.IsNullOrWhiteSpace(url) || IsAlreadyAddressable(url))
             return url;
 
-        if (url.StartsWith("//", StringComparison.Ordinal) || Uri.TryCreate(url, UriKind.Absolute, out _))
-            return url;
+        if (IsApiPath(url))
+        {
+            if (apiBase is null)
+                return url;
 
-        return new Uri(apiBase, url).ToString();
+            var path = url.StartsWith('/') ? url : $"/{url}";
+
+            return apiBase.GetLeftPart(UriPartial.Authority) + path;
+        }
+
+        return url.StartsWith('/') ? url : $"/{url}";
+    }
+
+    private static bool IsApiPath(string url)
+    {
+        return url.StartsWith("/api/", StringComparison.OrdinalIgnoreCase) || url.StartsWith("api/", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsAlreadyAddressable(string url)
+    {
+        return url.StartsWith("data:", StringComparison.OrdinalIgnoreCase) || url.StartsWith("blob:", StringComparison.OrdinalIgnoreCase)
+            || url.StartsWith("//", StringComparison.Ordinal) || url.Contains("://", StringComparison.Ordinal);
     }
 
     public static PortfolioSnapshotDto Resolve(Uri? apiBase, PortfolioSnapshotDto snapshot)

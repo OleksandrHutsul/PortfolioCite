@@ -4,14 +4,13 @@ public static class MediaLinks
 {
     public static string? Absolute(HttpRequest request, string? url)
     {
-        if (string.IsNullOrWhiteSpace(url) || Uri.TryCreate(url, UriKind.Absolute, out _))
+        if (string.IsNullOrWhiteSpace(url) || url.Contains("://", StringComparison.Ordinal) || !url.StartsWith("/api/", StringComparison.OrdinalIgnoreCase))
             return url;
 
         var scheme = Header(request, "X-Forwarded-Proto") ?? request.Scheme;
         var host = Header(request, "X-Forwarded-Host") ?? request.Host.Value;
-        var path = url.StartsWith('/') ? url : $"/{url}";
 
-        return $"{scheme}://{host}{request.PathBase}{path}";
+        return $"{scheme}://{host}{request.PathBase}{url}";
     }
 
     private static string? Header(HttpRequest request, string name)

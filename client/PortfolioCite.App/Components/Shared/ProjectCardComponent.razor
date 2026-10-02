@@ -1,7 +1,9 @@
 <article class="project-card">
     @if (!string.IsNullOrWhiteSpace(Project.ImageUrl))
     {
-        <img src="@Project.ImageUrl" alt="" />
+        <div class="project-card__media">
+            <img src="@Project.ImageUrl" alt="" />
+        </div>
     }
     <div class="project-card__body">
         <div>
