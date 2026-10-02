@@ -1,11 +1,11 @@
 .technology-card {
+    align-self: start;
     background: rgba(255, 255, 255, .035);
     border: 1px solid rgba(148, 163, 184, .18);
     border-radius: 8px;
     display: grid;
     gap: .9rem;
     grid-template-columns: 2.8rem minmax(0, 1fr);
-    min-height: 7.4rem;
     overflow: hidden;
     padding: 1rem;
     position: relative;
