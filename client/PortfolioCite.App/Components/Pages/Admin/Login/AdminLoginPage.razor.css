@@ -40,12 +40,14 @@
 }
 
     .login-form label {
+        --admin-field-message: 0.5rem;
         align-content: start;
         color: #d7e2f0;
         display: grid;
         font-size: .88rem;
         font-weight: 750;
         gap: .4rem;
+        grid-template-rows: auto auto minmax(var(--admin-field-message, 1.15rem), auto);
     }
 
     .login-form ::deep .validation-message {

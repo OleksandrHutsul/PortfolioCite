@@ -1,0 +1,4 @@
+div.admin-select__option.is-unsupported {
+    cursor: default;
+    opacity: .8;
+}

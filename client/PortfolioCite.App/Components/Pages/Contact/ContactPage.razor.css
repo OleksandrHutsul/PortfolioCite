@@ -99,11 +99,27 @@
 }
 
 .contact-form label {
+    align-content: start;
     color: #d7e2f0;
     display: grid;
     font-size: .88rem;
     font-weight: 750;
     gap: .42rem;
+}
+
+.contact-form__fields ::deep input:hover,
+.contact-form__fields ::deep textarea:hover {
+    border-color: rgba(148, 163, 184, .42);
+}
+
+.contact-form__fields ::deep input.invalid,
+.contact-form__fields ::deep textarea.invalid {
+    border-color: rgba(255, 107, 129, .75);
+}
+
+.contact-form__fields ::deep textarea {
+    min-height: 10rem;
+    resize: vertical;
 }
 
 .contact-submit {

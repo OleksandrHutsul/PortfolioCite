@@ -1,0 +1,30 @@
+.admin-dashboard-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.admin-dashboard-grid a {
+    background: rgba(15, 28, 45, .68);
+    border: 1px solid rgba(148, 163, 184, .16);
+    border-radius: 8px;
+    display: grid;
+    gap: .45rem;
+    padding: 1.25rem;
+    text-decoration: none;
+    transition: border-color .2s ease, transform .2s ease;
+}
+
+.admin-dashboard-grid a:hover {
+    border-color: rgba(99, 230, 190, .32);
+    transform: translateY(-2px);
+}
+
+.admin-dashboard-grid strong {
+    color: #f8fbff;
+}
+
+.admin-dashboard-grid span {
+    color: #91a4bc;
+    line-height: 1.55;
+}

@@ -21,16 +21,27 @@
     text-decoration: none;
 }
 
-.brand span {
+.brand__mark {
     align-items: center;
     background: linear-gradient(135deg, #63e6be, #79a8ff);
     border-radius: 8px;
     color: #06101d;
     display: inline-flex;
-    font-weight: 900;
+    flex: 0 0 auto;
     height: 2.35rem;
     justify-content: center;
     width: 2.35rem;
+}
+
+.brand__mark svg {
+    display: block;
+    fill: none;
+    height: 100%;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 3.1;
+    width: 100%;
 }
 
 .brand strong,
