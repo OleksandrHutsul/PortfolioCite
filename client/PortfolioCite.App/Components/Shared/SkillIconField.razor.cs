@@ -1,7 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Web;
 using PortfolioCite.Contracts.Portfolio.Models;
 using PortfolioCite.Contracts.Portfolio.Rules;
 
@@ -15,12 +14,8 @@ public partial class SkillIconField : ComponentBase, IDisposable
     [Parameter] public EventCallback<string> ValueChanged { get; set; }
     [Parameter, EditorRequired] public Expression<Func<string>> ValueExpression { get; set; } = default!;
 
-    private readonly string _menuId = $"skill-icon-{Guid.NewGuid():N}";
     private EditContext? _editContext;
     private FieldValidation? _validation;
-    private bool _suppressClick;
-    private bool IsOpen { get; set; }
-    private int Highlighted { get; set; }
 
     private SkillIcon? Selected => SkillIcons.Find(Value);
 
@@ -46,96 +41,6 @@ public partial class SkillIconField : ComponentBase, IDisposable
     public void Dispose()
     {
         _validation?.Dispose();
-    }
-
-    private void OnTriggerClick()
-    {
-        if (_suppressClick)
-        {
-            _suppressClick = false;
-            return;
-        }
-
-        if (IsOpen)
-            Close();
-        else
-            Open();
-    }
-
-    private async Task OnTriggerKeyDown(KeyboardEventArgs e)
-    {
-        switch (e.Key)
-        {
-            case "ArrowDown":
-                if (!IsOpen)
-                    Open();
-                else
-                    Move(1);
-                break;
-            
-            case "ArrowUp":
-                if (!IsOpen)
-                    Open();
-                else
-                    Move(-1);
-                break;
-            
-            case "Home" when IsOpen:
-                Highlighted = 0;
-                break;
-            
-            case "End" when IsOpen:
-                Highlighted = SkillIcons.All.Count - 1;
-                break;
-            
-            case "Escape" when IsOpen:
-                Close();
-                break;
-            
-            case "Enter" or " " when IsOpen:
-                _suppressClick = true;
-                await Choose(SkillIcons.All[Highlighted]);
-                break;
-        }
-    }
-
-    private void Open()
-    {
-        Highlighted = 0;
-        var canonical = SkillIcons.Canonical(Value);
-
-        if (canonical is not null)
-        {
-            for (var index = 0; index < SkillIcons.All.Count; index++)
-            {
-                if (SkillIcons.All[index].Name == canonical)
-                {
-                    Highlighted = index;
-                    break;
-                }
-            }
-        }
-
-        IsOpen = true;
-    }
-
-    private void Close()
-    {
-        IsOpen = false;
-    }
-
-    private void Move(int delta)
-    {
-        var last = SkillIcons.All.Count - 1;
-        Highlighted = Math.Clamp(Highlighted + delta, 0, last);
-    }
-
-    private async Task Choose(SkillIcon icon)
-    {
-        IsOpen = false;
-
-        if (!string.Equals(Value, icon.Name, StringComparison.Ordinal))
-            await ValueChanged.InvokeAsync(icon.Name);
     }
 
     private string? Error()

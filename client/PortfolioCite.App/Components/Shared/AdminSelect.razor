@@ -1,0 +1,70 @@
+@typeparam TItem
+
+<div class="admin-select @(IsOpen ? "is-open" : null)">
+    <button type="button"
+            class="admin-select__value @(Invalid ? "invalid" : null)"
+            aria-haspopup="listbox"
+            aria-expanded="@IsOpen"
+            aria-controls="@_menuId"
+            aria-invalid="@Invalid"
+            aria-required="@Required"
+            @onclick="OnTriggerClick"
+            @onkeydown="OnTriggerKeyDown">
+        <span class="admin-select__current">
+            @if (SelectedTemplate is not null)
+            {
+                @SelectedTemplate
+            }
+            else
+            {
+                @CurrentLabel
+            }
+        </span>
+        <svg class="admin-select__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M4 6.2 8 10.2 12 6.2" />
+        </svg>
+    </button>
+
+    @if (IsOpen)
+    {
+        <button type="button" class="admin-select__backdrop" tabindex="-1" aria-hidden="true" @onclick="Close"></button>
+        <div id="@_menuId" class="admin-select__menu" role="listbox" aria-label="@MenuLabel" @onclick:stopPropagation="true">
+            @LeadingContent
+
+            @if (IncludeEmpty)
+            {
+                var emptySelected = string.IsNullOrEmpty(Value);
+                <button type="button"
+                        class="admin-select__option @(Highlighted == 0 ? "is-active" : null)"
+                        role="option"
+                        aria-selected="@emptySelected"
+                        @onmouseenter="() => Highlighted = 0"
+                        @onclick="() => Choose(string.Empty)">
+                    @EmptyLabel
+                </button>
+            }
+
+            @for (var index = 0; index < Items.Count; index++)
+            {
+                var item = Items[index];
+                var optionIndex = index + (IncludeEmpty ? 1 : 0);
+                var selected = string.Equals(ItemValue(item), Value, StringComparison.Ordinal);
+                <button type="button"
+                        class="admin-select__option @(optionIndex == Highlighted ? "is-active" : null)"
+                        role="option"
+                        aria-selected="@selected"
+                        @onmouseenter="() => Highlighted = optionIndex"
+                        @onclick="() => Choose(ItemValue(item))">
+                    @if (ItemTemplate is not null)
+                    {
+                        @ItemTemplate(item)
+                    }
+                    else
+                    {
+                        @ItemLabel(item)
+                    }
+                </button>
+            }
+        </div>
+    }
+</div>

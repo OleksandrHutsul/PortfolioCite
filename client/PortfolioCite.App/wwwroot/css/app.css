@@ -264,7 +264,7 @@ p {
 .admin-form,
 .login-form,
 .contact-form {
-    --admin-field-message: 1.15rem;
+    --admin-field-message: 0.5rem;
 }
 
 .admin-form {
@@ -299,7 +299,7 @@ p {
 }
 
 .login-form label {
-    grid-template-rows: auto auto minmax(var(--admin-field-message, 1rem), auto);
+    grid-template-rows: auto auto minmax(var(--admin-field-message, 1.15rem), auto);
 }
 
     .admin-form label.wide {
@@ -621,16 +621,17 @@ p {
     white-space: nowrap;
 }
 
-.admin-icon-select {
+.admin-select {
     min-width: 0;
     position: relative;
+    width: 100%;
 }
 
-.admin-icon-select.is-open {
+.admin-select.is-open {
     z-index: 30;
 }
 
-.admin-icon-select__value {
+.admin-select__value {
     align-items: center;
     background: #07111f;
     border: 1px solid rgba(148, 163, 184, .24);
@@ -647,18 +648,26 @@ p {
     width: 100%;
 }
 
-.admin-icon-select__value:focus-visible,
-.admin-icon-select.is-open .admin-icon-select__value {
+.admin-select__value:focus-visible,
+.admin-select.is-open .admin-select__value {
     border-color: #79a8ff;
     box-shadow: 0 0 0 3px rgba(121, 168, 255, .1);
     outline: 0;
 }
 
-.admin-icon-select__value.invalid {
+.admin-select__value.invalid {
     border-color: rgba(255, 107, 129, .75);
 }
 
-.admin-icon-select__chevron {
+.admin-select__current {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-select__chevron {
     color: #91a4bc;
     fill: none;
     flex: 0 0 auto;
@@ -670,11 +679,11 @@ p {
     width: .9rem;
 }
 
-.admin-icon-select.is-open .admin-icon-select__chevron {
+.admin-select.is-open .admin-select__chevron {
     transform: rotate(180deg);
 }
 
-.admin-icon-select__backdrop {
+.admin-select__backdrop {
     background: transparent;
     border: 0;
     cursor: default;
@@ -685,17 +694,18 @@ p {
     z-index: 0;
 }
 
-.admin-icon-select__value,
-.admin-icon-select__menu {
+.admin-select__value,
+.admin-select__menu {
     position: relative;
     z-index: 1;
 }
 
-.admin-icon-select__menu {
+.admin-select__menu {
     background: #0b1626;
     border: 1px solid rgba(148, 163, 184, .24);
     border-radius: 7px;
     box-shadow: 0 16px 40px rgba(0, 0, 0, .35);
+    color-scheme: dark;
     display: grid;
     left: 0;
     margin: 0;
@@ -704,16 +714,37 @@ p {
     padding: .3rem;
     position: absolute;
     right: 0;
+    scrollbar-color: rgba(145, 164, 188, .55) #101c2e;
+    scrollbar-width: thin;
     top: calc(100% + .35rem);
     z-index: 2;
 }
 
-.admin-icon-option {
+.admin-select__menu::-webkit-scrollbar {
+    height: .55rem;
+    width: .55rem;
+}
+
+.admin-select__menu::-webkit-scrollbar-track {
+    background: #101c2e;
+    border-radius: 999px;
+}
+
+.admin-select__menu::-webkit-scrollbar-thumb {
+    background: rgba(145, 164, 188, .45);
+    border-radius: 999px;
+}
+
+.admin-select__menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(145, 164, 188, .75);
+}
+
+.admin-select__option {
     align-items: center;
     background: transparent;
     border: 0;
     border-radius: 5px;
-    color: inherit;
+    color: #f8fbff;
     cursor: pointer;
     display: flex;
     font: inherit;
@@ -722,16 +753,16 @@ p {
     width: 100%;
 }
 
-.admin-icon-option:hover,
-.admin-icon-option.is-active {
+.admin-select__option:hover,
+.admin-select__option.is-active {
     background: rgba(121, 168, 255, .12);
 }
 
-.admin-icon-option[aria-selected="true"] {
+.admin-select__option[aria-selected="true"] {
     background: rgba(121, 168, 255, .2);
 }
 
-.admin-icon-option.is-unsupported {
+.admin-select__option.is-unsupported {
     cursor: default;
     opacity: .8;
 }

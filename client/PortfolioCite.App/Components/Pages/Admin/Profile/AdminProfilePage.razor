@@ -1,5 +1,4 @@
 @page "/admin/profile"
-@using PortfolioCite.Contracts.Portfolio.Rules
 @attribute [Authorize(Policy = "PortfolioAdmin")]
 @layout AdminLayout
 
@@ -89,17 +88,7 @@ else
                                 <ValidationMessage For="@(() => language.Name)" />
                             </label>
 
-                            <label>
-                                <span>Proficiency<RequiredIndicatorComponent For="@(() => language.Proficiency)" /></span>
-                                <InputSelect @bind-Value="language.Proficiency" aria-required="true">
-                                    <option value="">Select proficiency</option>
-                                    @foreach (var option in LanguageProficiencies.All)
-                                    {
-                                        <option value="@option.Code">@option.AdminLabel</option>
-                                    }
-                                </InputSelect>
-                                <ValidationMessage For="@(() => language.Proficiency)" />
-                            </label>
+                            <ProficiencyField @bind-Value="language.Proficiency" />
 
                             <DisplayOrderField Value="language.DisplayOrder"
                                                ValueChanged="@(order => ChangeLanguageOrder(language, order))"

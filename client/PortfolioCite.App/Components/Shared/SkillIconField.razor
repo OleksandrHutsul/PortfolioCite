@@ -1,59 +1,42 @@
+@using PortfolioCite.Contracts.Portfolio.Models
 @using PortfolioCite.Contracts.Portfolio.Rules
 
 <label>
     <span>Icon<RequiredIndicatorComponent TValue="string" For="@ValueExpression" /></span>
-    <div class="admin-icon-select @(IsOpen ? "is-open" : null)">
-        <button type="button"
-                class="admin-icon-select__value @(IsInvalid ? "invalid" : null)"
-                aria-haspopup="listbox"
-                aria-expanded="@IsOpen"
-                aria-controls="@_menuId"
-                aria-invalid="@IsInvalid"
-                @onclick="OnTriggerClick"
-                @onkeydown="OnTriggerKeyDown">
+    <AdminSelect TItem="SkillIcon"
+                 Items="SkillIcons.All"
+                 Value="@Value"
+                 ValueChanged="@ValueChanged"
+                 ItemValue="@(icon => icon.Name)"
+                 ItemLabel="@(icon => icon.Label)"
+                 Placeholder="Select an icon"
+                 MenuLabel="Icon"
+                 Invalid="IsInvalid">
+        <ItemTemplate Context="icon">
+            <span class="skill-icon-choice">
+                <SkillIconMark Icon="icon" />
+                <span class="skill-icon-choice__label">@icon.Label</span>
+            </span>
+        </ItemTemplate>
+        <SelectedTemplate>
             <span class="skill-icon-choice">
                 <SkillIconMark Name="@Value" />
                 <span class="skill-icon-choice__label">@SelectedLabel</span>
             </span>
-            <svg class="admin-icon-select__chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                <path d="M4 6.2 8 10.2 12 6.2" />
-            </svg>
-        </button>
+        </SelectedTemplate>
+        <LeadingContent>
+            @if (Selected is null && !string.IsNullOrWhiteSpace(Value))
+            {
+                <div class="admin-select__option is-unsupported" role="option" aria-selected="true">
+                    <span class="skill-icon-choice">
+                        <SkillIconMark Name="@Value" />
+                        <span class="skill-icon-choice__label">@SelectedLabel</span>
+                    </span>
+                </div>
+            }
+        </LeadingContent>
+    </AdminSelect>
 
-        @if (IsOpen)
-        {
-            <button type="button" class="admin-icon-select__backdrop" tabindex="-1" aria-hidden="true" @onclick="Close"></button>
-            <div id="@_menuId" class="admin-icon-select__menu" role="listbox" aria-label="Icon" @onclick:stopPropagation="true">
-                @if (Selected is null && !string.IsNullOrWhiteSpace(Value))
-                {
-                    <div class="admin-icon-option is-unsupported" role="option" aria-selected="true">
-                        <span class="skill-icon-choice">
-                            <SkillIconMark Name="@Value" />
-                            <span class="skill-icon-choice__label">@SelectedLabel</span>
-                        </span>
-                    </div>
-                }
-
-                @for (var index = 0; index < SkillIcons.All.Count; index++)
-                {
-                    var icon = SkillIcons.All[index];
-                    var optionIndex = index;
-                    <button type="button"
-                            class="admin-icon-option @(optionIndex == Highlighted ? "is-active" : null)"
-                            role="option"
-                            aria-selected="@(Selected?.Name == icon.Name)"
-                            @onmouseenter="() => Highlighted = optionIndex"
-                            @onclick="() => Choose(icon)">
-                        <span class="skill-icon-choice">
-                            <SkillIconMark Icon="@icon" />
-                            <span class="skill-icon-choice__label">@icon.Label</span>
-                        </span>
-                    </button>
-                }
-            </div>
-        }
-    </div>
-    
     <div class="admin-field-message">
         <ValidationMessage For="@ValueExpression" />
     </div>

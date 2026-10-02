@@ -1,0 +1,21 @@
+@using PortfolioCite.Contracts.Portfolio.Models
+@using PortfolioCite.Contracts.Portfolio.Rules
+
+<label>
+    <span>@Label<RequiredIndicatorComponent TValue="string" For="@ValueExpression" /></span>
+    <AdminSelect TItem="LanguageProficiency"
+                 Items="LanguageProficiencies.All"
+                 Value="@Value"
+                 ValueChanged="OnChanged"
+                 ItemValue="@(item => item.Code)"
+                 ItemLabel="@(item => item.AdminLabel)"
+                 IncludeEmpty="true"
+                 EmptyLabel="Select proficiency"
+                 Placeholder="Select proficiency"
+                 MenuLabel="Proficiency"
+                 Invalid="IsInvalid"
+                 Required="true" />
+    <div class="admin-field-message">
+        <ValidationMessage For="@ValueExpression" />
+    </div>
+</label>
